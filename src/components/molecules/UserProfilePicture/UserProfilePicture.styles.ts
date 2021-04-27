@@ -8,7 +8,6 @@ type AvatarProps = {
 };
 
 export const Avatar = styled.div<AvatarProps>`
-  background-position: center;
   background-size: cover;
   width: 4vh;
   height: 4vh;
