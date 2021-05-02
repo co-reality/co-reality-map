@@ -7,7 +7,7 @@ import {
   faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { VenueChat, PrivateChats } from "./components";
+import { VenueChat, PrivateChats, Twitter } from "./components";
 
 import { useChatSidebarControls, useChatSidebarInfo } from "hooks/chatSidebar";
 
@@ -22,9 +22,14 @@ export const ChatSidebar: React.FC = () => {
     chatSettings,
     selectVenueChat,
     selectPrivateChat,
+    selectTwitterChat,
   } = useChatSidebarControls();
 
-  const { privateChatTabTitle, venueChatTabTitle } = useChatSidebarInfo();
+  const {
+    privateChatTabTitle,
+    venueChatTabTitle,
+    twitterTabTitle,
+  } = useChatSidebarInfo();
 
   const containerStyles = classNames("chat-sidebar", {
     "chat-sidebar--expanded": isExpanded,
@@ -38,6 +43,11 @@ export const ChatSidebar: React.FC = () => {
   const privateChatTabStyles = classNames("chat-sidebar__tab", {
     "chat-sidebar__tab--selected":
       chatSettings.openedChatType === ChatTypes.PRIVATE_CHAT,
+  });
+
+  const twitterTabStyles = classNames("chat-sidebar__tab", {
+    "chat-sidebar__tab--selected":
+      chatSettings.openedChatType === ChatTypes.TWITTER,
   });
 
   return (
@@ -57,13 +67,15 @@ export const ChatSidebar: React.FC = () => {
             </>
           )}
         </div>
-
         <div className="chat-sidebar__tabs">
           <div className={venueChatTabStyles} onClick={selectVenueChat}>
             {venueChatTabTitle}
           </div>
           <div className={privateChatTabStyles} onClick={selectPrivateChat}>
             {privateChatTabTitle}
+          </div>
+          <div className={twitterTabStyles} onClick={selectTwitterChat}>
+            {twitterTabTitle}
           </div>
         </div>
       </div>
@@ -72,6 +84,7 @@ export const ChatSidebar: React.FC = () => {
         {chatSettings.openedChatType === ChatTypes.PRIVATE_CHAT && (
           <PrivateChats recipientId={chatSettings.recipientId} />
         )}
+        {chatSettings.openedChatType === ChatTypes.TWITTER && <Twitter />}
       </div>
     </div>
   );

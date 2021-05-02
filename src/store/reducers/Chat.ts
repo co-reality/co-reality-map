@@ -40,6 +40,15 @@ export const chatReducer = (
       };
     }
 
+    case ChatActionTypes.SET_TWITTER_TAB_OPEN: {
+      const { openedChatType } = action.payload;
+
+      return {
+        ...state,
+        settings: { openedChatType },
+      };
+    }
+
     default:
       return state;
   }

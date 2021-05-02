@@ -1,10 +1,16 @@
-import { VenueChatSettings, PrivateChatSettings, ChatTypes } from "types/chat";
+import {
+  VenueChatSettings,
+  PrivateChatSettings,
+  TwitterSettings,
+  ChatTypes,
+} from "types/chat";
 import { ReduxAction } from "types/redux";
 
 export enum ChatActionTypes {
   SET_CHAT_SIDEBAR_VISIBILITY = "SET_CHAT_SIDEBAR_VISIBILITY",
   SET_VENUE_CHAT_TAB_OPENED = "SET_VENUE_CHAT_TAB_OPENED",
   SET_PRIVATE_CHAT_TAB_OPENED = "SET_PRIVATE_CHAT_TAB_OPENED",
+  SET_TWITTER_TAB_OPEN = "SET_TWITTER_TAB_OPEN",
 }
 
 export type SetChatsSidebarVisibilityAction = ReduxAction<
@@ -20,6 +26,11 @@ export type SetVenueChatTabOpenedAction = ReduxAction<
 export type SetPrivateChatTabOpenedAction = ReduxAction<
   ChatActionTypes.SET_PRIVATE_CHAT_TAB_OPENED,
   PrivateChatSettings
+>;
+
+export type SetTwitterTabOpenedAction = ReduxAction<
+  ChatActionTypes.SET_TWITTER_TAB_OPEN,
+  TwitterSettings
 >;
 
 export const setChatSidebarVisibility = (
@@ -46,7 +57,15 @@ export const setPrivateChatTabOpened = (
   },
 });
 
+export const setTwitterTabOpened = (): SetTwitterTabOpenedAction => ({
+  type: ChatActionTypes.SET_TWITTER_TAB_OPEN,
+  payload: {
+    openedChatType: ChatTypes.TWITTER,
+  },
+});
+
 export type ChatActions =
   | SetChatsSidebarVisibilityAction
   | SetVenueChatTabOpenedAction
+  | SetTwitterTabOpenedAction
   | SetPrivateChatTabOpenedAction;

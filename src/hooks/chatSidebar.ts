@@ -9,6 +9,7 @@ import {
   setPrivateChatTabOpened,
   setVenueChatTabOpened,
   setChatSidebarVisibility,
+  setTwitterTabOpened,
 } from "store/actions/Chat";
 
 import { useSelector } from "./useSelector";
@@ -43,6 +44,11 @@ export const useChatSidebarControls = () => {
     dispatch(setVenueChatTabOpened());
   }, [dispatch, expandSidebar]);
 
+  const selectTwitterChat = useCallback(() => {
+    expandSidebar();
+    dispatch(setTwitterTabOpened());
+  }, [dispatch, expandSidebar]);
+
   const selectPrivateChat = useCallback(() => {
     expandSidebar();
     dispatch(setPrivateChatTabOpened());
@@ -64,6 +70,7 @@ export const useChatSidebarControls = () => {
     selectVenueChat,
     selectPrivateChat,
     selectRecipientChat,
+    selectTwitterChat,
     collapseSidebar,
     toggleSidebar,
   };
@@ -81,5 +88,6 @@ export const useChatSidebarInfo = () => {
       numberOfUnreadChats ? `(${numberOfUnreadChats})` : ""
     }`,
     venueChatTabTitle: `${chatTitle} Chat`,
+    twitterTabTitle: `Twitter Feed`,
   };
 };

@@ -37,6 +37,7 @@ export enum ChatTypes {
   WORLD_CHAT = "WORLD_CHAT",
   VENUE_CHAT = "VENUE_CHAT",
   PRIVATE_CHAT = "PRIVATE_CHAT",
+  TWITTER = "TWITTER",
 }
 
 export type PrivateChatSettings = {
@@ -48,7 +49,14 @@ export type VenueChatSettings = {
   openedChatType: ChatTypes.VENUE_CHAT;
 };
 
-export type ChatSettings = PrivateChatSettings | VenueChatSettings;
+export type TwitterSettings = {
+  openedChatType: ChatTypes.TWITTER;
+};
+
+export type ChatSettings =
+  | PrivateChatSettings
+  | VenueChatSettings
+  | TwitterSettings;
 
 // @debt Remove it when UserProfileModal is refactored
 export type SetSelectedProfile = (user: WithId<User>) => void;
