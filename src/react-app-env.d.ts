@@ -1,5 +1,10 @@
 /// <reference types="react-scripts" />
 
+declare module "*.m4a" {
+  const src: string;
+  export default src;
+}
+
 declare module "react-eventbrite-popup-checkout" {
   interface PropType {
     ebEventId: string;
