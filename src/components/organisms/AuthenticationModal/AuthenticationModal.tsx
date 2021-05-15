@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Modal } from "react-bootstrap";
 import "./AuthenticationModal.scss";
 import { InitialForm } from "./InitialForm";
@@ -13,14 +13,14 @@ export enum AuthOptions {
   initial = "initial",
 }
 
-interface PropsType {
+export interface AuthenticationModalProps {
   show: boolean;
-  onHide: () => void;
+  onHide?: () => void;
   afterUserIsLoggedIn?: () => void;
   showAuth: AuthOptions;
 }
 
-export const AuthenticationModal: React.FunctionComponent<PropsType> = ({
+export const AuthenticationModal: React.FunctionComponent<AuthenticationModalProps> = ({
   show,
   onHide,
   afterUserIsLoggedIn,
@@ -28,22 +28,22 @@ export const AuthenticationModal: React.FunctionComponent<PropsType> = ({
 }) => {
   const [formToDisplay, setFormToDisplay] = useState(showAuth);
 
-  const displayLoginForm = () => {
+  const displayLoginForm = useCallback(() => {
     setFormToDisplay(AuthOptions.login);
-  };
+  }, []);
 
-  const displayRegisterForm = () => {
+  const displayRegisterForm = useCallback(() => {
     setFormToDisplay(AuthOptions.register);
-  };
+  }, []);
 
-  const displayPasswordResetForm = () => {
+  const displayPasswordResetForm = useCallback(() => {
     setFormToDisplay(AuthOptions.passwordReset);
-  };
+  }, []);
 
-  const closeAuthenticationModal = () => {
+  const closeAuthenticationModal = useCallback(() => {
     setFormToDisplay(showAuth);
-    onHide();
-  };
+    onHide && onHide();
+  }, [onHide, showAuth]);
 
   return (
     <Modal show={show} onHide={closeAuthenticationModal}>

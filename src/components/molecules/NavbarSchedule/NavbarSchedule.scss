@@ -1,0 +1,53 @@
+@import "scss/constants.scss";
+
+.nav-schedule {
+  position: relative;
+  background-color: rgba($white, 0.08);
+  height: $schedule-height;
+  padding: 0 50px 0 10px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: transform 400ms $transition-function;
+  text-indent: 20px;
+
+  img {
+    height: 40px;
+  }
+
+  &:hover {
+    background-color: rgba($white, 0.14);
+    &:after {
+      opacity: 0.7;
+    }
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    height: 20px;
+    width: 20px;
+    background-image: url(/icons/nav-party-logo-icon.png);
+    background-size: 20px;
+    opacity: 0.4;
+    transform: rotate(0deg);
+    transition: transform 400ms $transition-function;
+  }
+
+  &--visible {
+    &:after {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.slide {
+    transform: translateX(110px);
+  }
+}

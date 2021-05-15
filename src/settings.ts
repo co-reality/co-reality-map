@@ -102,6 +102,9 @@ export const GIF_IMAGE_WIDTH_PX = 300;
 export const DOCUMENT_ID = "__name__";
 export const NUM_CHAT_UIDS_TO_LOAD = 10;
 
+export const GIFT_TICKET_URL =
+  "https://www.eventbrite.com/e/sparkleverse-2020-online-burn-tickets-117154948605";
+
 export const MINIMUM_COLUMNS = 5;
 export const MAXIMUM_COLUMNS = 100;
 // playa is 4000x4000 pixels, Burning Seed paddock is 2000x2000

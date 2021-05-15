@@ -30,11 +30,7 @@ const VenueWizardCreate: React.FC<VenueWizardCreateProps> = ({
   if (!user) {
     return (
       <WithNavigationBar fullscreen>
-        <AuthenticationModal
-          show={true}
-          onHide={() => {}}
-          showAuth={AuthOptions.login}
-        />
+        <AuthenticationModal show={true} showAuth={AuthOptions.login} />
       </WithNavigationBar>
     );
   }

@@ -10,7 +10,6 @@ export const Wrapper = styled.div<WrapperProps>`
   grid-template-columns: auto;
 
   position: relative;
-  overflow-y: scroll;
   scrollbar-width: thin;
 
   input:disabled {

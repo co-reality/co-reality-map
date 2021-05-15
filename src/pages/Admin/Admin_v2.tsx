@@ -18,6 +18,7 @@ import { AuthOptions } from "components/organisms/AuthenticationModal/Authentica
 import { AdminVenues } from "components/organisms/AdminVenues/AdminVenues";
 import { AdminVenueView } from "components/organisms/AdminVenueView";
 import AuthenticationModal from "components/organisms/AuthenticationModal";
+import { WithNavigationBar } from "components/organisms/WithNavigationBar";
 import { LoadingPage } from "components/molecules/LoadingPage";
 
 import "./Admin.scss";
@@ -53,9 +54,11 @@ const Admin_v2: React.FC = () => {
     return <>Forbidden</>;
   }
 
+  const hasSelectedVenue = !!selectedVenue;
+
   return (
-    <>
-      <S.Wrapper className="no-venue-selected">
+    <WithNavigationBar>
+      <S.Wrapper hasSelectedVenue={hasSelectedVenue}>
         <S.ViewWrapper>
           {selectedVenue ? (
             // @debt Venue_v2 has different structure than AnyVenue, 1 of them should be deprecated.
@@ -66,12 +69,8 @@ const Admin_v2: React.FC = () => {
         </S.ViewWrapper>
       </S.Wrapper>
 
-      <AuthenticationModal
-        show={!user}
-        onHide={() => {}}
-        showAuth={AuthOptions.login}
-      />
-    </>
+      <AuthenticationModal show={!user} showAuth={AuthOptions.login} />
+    </WithNavigationBar>
   );
 };
 

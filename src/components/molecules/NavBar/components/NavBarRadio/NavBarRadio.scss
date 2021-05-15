@@ -1,0 +1,20 @@
+.radio-trigger {
+  position: relative;
+  padding: 0.5em;
+
+  &__iframe {
+    position: absolute;
+    top: 100%;
+    right: 0;
+
+    &--visible {
+      visibility: visible;
+      user-select: auto;
+    }
+
+    &--hidden {
+      visibility: hidden;
+      user-select: none;
+    }
+  }
+}

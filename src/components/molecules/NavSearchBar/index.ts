@@ -1,3 +1,1 @@
-import NavSearchBar from "./NavSearchBar";
-
-export default NavSearchBar;
+export { NavSearchBar } from "./NavSearchBar";
