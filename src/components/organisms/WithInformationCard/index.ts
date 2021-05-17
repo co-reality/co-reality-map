@@ -1,0 +1,1 @@
+export { WithInformationCard } from "./WithInformationCard";

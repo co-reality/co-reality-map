@@ -24,6 +24,7 @@ import { ReactionPage } from "components/templates/ReactionPage";
 import { ChatSidebar } from "components/organisms/ChatSidebar";
 import { UserProfileModal } from "components/organisms/UserProfileModal";
 import { WithNavigationBar } from "components/organisms/WithNavigationBar";
+import { WithInformationCard } from "components/organisms/WithInformationCard";
 
 import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
 
@@ -142,6 +143,7 @@ const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
     <ReactionsProvider venueId={venue.id}>
       <WithNavigationBar fullscreen={fullscreen} hasBackButton={hasBackButton}>
         <AnnouncementMessage message={venue.bannerMessage} />
+        <WithInformationCard venue={venue} showInfo={venue?.showInfo} />
         {template}
         <ChatSidebar />
         <UserProfileModal />

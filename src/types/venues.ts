@@ -145,6 +145,7 @@ export interface BaseVenue {
   hideVideo?: boolean;
   showLiveSchedule?: boolean;
   showGrid?: boolean;
+  showInfo?: boolean;
   roomVisibility?: RoomVisibility;
   rooms?: Room[];
   width: number;

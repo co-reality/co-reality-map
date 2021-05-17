@@ -4,7 +4,7 @@ import classNames from "classnames";
 import "./InformationCard.scss";
 
 export interface InformationCardProps {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   className?: string;
 }
@@ -15,7 +15,7 @@ const InformationCard: React.FC<InformationCardProps> = ({
   className,
 }) => (
   <div className={classNames("information-card-container", className)}>
-    <h4 className="title">{title}</h4>
+    {title && <h4 className="title">{title}</h4>}
     <div className="information-card-text">{children}</div>
   </div>
 );
