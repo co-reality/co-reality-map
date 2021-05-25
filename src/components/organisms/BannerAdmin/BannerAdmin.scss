@@ -1,0 +1,22 @@
+@import "scss/constants.scss";
+
+.Banner {
+  &__input-text {
+    text-align: start;
+  }
+
+  &__button-container {
+    margin-top: 25px;
+  }
+
+  &__action-container {
+    margin-left: 50px;
+  }
+}
+
+.BannerToggle {
+  &__title {
+    font-size: $font-size--lg;
+    margin-left: $spacing--md;
+  }
+}

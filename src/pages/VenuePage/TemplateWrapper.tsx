@@ -7,6 +7,8 @@ import { WithId } from "utils/id";
 import { tracePromise } from "utils/performance";
 
 import { ReactionsProvider } from "hooks/reactions";
+import { WorldUsersProvider } from "hooks/users";
+import { RelatedVenuesProvider } from "hooks/useRelatedVenues";
 
 import { FriendShipPage } from "pages/FriendShipPage";
 
@@ -163,15 +165,19 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
 
   // @debt remove backButton from Navbar
   return (
-    <ReactionsProvider venueId={venue.id}>
-      <WithNavigationBar hasBackButton={hasBackButton}>
-        <AnnouncementMessage message={venue.bannerMessage} />
+    <WorldUsersProvider venueId={venue.id}>
+      <RelatedVenuesProvider venueId={venue.id}>
+        <ReactionsProvider venueId={venue.id}>
+          <WithNavigationBar hasBackButton={hasBackButton}>
+            <AnnouncementMessage banner={venue.banner} />
 
-        <Suspense fallback={<LoadingPage />}>{template}</Suspense>
+            <Suspense fallback={<LoadingPage />}>{template}</Suspense>
 
-        <ChatSidebar venue={venue} />
-        <UserProfileModal venue={venue} />
-      </WithNavigationBar>
-    </ReactionsProvider>
+            <ChatSidebar venue={venue} />
+            <UserProfileModal venue={venue} />
+          </WithNavigationBar>
+        </ReactionsProvider>
+      </RelatedVenuesProvider>
+    </WorldUsersProvider>
   );
 };

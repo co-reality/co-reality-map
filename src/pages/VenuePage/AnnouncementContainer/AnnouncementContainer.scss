@@ -1,0 +1,9 @@
+@import "scss/constants";
+
+.AnnouncementContainer {
+  position: absolute;
+  top: 66px;
+  left: calc(50% - 319px);
+  display: flex;
+  justify-content: center;
+}

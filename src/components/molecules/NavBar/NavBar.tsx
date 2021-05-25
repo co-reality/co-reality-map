@@ -77,7 +77,6 @@ export interface NavBarPropsType {
 export const NavBar: React.FC<NavBarPropsType> = ({ hasBackButton = true }) => {
   const { user, userWithId } = useUser();
   const venueId = useVenueId();
-
   const radioStations = useSelector(radioStationsSelector);
 
   const { currentVenue, parentVenue, sovereignVenueId } = useRelatedVenues({

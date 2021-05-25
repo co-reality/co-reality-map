@@ -1,4 +1,23 @@
-.admin-page-title {
-  text-align: center;
-  padding-top: 25px;
+@import "scss/constants";
+
+.AdminPage {
+  position: relative;
+  max-width: 638px;
+  margin: 0 auto;
+
+  &__title {
+    text-align: center;
+    margin-top: 41px;
+    padding: 5px;
+    font-size: $font-size--sm;
+    background: #1a1d24;
+    border-radius: $border-radius--xl;
+    opacity: 0.7;
+  }
+
+  &__options {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+  }
 }

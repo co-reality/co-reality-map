@@ -7,20 +7,13 @@ $message-margin: $spacing + $close-icon-width + 5px;
 .announcement-container {
   display: block;
   z-index: z(announcement);
-  position: absolute;
+  position: relative;
   background: $primary;
-  top: 66px;
-  left: 50%;
-  width: 500px;
-  margin: 0 auto 0 -250px;
+  width: 638px;
   transition: left 0.1s linear;
 
-  &.centered {
-    left: 50%;
-  }
-
   padding: $spacing 0;
-  border-radius: 0 0 20px 20px;
+  border-radius: 20px;
   text-align: center;
 
   .close-button {

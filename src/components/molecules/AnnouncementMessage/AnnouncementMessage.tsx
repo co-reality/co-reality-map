@@ -9,12 +9,16 @@ import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 
 import "./AnnouncementMessage.scss";
 
+import { BannerFormData } from "types/banner";
+
 type AnnouncementMessageProps = {
-  message?: string;
+  banner?: BannerFormData;
+  isCancel?: boolean;
 };
 
 export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
-  message = "",
+  banner,
+  isCancel = false,
 }) => {
   const [isVisible, setVisibility] = useState<boolean>(false);
   const { isExpanded } = useChatSidebarControls();
@@ -24,12 +28,12 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   }, []);
 
   useEffect(() => {
-    if (message) {
+    if (banner?.content) {
       setVisibility(true);
     }
-  }, [message]);
+  }, [banner]);
 
-  if (!isVisible || !message) return null;
+  if (!isVisible || !banner?.content) return null;
 
   return (
     <div
@@ -38,11 +42,13 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
       })}
     >
       <div className="announcement-message">
-        <RenderMarkdown text={message} />
+        <RenderMarkdown text={banner.content} />
       </div>
-      <span className="close-button" onClick={hideAnnouncement}>
-        <FontAwesomeIcon icon={faTimesCircle} />
-      </span>
+      {isCancel ? (
+        <span className="close-button" onClick={hideAnnouncement}>
+          <FontAwesomeIcon icon={faTimesCircle} />
+        </span>
+      ) : null}
     </div>
   );
 };
