@@ -9,7 +9,7 @@ $message-margin: $spacing + $close-icon-width + 5px;
   z-index: z(announcement);
   position: relative;
   background: $primary;
-  width: 638px;
+  width: 100%;
   transition: left 0.1s linear;
 
   padding: $spacing 0;
