@@ -1,0 +1,31 @@
+@import "scss/constants.scss";
+
+$button-width: 136px;
+
+.ConfirmationBannerModal {
+  text-align: center;
+
+  &__header {
+    font-size: $font-size--xl;
+  }
+
+  &__message {
+    padding: 10px 0 30px 0;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+  &__confirm-button {
+    width: $button-width;
+  }
+
+  &__cancel-button {
+    background-image: none;
+    background-color: $black;
+    border: solid $white 1px;
+    border-color: $white;
+    width: $button-width;
+  }
+}

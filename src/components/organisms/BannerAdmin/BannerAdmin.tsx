@@ -1,10 +1,18 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
-// import { makeUpdateBanner } from "api/bannerAdmin";
+import { makeUpdateBanner } from "api/bannerAdmin";
 
 import { AnyVenue } from "types/venues";
 import { BannerFormData } from "types/banner";
+
+import { useShowHide } from "hooks/useShowHide";
+
+import { Checkbox } from "components/atoms/Checkbox";
+import { InputField } from "components/atoms/InputField";
+
+import { ConfirmationBannerModal } from "./ConfirmationBannerModal";
 
 import "./BannerAdmin.scss";
 
@@ -21,27 +29,43 @@ const initialBannerData = {
 interface BannerAdminProps {
   venueId?: string;
   venue: AnyVenue;
+  onClose: () => void;
 }
 
 // @debt This component is almost exactly the same as IframeAdmin, we should refactor them both to use the same generic base component
 //   BannerAdmin is the 'canonical example' to follow when we do this
-export const BannerAdmin: React.FC<BannerAdminProps> = ({ venueId, venue }) => {
+export const BannerAdmin: React.FC<BannerAdminProps> = ({
+  venueId,
+  venue,
+  onClose,
+}) => {
   const { register, handleSubmit, reset } = useForm<BannerFormData>({
     mode: "onChange",
     reValidateMode: "onChange",
   });
 
+  const [bannerData, setBannerDate] = useState<BannerFormData>(
+    initialBannerData
+  );
+
+  const {
+    isShown: isShowModal,
+    show: showModal,
+    hide: hideModal,
+  } = useShowHide();
+
   const updateBannerInFirestore = useCallback(
     (data: BannerFormData) => {
       if (!venueId) return;
-
-      // makeUpdateBanner(venueId)(data);
+      makeUpdateBanner(venueId)(data);
+      onClose();
     },
-    [venueId]
+    [venueId, onClose]
   );
 
   const onSubmit = (data: BannerFormData) => {
-    updateBannerInFirestore(data);
+    showModal();
+    setBannerDate(data);
   };
 
   const clearBanner = useCallback(() => {
@@ -49,114 +73,101 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({ venueId, venue }) => {
     reset();
   }, [updateBannerInFirestore, reset]);
 
+  const confirmChangeBannerData = () => {
+    updateBannerInFirestore(bannerData);
+    hideModal();
+  };
+
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-              <input
-                ref={register({ required: true })}
-                name="title"
-                type="text"
-                placeholder="Please type your announcement title. (optional)"
-                autoComplete="off"
-                className="Banner__input-text"
-              />
-            </div>
+    <div className="Banner">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputField
+          ref={register}
+          name="title"
+          placeholder="Please type your announcement title. (optional)"
+          defaultValue={venue?.banner?.title}
+          containerClassName="Banner__input-container"
+          inputClassName="Banner__input-text"
+          autoComplete="off"
+        />
 
-            <div className="form-group">
-              <textarea
-                name="content"
-                className="Banner__input-text"
-                placeholder="Please type your announcement content"
-                ref={register}
-              />
-            </div>
-
-            <div className="BannerToggle">
-              <label id={"isActionButton"} className="switch">
-                <input
-                  type="checkbox"
-                  id={"isActionButton"}
-                  name={"isActionButton"}
-                  ref={register}
-                />
-                <span className="slider round"></span>
-              </label>
-              <span className="BannerToggle__title">Call to Action Button</span>
-            </div>
-
-            <div className="Banner__action-container">
-              <div className="form-group">
-                <input
-                  ref={register}
-                  name="buttonUrl"
-                  type="text"
-                  placeholder="Button URL"
-                  autoComplete="off"
-                  className="Banner__input-text"
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  ref={register}
-                  name="buttonDisplayText"
-                  type="text"
-                  placeholder="Button display text"
-                  autoComplete="off"
-                  className="Banner__input-text"
-                />
-              </div>
-            </div>
-
-            <div className="BannerToggle">
-              <label id={"isFullScreen"} className="switch">
-                <input
-                  type="checkbox"
-                  id={"isFullScreen"}
-                  name={"isFullScreen"}
-                  ref={register}
-                />
-                <span className="slider round"></span>
-              </label>
-              <span className="BannerToggle__title">
-                Set fullscreen announcement
-              </span>
-            </div>
-
-            <div className="BannerToggle">
-              <label id={"isCloseButton"} className="switch">
-                <input
-                  type="checkbox"
-                  id={"isCloseButton"}
-                  name={"isCloseButton"}
-                  ref={register}
-                />
-                <span className="slider round"></span>
-              </label>
-              <span className="BannerToggle__title">
-                Force funnel (users will have to click your button)
-              </span>
-            </div>
-
-            <div className="form-inline justify-content-between Banner__button-container">
-              <button
-                className="btn btn-danger"
-                type="reset"
-                onClick={clearBanner}
-              >
-                Clear
-              </button>
-
-              <button className="btn btn-primary" type="submit">
-                Save
-              </button>
-            </div>
-          </form>
+        <div className="form-group">
+          <textarea
+            name="content"
+            defaultValue={venue?.banner?.content}
+            className="Banner__input-text"
+            placeholder="Please type your announcement content"
+            ref={register({ required: true })}
+          />
         </div>
-      </div>
+
+        <Checkbox
+          containerClassName="Banner__checkbox Banner__checkbox--action"
+          labelClassName="Banner__checkbox-label"
+          name="isActionButton"
+          label="Call to Action Button"
+          toggler
+          forwardedRef={register}
+          defaultChecked={venue?.banner?.isActionButton}
+        />
+
+        <div className="Banner__action-container">
+          <InputField
+            ref={register}
+            name="buttonUrl"
+            placeholder="Button URL"
+            defaultValue={venue?.banner?.buttonUrl}
+            containerClassName="Banner__input-container"
+            inputClassName="Banner__input-text"
+            autoComplete="off"
+          />
+          <InputField
+            ref={register}
+            name="buttonDisplayText"
+            placeholder="Button display text"
+            defaultValue={venue?.banner?.buttonDisplayText}
+            containerClassName="Banner__input-container"
+            inputClassName="Banner__input-text"
+            autoComplete="off"
+          />
+        </div>
+        <Checkbox
+          containerClassName="Banner__checkbox"
+          name="isFullScreen"
+          label="Set fullscreen announcement"
+          toggler
+          forwardedRef={register}
+          defaultChecked={venue?.banner?.isFullScreen}
+        />
+
+        <Checkbox
+          containerClassName="Banner__checkbox"
+          name="isCloseButton"
+          label="Force funnel (users will have to click your button)"
+          toggler
+          forwardedRef={register}
+          defaultChecked={venue?.banner?.isCloseButton}
+        />
+
+        <div className="Banner__button-container">
+          <Button
+            className="Banner__button"
+            variant="danger"
+            onClick={clearBanner}
+          >
+            Clear
+          </Button>
+          <Button className="Banner__button" type="submit">
+            Save
+          </Button>
+        </div>
+      </form>
+
+      <ConfirmationBannerModal
+        show={isShowModal}
+        onConfirm={confirmChangeBannerData}
+        onCancel={hideModal}
+      />
     </div>
   );
 };

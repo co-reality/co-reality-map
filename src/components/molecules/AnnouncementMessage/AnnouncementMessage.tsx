@@ -1,59 +1,92 @@
-import React, { useCallback, useEffect, useState } from "react";
-import classNames from "classnames";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
 
-import { useChatSidebarControls } from "hooks/chatSidebar";
 
 import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 
-import "./AnnouncementMessage.scss";
+import { useShowHide } from "hooks/useShowHide";
 
 import { BannerFormData } from "types/banner";
 
-type AnnouncementMessageProps = {
+import { externalUrlAdditionalProps } from "utils/url";
+
+import "./AnnouncementMessage.scss";
+
+export interface AnnouncementMessageProps {
   banner?: BannerFormData;
-  isCancel?: boolean;
-};
+  isUser?: boolean;
+}
 
 export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   banner,
-  isCancel = false,
+  isUser = false,
 }) => {
-  const [isVisible, setVisibility] = useState<boolean>(false);
-  const { isExpanded } = useChatSidebarControls();
 
-  const hideAnnouncement = useCallback(() => {
-    setVisibility(false);
-  }, []);
+  const {
+    isShown: isShownAnnouncementMessage,
+    show: showAnnouncementMessage,
+    hide: hideAnnouncementMessage,
+  } = useShowHide();
 
   useEffect(() => {
     if (banner?.content) {
-      setVisibility(true);
+      showAnnouncementMessage();
     }
-  }, [banner]);
+  }, [banner, showAnnouncementMessage]);
 
-  if (!isVisible || !banner?.content) return null;
+  const noop = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+  };
+
+  const isActiveButton =
+    banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
+
+  const containerClassNames = classNames("AnnouncementContainer", {
+    "AnnouncementContainer--centered": banner?.isFullScreen,
+    "AnnouncementContainer--canceled": !isUser,
+  });
+
+  if (!isUser && !banner?.content)
+    return (
+      <div className="AnnouncementMessage">
+        <span className="AnnouncementMessage__default-text">
+          No announcement
+        </span>
+      </div>
+    );
+
+  if (!isShownAnnouncementMessage || !banner?.content) return null;
 
   return (
-    <div
-      className={classNames("announcement-container", {
-        centered: !isExpanded,
-      })}
-    >
-      <div className="announcement-message">
-        <RenderMarkdown text={banner.content} />
+    <div className={containerClassNames} onClick={hideAnnouncementMessage}>
+      <div className="AnnouncementMessage" onClick={noop}>
+        {banner?.title && (
+          <h2 className="AnnouncementMessage__title">{banner.title}</h2>
+        )}
+        <div className="AnnouncementMessage__content">
+          <RenderMarkdown text={banner.content} />
+          {/* {getLinkFromText(banner.content)} */}
+        </div>
+        {isActiveButton && (
+          <a
+            href={banner.buttonUrl}
+            className="AnnouncementMessage__action-button"
+            {...externalUrlAdditionalProps}
+          >
+            {banner.buttonDisplayText}
+          </a>
+        )}
+        {isUser && banner.isCloseButton ? (
+          <span
+            className="AnnouncementMessage__close-button"
+            onClick={hideAnnouncementMessage}
+          >
+            <FontAwesomeIcon icon={faTimesCircle} />
+          </span>
+        ) : null}
       </div>
-      {isCancel ? (
-        <span className="close-button" onClick={hideAnnouncement}>
-          <FontAwesomeIcon icon={faTimesCircle} />
-        </span>
-      ) : null}
     </div>
   );
 };
-
-/**
- * @deprecated use named export instead
- */
-export default AnnouncementMessage;

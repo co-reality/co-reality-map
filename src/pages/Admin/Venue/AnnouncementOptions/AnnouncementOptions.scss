@@ -1,0 +1,33 @@
+@import "scss/constants";
+
+.AnnouncementOptions {
+  font-size: $font-size--lg;
+  margin-top: 4px;
+
+  &__buttons {
+    display: flex;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  &__img {
+    margin-right: 4px;
+  }
+
+  &__url {
+    margin-top: 19px;
+  }
+
+  &__url-text {
+    font-size: $font-size--md;
+    padding-left: 17px;
+
+    &--empty {
+      opacity: 0.4;
+    }
+  }
+}

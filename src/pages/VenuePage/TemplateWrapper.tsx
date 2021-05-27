@@ -32,6 +32,7 @@ import { WithNavigationBar } from "components/organisms/WithNavigationBar";
 import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
 import { LoadingPage } from "components/molecules/LoadingPage";
 
+
 const PlayaRouter = lazy(() =>
   tracePromise("TemplateWrapper::lazy-import::PlayaRouter", () =>
     import("components/templates/Playa/Router").then(({ PlayaRouter }) => ({
@@ -47,8 +48,6 @@ export interface TemplateWrapperProps {
 export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
   const history = useHistory();
   const match = useRouteMatch();
-
-  // const { isShown, show, hide } = useShowHide();
 
   let template;
   // @debt remove backButton from Navbar

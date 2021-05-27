@@ -3,20 +3,43 @@
 .Banner {
   &__input-text {
     text-align: start;
+    padding: 6px 14px;
+    font-size: $font-size--md;
+
+    &--large {
+      height: 55px;
+    }
+  }
+
+  &__input-container {
+    margin-bottom: 14px;
   }
 
   &__button-container {
+    display: flex;
+    justify-content: space-between;
     margin-top: 25px;
+  }
+
+  &__button {
+    width: 136px;
+    height: 44px;
   }
 
   &__action-container {
     margin-left: 50px;
   }
-}
 
-.BannerToggle {
-  &__title {
+  &__checkbox {
+    justify-content: start;
+    margin-bottom: 19px;
+
+    &--action {
+      margin-bottom: 4px;
+    }
+  }
+
+  &__checkbox-label {
     font-size: $font-size--lg;
-    margin-left: $spacing--md;
   }
 }

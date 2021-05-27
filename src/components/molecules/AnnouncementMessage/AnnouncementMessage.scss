@@ -4,19 +4,48 @@ $spacing: 15px;
 $close-icon-width: 20px;
 $message-margin: $spacing + $close-icon-width + 5px;
 
-.announcement-container {
+.AnnouncementMessage {
   display: block;
-  z-index: z(announcement);
   position: relative;
   background: $primary;
-  width: 100%;
+  width: 638px;
   transition: left 0.1s linear;
 
   padding: $spacing 0;
   border-radius: 20px;
   text-align: center;
 
-  .close-button {
+  &__default-text {
+    opacity: 0.6;
+  }
+
+  &__title {
+    font-size: $font-size--xl;
+  }
+
+  &__content {
+    font-size: $font-size--md;
+    margin: 0 $message-margin;
+  }
+
+  &__action-button {
+    display: inline-block;
+    background-color: $primary--darker;
+    min-width: 136px;
+    min-height: 30px;
+    margin-top: 15px;
+    text-decoration: none;
+    font-size: $font-size--md;
+    font-weight: 500;
+    padding: 6px;
+    border-radius: $border-radius--xl;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__close-button {
     cursor: pointer;
     position: absolute;
     top: $spacing;
@@ -28,6 +57,26 @@ $message-margin: $spacing + $close-icon-width + 5px;
   }
 }
 
-.announcement-message {
-  margin: 0 $message-margin;
+.AnnouncementContainer {
+  position: fixed;
+  top: 66px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: z(announcement);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &--centered {
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    background-color: opaque-black(0.6);
+  }
+
+  &--canceled {
+    position: relative;
+    top: 0;
+  }
 }

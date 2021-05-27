@@ -6,11 +6,10 @@ export const makeUpdateBanner = (venueId: string) => async (
 ): Promise<void> => {
   const params = {
     venueId,
-    banner: data ?? {},
+    banner: data,
   };
 
-  await firebase
-    .functions()
-    .httpsCallable("venue-adminUpdateBannerMessage")(params)
-    .catch((e) => console.log(e));
+  await firebase.functions().httpsCallable("venue-adminUpdateBannerMessage")(
+    params
+  );
 };

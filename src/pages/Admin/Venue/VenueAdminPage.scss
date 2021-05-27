@@ -18,6 +18,11 @@
   &__options {
     display: flex;
     justify-content: space-between;
-    padding-top: 10px;
+    padding-top: 18px;
+  }
+
+  &__option-button {
+    height: 44px;
+    width: 136px;
   }
 }
