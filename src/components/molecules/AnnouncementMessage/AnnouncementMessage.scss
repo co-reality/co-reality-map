@@ -31,7 +31,7 @@ $message-margin: $spacing + $close-icon-width + 5px;
   &__action-button {
     display: inline-block;
     background-color: $primary--darker;
-    min-width: 136px;
+    min-width: $button-width;
     min-height: 30px;
     margin-top: 15px;
     text-decoration: none;

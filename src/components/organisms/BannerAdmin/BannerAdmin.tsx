@@ -63,20 +63,23 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
     [venueId, onClose]
   );
 
-  const onSubmit = (data: BannerFormData) => {
-    showModal();
-    setBannerDate(data);
-  };
+  const onSubmit = useCallback(
+    (data: BannerFormData) => {
+      showModal();
+      setBannerDate(data);
+    },
+    [showModal]
+  );
 
   const clearBanner = useCallback(() => {
     updateBannerInFirestore(initialBannerData);
     reset();
   }, [updateBannerInFirestore, reset]);
 
-  const confirmChangeBannerData = () => {
+  const confirmChangeBannerData = useCallback(() => {
     updateBannerInFirestore(bannerData);
     hideModal();
-  };
+  }, [bannerData, updateBannerInFirestore, hideModal]);
 
   return (
     <div className="Banner">

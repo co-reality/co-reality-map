@@ -1,0 +1,30 @@
+@import "scss/constants";
+
+.AnnouncementStatus {
+  &__buttons {
+    display: flex;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    margin-right: $spacing--xl;
+  }
+
+  &__img {
+    margin-right: $spacing--xs;
+  }
+
+  &__url {
+    margin-top: $spacing--lg;
+  }
+
+  &__url-text {
+    font-size: $font-size--md;
+    padding-left: $spacing--lg;
+
+    &--empty {
+      opacity: 0.4;
+    }
+  }
+}

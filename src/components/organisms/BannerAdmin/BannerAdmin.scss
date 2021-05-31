@@ -3,7 +3,7 @@
 .Banner {
   &__input-text {
     text-align: start;
-    padding: 6px 14px;
+    padding: $spacing--sm $spacing--lg;
     font-size: $font-size--md;
 
     &--large {
@@ -12,18 +12,18 @@
   }
 
   &__input-container {
-    margin-bottom: 14px;
+    margin-bottom: $spacing--lg;
   }
 
   &__button-container {
     display: flex;
     justify-content: space-between;
-    margin-top: 25px;
+    margin-top: $spacing--xl;
   }
 
   &__button {
-    width: 136px;
-    height: 44px;
+    width: $button-width;
+    height: $submit-button-diameter;
   }
 
   &__action-container {
@@ -32,10 +32,10 @@
 
   &__checkbox {
     justify-content: start;
-    margin-bottom: 19px;
+    margin-bottom: $spacing--lg;
 
     &--action {
-      margin-bottom: 4px;
+      margin-bottom: $spacing--xs;
     }
   }
 

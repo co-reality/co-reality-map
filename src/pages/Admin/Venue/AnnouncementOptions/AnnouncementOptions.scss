@@ -1,33 +1,17 @@
 @import "scss/constants";
 
 .AnnouncementOptions {
-  font-size: $font-size--lg;
-  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: $spacing--lg;
 
-  &__buttons {
-    display: flex;
+  &__left-side {
+    font-size: $font-size--lg;
+    margin-top: $spacing--xs;
   }
 
-  &__checkbox {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-  }
-
-  &__img {
-    margin-right: 4px;
-  }
-
-  &__url {
-    margin-top: 19px;
-  }
-
-  &__url-text {
-    font-size: $font-size--md;
-    padding-left: 17px;
-
-    &--empty {
-      opacity: 0.4;
-    }
+  &__edit-button {
+    height: $submit-button-diameter;
+    width: $button-width;
   }
 }

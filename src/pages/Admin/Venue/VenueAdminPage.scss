@@ -14,15 +14,4 @@
     border-radius: $border-radius--xl;
     opacity: 0.7;
   }
-
-  &__options {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 18px;
-  }
-
-  &__option-button {
-    height: 44px;
-    width: 136px;
-  }
 }
