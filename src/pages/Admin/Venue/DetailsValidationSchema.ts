@@ -15,11 +15,13 @@ import {
   BACKGROUND_IMG_TEMPLATES,
   MINIMUM_COLUMNS,
   MAXIMUM_COLUMNS,
-  VENUE_NAME_MAX_CHAR_COUNT,
-  VENUE_NAME_MIN_CHAR_COUNT,
 } from "settings";
 
 import { VenueTemplate } from "types/venues";
+import {
+  roomTitleSchema,
+  urlIfNoFileValidation,
+} from "pages/Admin/Details/ValidationSchema";
 
 const initialMapIconPlacement: VenueInput["placement"] = {
   x: (PLAYA_WIDTH - PLAYA_VENUE_SIZE) / 2,
@@ -46,53 +48,34 @@ const createFileSchema = (name: string, required: boolean) =>
       }
     );
 
-const urlIfNoFileValidation = (fieldName: string) =>
-  Yup.string().when(
-    fieldName,
-    (file: FileList | undefined, schema: Yup.MixedSchema<FileList>) =>
-      file && file.length > 0
-        ? schema.notRequired()
-        : schema.required("Required")
-  );
-
 export const validationSchema = Yup.object()
   .shape<VenueInput>({
     template: Yup.mixed<VenueTemplate>().required(),
-    name: Yup.string()
-      .required("Venue name is required")
-      .min(
-        VENUE_NAME_MIN_CHAR_COUNT,
-        ({ min }) => `Name must be at least ${min} characters`
-      )
-      .max(
-        VENUE_NAME_MAX_CHAR_COUNT,
-        ({ max }) => `Name must be less than ${max} characters`
-      )
-      .when(
-        "$editing",
-        (editing: boolean, schema: Yup.StringSchema) =>
-          !editing
-            ? schema
-                .test(
-                  "name",
-                  "Must have alphanumeric characters",
-                  (val: string) => createUrlSafeName(val).length > 0
-                )
-                .test(
-                  "name",
-                  "This venue name is already taken",
-                  async (val: string) =>
-                    !val ||
-                    !(
-                      await firebase
-                        .firestore()
-                        .collection("venues")
-                        .doc(createUrlSafeName(val))
-                        .get()
-                    ).exists
-                )
-            : schema //will be set from the data from the api. Does not need to be unique
-      ),
+    name: roomTitleSchema.when(
+      "$editing",
+      (editing: boolean, schema: Yup.StringSchema) =>
+        !editing
+          ? schema
+              .test(
+                "name",
+                "Must have alphanumeric characters",
+                (val: string) => createUrlSafeName(val).length > 0
+              )
+              .test(
+                "name",
+                "This venue name is already taken",
+                async (val: string) =>
+                  !val ||
+                  !(
+                    await firebase
+                      .firestore()
+                      .collection("venues")
+                      .doc(createUrlSafeName(val))
+                      .get()
+                  ).exists
+              )
+          : schema //will be set from the data from the api. Does not need to be unique
+    ),
     bannerImageFile: createFileSchema("bannerImageFile", false).notRequired(), // override files to make them non required
     logoImageFile: createFileSchema("logoImageFile", false).notRequired(),
 
@@ -185,10 +168,10 @@ export const validationSchema = Yup.object()
     showReactions: Yup.bool().notRequired(),
     auditoriumColumns: Yup.number()
       .notRequired()
-      .min(5, "Columns must be at least 5"),
+      .min(5, "There must be at least 5 columns"),
     auditoriumRows: Yup.number()
       .notRequired()
-      .min(5, "Rows must be at least 5"),
+      .min(5, "There must be at least 5 rows"),
   })
   .required();
 
