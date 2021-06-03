@@ -10,7 +10,7 @@ import { useShowHide } from "hooks/useShowHide";
 
 import { BannerFormData } from "types/banner";
 
-import { externalUrlAdditionalProps } from "utils/url";
+import { LinkButton } from "components/atoms/LinkButton";
 
 import "./AnnouncementMessage.scss";
 
@@ -70,13 +70,12 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
           {/* {getLinkFromText(banner.content)} */}
         </div>
         {isActiveButton && (
-          <a
+          <LinkButton
             href={banner.buttonUrl}
             className="AnnouncementMessage__action-button"
-            {...externalUrlAdditionalProps}
           >
             {banner.buttonDisplayText}
-          </a>
+          </LinkButton>
         )}
         {isUser && banner.isCloseButton ? (
           <span

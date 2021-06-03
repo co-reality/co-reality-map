@@ -5,25 +5,26 @@
 
   &__header {
     font-size: $font-size--xl;
+    margin: 0;
   }
 
   &__message {
-    padding: 10px 0 30px 0;
+    padding: $spacing--md 0 $spacing--xl;
   }
 
   &__buttons {
     display: flex;
     justify-content: space-around;
   }
-  &__confirm-button {
-    width: $button-width;
-  }
+}
 
-  &__cancel-button {
-    background-image: none;
-    background-color: $black;
-    border: solid $white 1px;
-    border-color: $white;
-    width: $button-width;
+// Override global styles button
+button.ConfirmationBannerModal__button {
+  width: $button-width;
+  font-weight: $font-weight--500;
+  background-color: $primary--live;
+
+  &--cancel {
+    background-color: opaque-white(0.2);
   }
 }

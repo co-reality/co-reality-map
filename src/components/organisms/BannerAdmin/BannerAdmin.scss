@@ -23,7 +23,6 @@
 
   &__button {
     width: $button-width;
-    height: $submit-button-diameter;
   }
 
   &__action-container {
@@ -41,5 +40,14 @@
 
   &__checkbox-label {
     font-size: $font-size--lg;
+  }
+}
+
+// Override global styles button
+button.Banner__button {
+  background-color: $primary--live;
+
+  &--close {
+    background-color: $red;
   }
 }

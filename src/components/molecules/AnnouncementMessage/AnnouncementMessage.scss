@@ -3,6 +3,8 @@
 $spacing: 15px;
 $close-icon-width: 20px;
 $message-margin: $spacing + $close-icon-width + 5px;
+$action-button-height: 30px;
+$action-button-padding: 6px;
 
 .AnnouncementMessage {
   display: block;
@@ -32,17 +34,10 @@ $message-margin: $spacing + $close-icon-width + 5px;
     display: inline-block;
     background-color: $primary--darker;
     min-width: $button-width;
-    min-height: 30px;
-    margin-top: 15px;
-    text-decoration: none;
+    min-height: $action-button-height;
     font-size: $font-size--md;
-    font-weight: 500;
-    padding: 6px;
-    border-radius: $border-radius--xl;
-
-    &:hover {
-      text-decoration: none;
-    }
+    font-weight: $font-weight--500;
+    padding: $action-button-padding $spacing--lg;
   }
 
   &__close-button {

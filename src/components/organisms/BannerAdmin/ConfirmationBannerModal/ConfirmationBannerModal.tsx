@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+
+import { Button } from "components/atoms/Button";
 
 import "./ConfirmationBannerModal.scss";
 
@@ -24,14 +26,13 @@ export const ConfirmationBannerModal: React.FC<ConfirmationBannerModalProps> = (
           <div className="ConfirmationBannerModal__message">Are you sure?</div>
           <div className="ConfirmationBannerModal__buttons">
             <Button
-              variant="secondary"
-              className="ConfirmationBannerModal__cancel-button"
+              customClass="ConfirmationBannerModal__button ConfirmationBannerModal__button--cancel"
               onClick={onCancel}
             >
               Cancel
             </Button>
             <Button
-              className="ConfirmationBannerModal__confirm-button"
+              customClass="ConfirmationBannerModal__button"
               onClick={onConfirm}
             >
               Clear & Save
