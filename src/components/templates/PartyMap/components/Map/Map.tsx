@@ -21,6 +21,10 @@ import { setLocationData } from "utils/userLocation";
 import { useKeyboardControls } from "hooks/useKeyboardControls";
 import { useRecentVenueUsers } from "hooks/users";
 
+import { useRelatedVenues } from "hooks/useRelatedVenues";
+import { useVenueEvents } from "hooks/events";
+import { isEventLive } from "utils/event";
+
 // @debt refactor these hooks into somewhere more sensible
 import { useMapGrid } from "./hooks/useMapGrid";
 import { usePartygoersbySeat } from "./hooks/usePartygoersBySeat";
@@ -199,6 +203,29 @@ export const Map: React.FC<MapProps> = ({
     partygoers: recentVenueUsers,
   });
 
+  const [liveRooms, setLiveRooms] = useState<Array<string | undefined>>();
+
+  const { relatedVenues, relatedVenueIds } = useRelatedVenues({
+    currentVenueId: venue.id,
+  });
+  const { events: relatedVenueEvents } = useVenueEvents({
+    venueIds: relatedVenueIds,
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const liveEvents = relatedVenueEvents.filter((event) =>
+        isEventLive(event)
+      );
+      const liveLocations = liveEvents.map(
+        (event) =>
+          relatedVenues.find((venue) => venue.id === event.venueId)?.name
+      );
+      setLiveRooms(liveLocations);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [relatedVenueEvents, relatedVenues]);
+
   const roomOverlay = useMemo(
     () =>
       venue?.rooms
@@ -208,10 +235,11 @@ export const Map: React.FC<MapProps> = ({
             key={room.title}
             venue={venue}
             room={room}
+            isLive={liveRooms?.includes(room.title)}
             selectRoom={() => selectRoom(room)}
           />
         )),
-    [selectRoom, venue]
+    [selectRoom, venue, liveRooms]
   );
 
   const gridContainerStyles = useMemo(

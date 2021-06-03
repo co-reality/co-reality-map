@@ -19,12 +19,14 @@ const noop = () => {};
 export interface MapRoomProps {
   venue: PartyMapVenue;
   room: Room;
+  isLive?: Boolean;
   selectRoom: () => void;
 }
 
 export const MapRoom: React.FC<MapRoomProps> = ({
   venue,
   room,
+  isLive,
   selectRoom,
 }) => {
   const { recentRoomUsers } = useRoom({ room, venueName: venue.name });
@@ -53,6 +55,10 @@ export const MapRoom: React.FC<MapRoomProps> = ({
   const titleClasses = classNames("maproom__title", {
     "maproom__title--count":
       !isUnclickable && venue.roomVisibility === RoomVisibility.count,
+  });
+
+  const imageClasses = classNames("maproom__image", {
+    "maproom__title islive": isLive,
   });
 
   const roomInlineStyles = useMemo(
@@ -86,7 +92,7 @@ export const MapRoom: React.FC<MapRoomProps> = ({
       onMouseEnter={isUnclickable ? noop : handleRoomHovered}
       onMouseLeave={isUnclickable ? noop : handleRoomUnhovered}
     >
-      <img className="maproom__image" src={room.image_url} alt={room.title} />
+      <img className={imageClasses} src={room.image_url} alt={room.title} />
 
       {!isUnclickable && (
         <div className="maproom__label">
