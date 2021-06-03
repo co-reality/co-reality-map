@@ -39,7 +39,7 @@ const PlayaVenue = ({
         <span className="img-vcenter-helper" />
         <img
           className="venue-icon"
-          src={venue.mapIconImageUrl || DEFAULT_MAP_ICON_URL}
+          src={DEFAULT_MAP_ICON_URL}
           alt={`${venue.name} Icon`}
         />
         {selectedVenueId === venue.id && <div className="selected" />}

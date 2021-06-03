@@ -21,6 +21,7 @@ import "firebase/storage";
 
 import { IS_BURN } from "secrets";
 import {
+  DEFAULT_MAP_ICON_URL,
   DEFAULT_VENUE,
   PLACEABLE_VENUE_TEMPLATES,
   PLAYA_HEIGHT,
@@ -297,14 +298,14 @@ const VenueInfoComponent: React.FC<VenueInfoComponentProps> = ({
                       interactive={false}
                       resizable={false}
                       iconsMap={
-                        venue.placement && venue.mapIconImageUrl
+                        venue.placement
                           ? {
                               icon: {
                                 width: PLAYA_VENUE_SIZE,
                                 height: PLAYA_VENUE_SIZE,
                                 top: venue.placement.y,
                                 left: venue.placement.x,
-                                url: venue.mapIconImageUrl,
+                                url: DEFAULT_MAP_ICON_URL,
                               },
                             }
                           : {}

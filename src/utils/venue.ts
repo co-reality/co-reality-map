@@ -62,10 +62,6 @@ export const createJazzbar = (values: FormValues): JazzbarVenue => {
   return {
     template: VenueTemplate.jazzbar,
     name: values.name || "Your Jazz Bar",
-    mapIconImageUrl: urlFromImage(
-      "/default-profile-pic.png",
-      values.mapIconImageFile
-    ),
     config: {
       theme: {
         primaryColor: "yellow",

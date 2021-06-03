@@ -644,7 +644,7 @@ const Playa = () => {
                 <span className="img-vcenter-helper" />
                 <img
                   className="venue-icon"
-                  src={v.mapIconImageUrl || DEFAULT_MAP_ICON_URL}
+                  src={DEFAULT_MAP_ICON_URL}
                   alt={`${v.name} Icon`}
                 />
 

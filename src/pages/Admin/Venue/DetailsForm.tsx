@@ -155,8 +155,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({
   const mapIconUrl = useMemo(() => {
     const file = values.mapIconImageFile;
     if (file && file.length > 0) return URL.createObjectURL(file[0]);
-    return values.mapIconImageUrl;
-  }, [values.mapIconImageFile, values.mapIconImageUrl]);
+  }, [values.mapIconImageFile]);
 
   const iconsMap = useMemo(
     () =>

@@ -39,7 +39,6 @@ export const PlayaContainer: React.FC<PropsType> = (props) => {
               height: v.height ? (v.height / PLAYA_HEIGHT) * 100 : 2,
               top: v.placement?.y,
               left: v.placement?.x,
-              url: v.mapIconImageUrl,
             },
           };
         }, {}) ?? {}

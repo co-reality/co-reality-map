@@ -3,12 +3,7 @@ import { AnyVenue, PartyMapVenue, VenueTemplate } from "types/venues";
 import { WithId } from "utils/id";
 import { PartyMapContainer } from "pages/Account/Venue/VenueMapEdition";
 import { ConvertToEmbeddableUrl } from "utils/ConvertToEmbeddableUrl";
-import {
-  IFRAME_ALLOW,
-  PLAYA_IMAGE,
-  PLAYA_VENUE_NAME,
-  PLAYA_VENUE_STYLES,
-} from "settings";
+import { IFRAME_ALLOW, PLAYA_IMAGE, PLAYA_VENUE_STYLES } from "settings";
 import { AdminVenueRoomsList } from "./AdminVenueRoomsList";
 
 export interface AdminVenuePreviewProps {
@@ -143,14 +138,6 @@ export const AdminVenuePreview: React.FC<AdminVenuePreviewProps> = ({
                 }
                 alt="icon"
               />
-            </div>
-          </div>
-          <div style={{ width: "150px" }}>
-            <div className="title" style={{ width: "150px" }}>
-              {PLAYA_VENUE_NAME} icon
-            </div>
-            <div className="content">
-              <img className="icon" src={venue.mapIconImageUrl} alt="icon" />
             </div>
           </div>
           <div style={{ width: "150px" }}>
