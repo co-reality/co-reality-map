@@ -1,18 +1,13 @@
 import { useCallback } from "react";
 
+import { KeyboardShortcutKeys } from "settings";
+
 import { ReactHook } from "types/utility";
 
 import { useMousetrap } from "hooks/useMousetrap";
 import { useUser } from "hooks/useUser";
 
-export const MovementKeys = {
-  up: ["up", "w"],
-  down: ["down", "s"],
-  left: ["left", "a"],
-  right: ["right", "d"],
-};
-
-interface UseKeyboardControlsProps {
+export interface UseMapKeyboardControlsProps {
   venueId: string;
   totalRows: number;
   totalColumns: number;
@@ -23,13 +18,10 @@ interface UseKeyboardControlsProps {
 // TODO: use e.preventDefault() or return false or similar in the keyboard handlers (check mousetrap docs) so we don't scroll on arrow key presses
 // TODO: we may also need some kind of 'centre me on the map' logic somewhere when we do this too? For large zoomed maps.
 // TODO: implement bindRef using useRef() or similar (in Camp?) then remove all withGlobalBind (default is false)
-export const useKeyboardControls: ReactHook<UseKeyboardControlsProps, void> = ({
-  venueId,
-  totalRows,
-  totalColumns,
-  isSeatTaken,
-  takeSeat,
-}) => {
+export const useMapKeyboardControls: ReactHook<
+  UseMapKeyboardControlsProps,
+  void
+> = ({ venueId, totalRows, totalColumns, isSeatTaken, takeSeat }) => {
   const { profile } = useUser();
   const { row, column } = profile?.data?.[venueId] ?? {};
 
@@ -44,7 +36,7 @@ export const useKeyboardControls: ReactHook<UseKeyboardControlsProps, void> = ({
   }, [row, column, isSeatTaken, takeSeat]);
 
   useMousetrap({
-    keys: MovementKeys.up,
+    keys: KeyboardShortcutKeys.movement.up,
     callback: moveUp,
     // TODO: bindRef: (null as never) as MutableRefObject<HTMLElement>,
     withGlobalBind: true, // TODO: remove this once we have a ref to bind to
@@ -61,7 +53,7 @@ export const useKeyboardControls: ReactHook<UseKeyboardControlsProps, void> = ({
   }, [row, column, totalRows, isSeatTaken, takeSeat]);
 
   useMousetrap({
-    keys: MovementKeys.down,
+    keys: KeyboardShortcutKeys.movement.down,
     callback: moveDown,
     // TODO: bindRef: (null as never) as MutableRefObject<HTMLElement>,
     withGlobalBind: true, // TODO: remove this once we have a ref to bind to
@@ -78,7 +70,7 @@ export const useKeyboardControls: ReactHook<UseKeyboardControlsProps, void> = ({
   }, [row, column, isSeatTaken, takeSeat]);
 
   useMousetrap({
-    keys: MovementKeys.left,
+    keys: KeyboardShortcutKeys.movement.left,
     callback: moveLeft,
     // TODO: bindRef: (null as never) as MutableRefObject<HTMLElement>,
     withGlobalBind: true, // TODO: remove this once we have a ref to bind to
@@ -95,7 +87,7 @@ export const useKeyboardControls: ReactHook<UseKeyboardControlsProps, void> = ({
   }, [row, column, totalColumns, isSeatTaken, takeSeat]);
 
   useMousetrap({
-    keys: MovementKeys.right,
+    keys: KeyboardShortcutKeys.movement.right,
     callback: moveRight,
     // TODO: bindRef: (null as never) as MutableRefObject<HTMLElement>,
     withGlobalBind: true, // TODO: remove this once we have a ref to bind to

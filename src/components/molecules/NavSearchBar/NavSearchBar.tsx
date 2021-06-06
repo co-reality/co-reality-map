@@ -1,10 +1,20 @@
-import React, { useCallback, useState, ChangeEvent, useMemo } from "react";
+import React, {
+  useCallback,
+  useState,
+  ChangeEvent,
+  useMemo,
+  useRef,
+} from "react";
 import classNames from "classnames";
 import { isEqual } from "lodash";
 
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-import { DEFAULT_PARTY_NAME, DEFAULT_VENUE_LOGO } from "settings";
+import {
+  DEFAULT_PARTY_NAME,
+  DEFAULT_VENUE_LOGO,
+  KeyboardShortcutKeys,
+} from "settings";
 
 import { Room, RoomTypes } from "types/rooms";
 import { AnyVenue, VenueEvent } from "types/venues";
@@ -17,6 +27,7 @@ import { isTruthy, isDefined } from "utils/types";
 import { useVenueEvents } from "hooks/events";
 import { useWorldUsers } from "hooks/users";
 import { useDebounceSearch } from "hooks/useDebounceSearch";
+import { useMousetrap } from "hooks/useMousetrap";
 import { useProfileModalControls } from "hooks/useProfileModalControls";
 import { useRelatedVenues } from "hooks/useRelatedVenues";
 
@@ -178,6 +189,19 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
     [searchQuery]
   );
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const focusSearchBar = useCallback((e) => {
+    e.preventDefault();
+    inputRef.current?.focus();
+  }, []);
+
+  useMousetrap({
+    keys: KeyboardShortcutKeys.search,
+    callback: focusSearchBar,
+    // TODO: bindRef: (null as never) as MutableRefObject<HTMLElement>,
+    withGlobalBind: true, // TODO: remove this once we have a ref to bind to
+  });
+
   return (
     <div className="NavSearchBar">
       <div className={navDropdownClassnames}>
@@ -200,6 +224,7 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
       </div>
 
       <InputField
+        ref={inputRef}
         value={searchInputValue}
         inputClassName="NavSearchBar__search-input"
         onChange={onSearchInputChange}

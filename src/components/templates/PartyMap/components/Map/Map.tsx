@@ -18,7 +18,7 @@ import { filterEnabledRooms, makeRoomHitFilter } from "utils/filter";
 import { WithId } from "utils/id";
 import { setLocationData } from "utils/userLocation";
 
-import { useKeyboardControls } from "hooks/useKeyboardControls";
+import { useMapKeyboardControls } from "hooks/useMapKeyboardControls";
 import { useRecentVenueUsers } from "hooks/users";
 
 // @debt refactor these hooks into somewhere more sensible
@@ -171,7 +171,7 @@ export const Map: React.FC<MapProps> = ({
     partygoers,
   });
 
-  useKeyboardControls({
+  useMapKeyboardControls({
     venueId,
     totalRows,
     totalColumns,

@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import classNames from "classnames";
+import { KeyboardShortcutKeys } from "settings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
@@ -61,9 +62,24 @@ const InputField: React.ForwardRefRenderFunction<
 
   const inputClassNames = classNames("input-field__input", inputClassName);
 
+  // @debt Replace this with useMousetrap when we fix it to bind refs (not just globally)
+  const keyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      e.key.toLowerCase() === KeyboardShortcutKeys.inputField.deselect &&
+      e.target
+    ) {
+      e.currentTarget.blur();
+    }
+  };
+
   return (
     <div className={containerClassNames}>
-      <input ref={ref} className={inputClassNames} {...extraInputProps} />
+      <input
+        ref={ref}
+        className={inputClassNames}
+        onKeyDown={keyDown}
+        {...extraInputProps}
+      />
 
       {iconStart && renderIcon(iconStart, "input-field__icon--start")}
       {iconEnd && renderIcon(iconEnd, "input-field__icon--end")}
