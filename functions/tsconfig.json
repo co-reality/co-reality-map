@@ -1,20 +1,31 @@
 {
+  // Note: ensure that the function's node version supports the features of the target specified here:
+  //   https://www.typescriptlang.org/tsconfig#target
+  //   https://github.com/tsconfig/bases#node-10-tsconfigjson
+  //   https://node.green/#ES2018
+  "extends": "@tsconfig/node10/tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    // Note: These are all set by @tsconfig/node10/tsconfig.json anyway, but including here for explicitness
+    "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+
+    // Imports / Outputs
+    "baseUrl": "./src",
+    "outDir": "lib",
+    "moduleResolution": "node", // We should only need to set this explicitly when module == AMD, UMD, System, or ES6; but just in case
+    "sourceMap": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react",
-    "baseUrl": "./src"
+    "resolveJsonModule": true, // Allows importing *.json files
+
+    // Etc
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true
   },
+  "compileOnSave": true,
   "include": ["src"]
 }

@@ -1,3 +1,5 @@
+// TODO: Rename this file to venue.ts (or venue/index.ts) + refactor to make proper use of TypeScript
+
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const { checkAuth } = require("./auth");

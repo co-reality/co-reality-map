@@ -1,3 +1,5 @@
+// TODO: Rename this file to stats.ts (or stats/index.ts) + refactor to make proper use of TypeScript
+
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 

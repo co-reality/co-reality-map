@@ -1,3 +1,5 @@
+// TODO: Rename this file to auth.ts (or auth/index.ts) + refactor to make proper use of TypeScript
+
 const functions = require("firebase-functions");
 const PROJECT_ID = functions.config().project.id;
 

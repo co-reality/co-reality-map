@@ -1,12 +1,18 @@
 {
   "name": "functions",
-  "description": "Cloud Functions for Firebase",
   "scripts": {
-    "lint": "prettier --write \"./**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "lint": "prettier --write \"./**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
   "engines": {
     "node": "10"
   },
+  "main": "lib/index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "firebase": "^8.2.4",
@@ -17,11 +23,13 @@
     "uuidv4": "^6.2.6"
   },
   "devDependencies": {
+    "@tsconfig/node10": "^1.0.7",
     "eslint": "^7.19.0",
     "eslint-plugin-promise": "^4.0.1",
     "firebase-functions-test": "^0.2.3",
     "firebase-tools": "^9.2.2",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "typescript": "^4.3.2"
   },
   "private": true
 }

@@ -1,3 +1,5 @@
+// TODO: Rename this file to video.ts (or video/index.ts) + refactor to make proper use of TypeScript
+
 const functions = require("firebase-functions");
 
 const twilio = require("twilio");

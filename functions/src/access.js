@@ -1,3 +1,5 @@
+// TODO: Rename this file to access.ts (or access/index.ts) + refactor to make proper use of TypeScript
+
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const { HttpsError } = require("firebase-functions/lib/providers/https");
