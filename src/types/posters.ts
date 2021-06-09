@@ -3,4 +3,5 @@ export type Poster = {
   categories: string[];
   introVideoUrl: string;
   authorName: string;
+  thumbnailUrl: string;
 };

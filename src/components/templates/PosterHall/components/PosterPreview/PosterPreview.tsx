@@ -18,7 +18,8 @@ export interface PosterPreviewProps {
 export const PosterPreview: React.FC<PosterPreviewProps> = ({
   posterVenue,
 }) => {
-  const { title, authorName, categories } = posterVenue.poster ?? {};
+  const { title, authorName, categories, thumbnailUrl } =
+    posterVenue.poster ?? {};
 
   const venueId = posterVenue.id;
 
@@ -47,6 +48,8 @@ export const PosterPreview: React.FC<PosterPreviewProps> = ({
       </p>
 
       <div className="PosterPreview__categories">{renderedCategories}</div>
+
+      <img src={thumbnailUrl} alt="Thumbnail" />
 
       <div className="PosterPreview__author">{authorName}</div>
     </div>

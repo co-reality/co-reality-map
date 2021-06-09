@@ -1,6 +1,6 @@
 @import "scss/constants";
 
-$poster-preview-height: 200px;
+$poster-preview-height: 350px;
 $poster-preview-width: 300px;
 $active-poster-shadows: 0 10px 20px 0 rgba($primary, 0.56);
 
@@ -47,6 +47,7 @@ $active-poster-shadows: 0 10px 20px 0 rgba($primary, 0.56);
   }
 
   &__categories {
+    margin-bottom: auto;
     display: flex;
     flex-wrap: wrap;
   }
