@@ -8,10 +8,10 @@
   &__title {
     text-align: center;
     margin-top: 41px;
-    padding: 5px;
+    padding: $spacing--xs;
     font-size: $font-size--sm;
-    background: #1a1d24;
+    background: $dark;
     border-radius: $border-radius--xl;
-    opacity: 0.7;
+    opacity: 0.9;
   }
 }
