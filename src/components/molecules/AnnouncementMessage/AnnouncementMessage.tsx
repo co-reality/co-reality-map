@@ -44,7 +44,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   const isActiveButton =
     banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
 
-  const containerClassNames = classNames("AnnouncementMessage__container", {
+  const containerClasses = classNames("AnnouncementMessage__container", {
     "AnnouncementMessage__container--centered": banner?.isFullScreen,
     "AnnouncementMessage__container--canceled": !isUser,
   });
@@ -61,7 +61,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   if (!isShownAnnouncementMessage || !banner?.content) return null;
 
   return (
-    <div className={containerClassNames} onClick={hideAnnouncementMessage}>
+    <div className={containerClasses} onClick={hideAnnouncementMessage}>
       <div className="AnnouncementMessage" onClick={noop}>
         {banner?.title && (
           <h2 className="AnnouncementMessage__title">{banner.title}</h2>
