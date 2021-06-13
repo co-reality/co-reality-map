@@ -68,9 +68,9 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [isActionButtonValue]);
 
   const updateBannerInFirestore = useCallback(
-    (data: BannerFormData) => {
+    (banner: BannerFormData) => {
       if (!venueId) return;
-      makeUpdateBanner(venueId)(data);
+      makeUpdateBanner({ venueId, banner });
       onClose();
     },
     [venueId, onClose]
