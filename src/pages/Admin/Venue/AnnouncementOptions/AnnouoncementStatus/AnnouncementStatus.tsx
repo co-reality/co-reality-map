@@ -11,8 +11,8 @@ export interface AnnouncementStatusProps {
   banner?: BannerFormData;
 }
 
-const ENABLED = "enabled";
-const DISABLED = "disabled";
+const ENABLED__TEXT = "enabled";
+const DISABLED__TEXT = "disabled";
 
 export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
   banner,
@@ -20,8 +20,8 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
   const fullscreenImg = banner?.isFullScreen ? faCheck : faTimes;
   const closeImg = banner?.hasCloseButton ? faCheck : faTimes;
 
-  const fullscreenText = banner?.isFullScreen ? ENABLED : DISABLED;
-  const forceText = banner?.hasCloseButton ? ENABLED : DISABLED;
+  const fullscreenText = banner?.isFullScreen ? ENABLED__TEXT : DISABLED__TEXT;
+  const forceText = banner?.hasCloseButton ? ENABLED__TEXT : DISABLED__TEXT;
 
   const urlText = banner?.isActionButton ? banner?.buttonUrl : "blank";
 
