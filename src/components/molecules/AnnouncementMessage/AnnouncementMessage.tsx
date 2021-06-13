@@ -17,12 +17,12 @@ import "./AnnouncementMessage.scss";
 
 export interface AnnouncementMessageProps {
   banner?: BannerFormData;
-  isUser?: boolean;
+  announcementForUser?: boolean;
 }
 
 export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   banner,
-  isUser = false,
+  announcementForUser = false,
 }) => {
 
   const {
@@ -46,10 +46,10 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
 
   const containerClasses = classNames("AnnouncementMessage__container", {
     "AnnouncementMessage__container--centered": banner?.isFullScreen,
-    "AnnouncementMessage__container--canceled": !isUser,
+    "AnnouncementContainer--canceled": !announcementForUser,
   });
 
-  if (!isUser && !banner?.content)
+  if (!announcementForUser && !banner?.content)
     return (
       <div className="AnnouncementMessage">
         <span className="AnnouncementMessage__default-text">
@@ -78,7 +78,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
             {banner.buttonDisplayText}
           </LinkButton>
         )}
-        {isUser && banner.hasCloseButton ? (
+        {announcementForUser && banner.isCloseButton ? (
           <span
             className="AnnouncementMessage__close-button"
             onClick={hideAnnouncementMessage}
