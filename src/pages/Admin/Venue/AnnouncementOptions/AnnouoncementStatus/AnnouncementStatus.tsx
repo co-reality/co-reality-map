@@ -3,14 +3,14 @@ import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { BannerFormData } from "types/banner";
+import { Banner } from "types/banner";
 
 import { isDefined } from "utils/types";
 
 import "./AnnouncementStatus.scss";
 
 export interface AnnouncementStatusProps {
-  banner?: BannerFormData;
+  banner?: Banner;
 }
 
 const ENABLED__TEXT = "enabled";

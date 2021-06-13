@@ -9,14 +9,14 @@ import { isDefined } from "utils/types";
 
 import { useShowHide } from "hooks/useShowHide";
 
-import { BannerFormData } from "types/banner";
+import { Banner } from "types/banner";
 
 import { LinkButton } from "components/atoms/LinkButton";
 
 import "./AnnouncementMessage.scss";
 
 export interface AnnouncementMessageProps {
-  banner?: BannerFormData;
+  banner?: Banner;
   announcementForUser?: boolean;
 }
 
@@ -78,7 +78,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
             {banner.buttonDisplayText}
           </LinkButton>
         )}
-        {announcementForUser && banner.isCloseButton ? (
+        {announcementForUser && banner.hasCloseButton ? (
           <span
             className="AnnouncementMessage__close-button"
             onClick={hideAnnouncementMessage}

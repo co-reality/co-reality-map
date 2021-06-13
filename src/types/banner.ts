@@ -1,4 +1,4 @@
-export interface BannerFormData {
+export interface Banner {
   title?: string;
   content?: string;
   isActionButton?: boolean;

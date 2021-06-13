@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BannerFormData } from "types/banner";
+import { Banner } from "types/banner";
 
 import { Button } from "components/atoms/Button";
 
@@ -9,7 +9,7 @@ import { AnnouncementStatus } from "./AnnouoncementStatus";
 import "./AnnouncementOptions.scss";
 
 export interface AnnouncementOptionsProps {
-  banner?: BannerFormData;
+  banner?: Banner;
   onEdit: () => void;
 }
 

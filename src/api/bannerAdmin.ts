@@ -1,9 +1,9 @@
 import firebase from "firebase/app";
-import { BannerFormData } from "types/banner";
+import { Banner } from "types/banner";
 
 export interface makeUpdateBannerProps {
   venueId: string;
-  banner?: BannerFormData;
+  banner?: Banner;
 }
 
 export const makeUpdateBanner = async ({

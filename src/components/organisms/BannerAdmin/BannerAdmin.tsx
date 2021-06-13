@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { makeUpdateBanner } from "api/bannerAdmin";
 
 import { AnyVenue } from "types/venues";
-import { BannerFormData } from "types/banner";
+import { Banner } from "types/banner";
 
 import { useShowHide } from "hooks/useShowHide";
 
@@ -29,19 +29,13 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   venue,
   onClose,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    reset,
-    watch,
-  } = useForm<BannerFormData>({
+  const { register, handleSubmit, errors, reset, watch } = useForm<Banner>({
     mode: "onChange",
     reValidateMode: "onChange",
   });
   const isActionButtonValue = watch("isActionButton");
 
-  const [bannerData, setBannerDate] = useState<BannerFormData>();
+  const [bannerData, setBannerDate] = useState<Banner>();
 
   const {
     isShown: isShowModal,
@@ -57,7 +51,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [isActionButtonValue]);
 
   const updateBannerInFirestore = useCallback(
-    (banner?: BannerFormData) => {
+    (banner?: Banner) => {
       if (!venueId) return;
       makeUpdateBanner({ venueId, banner });
       onClose();
@@ -66,7 +60,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   );
 
   const onSubmit = useCallback(
-    (data: BannerFormData) => {
+    (data: Banner) => {
       showModal();
       setBannerDate(data);
     },
