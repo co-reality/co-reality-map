@@ -1,6 +1,6 @@
 @import "scss/constants.scss";
 
-.Banner {
+.BannerAdmin {
   &__input-text {
     text-align: start;
     padding: $spacing--sm $spacing--lg;
@@ -44,7 +44,7 @@
 }
 
 // Override global styles button
-button.Banner__button {
+button.BannerAdmin__button {
   background-color: $primary--live;
 
   &--close {

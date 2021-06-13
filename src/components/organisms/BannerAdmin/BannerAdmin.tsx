@@ -95,15 +95,15 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [bannerData, updateBannerInFirestore, hideModal]);
 
   return (
-    <div className="Banner">
+    <div className="BannerAdmin">
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
           ref={register}
           name="title"
           placeholder="Please type your announcement title. (optional)"
           defaultValue={venue?.banner?.title}
-          containerClassName="Banner__input-container"
-          inputClassName="Banner__input-text"
+          containerClassName="BannerAdmin__input-container"
+          inputClassName="BannerAdmin__input-text"
           autoComplete="off"
         />
 
@@ -111,7 +111,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           <textarea
             name="content"
             defaultValue={venue?.banner?.content}
-            className="Banner__input-text"
+            className="BannerAdmin__input-text"
             placeholder="Please type your announcement content"
             ref={register({ required: true })}
           />
@@ -121,8 +121,8 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         </div>
 
         <Checkbox
-          containerClassName="Banner__checkbox Banner__checkbox--action"
-          labelClassName="Banner__checkbox-label"
+          containerClassName="BannerAdmin__checkbox BannerAdmin__checkbox--action"
+          labelClassName="BannerAdmin__checkbox-label"
           name="isActionButton"
           label="Call to Action Button"
           toggler
@@ -130,14 +130,14 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           defaultChecked={venue?.banner?.isActionButton}
         />
 
-        <div className="Banner__action-container">
+        <div className="BannerAdmin__action-container">
           <InputField
             ref={register}
             name="buttonUrl"
             placeholder="Button URL"
             defaultValue={venue?.banner?.buttonUrl}
-            containerClassName="Banner__input-container"
-            inputClassName="Banner__input-text"
+            containerClassName="BannerAdmin__input-container"
+            inputClassName="BannerAdmin__input-text"
             disabled={!isDisabledUrlFields}
             autoComplete="off"
           />
@@ -146,14 +146,14 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
             name="buttonDisplayText"
             placeholder="Button display text"
             defaultValue={venue?.banner?.buttonDisplayText}
-            containerClassName="Banner__input-container"
-            inputClassName="Banner__input-text"
+            containerClassName="BannerAdmin__input-container"
+            inputClassName="BannerAdmin__input-text"
             disabled={!isDisabledUrlFields}
             autoComplete="off"
           />
         </div>
         <Checkbox
-          containerClassName="Banner__checkbox"
+          containerClassName="BannerAdmin__checkbox"
           name="isFullScreen"
           label="Set fullscreen announcement"
           toggler
@@ -162,7 +162,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         />
 
         <Checkbox
-          containerClassName="Banner__checkbox"
+          containerClassName="BannerAdmin__checkbox"
           name="hasCloseButton"
           label="Force funnel (users will have to click your button)"
           toggler
@@ -170,14 +170,14 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           defaultChecked={venue?.banner?.hasCloseButton}
         />
 
-        <div className="Banner__button-container">
+        <div className="BannerAdmin__button-container">
           <Button
-            customClass="Banner__button Banner__button--close"
+            customClass="BannerAdmin__button BannerAdmin__button--close"
             onClick={clearBanner}
           >
             Clear
           </Button>
-          <Button customClass="Banner__button" type="submit">
+          <Button customClass="BannerAdmin__button" type="submit">
             Save
           </Button>
         </div>
