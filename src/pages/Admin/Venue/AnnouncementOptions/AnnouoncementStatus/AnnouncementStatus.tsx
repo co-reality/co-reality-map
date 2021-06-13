@@ -5,6 +5,8 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { BannerFormData } from "types/banner";
 
+import { isDefined } from "utils/types";
+
 import "./AnnouncementStatus.scss";
 
 export interface AnnouncementStatusProps {
@@ -29,7 +31,7 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
     "AnnouncementStatus__url-text--empty": !banner?.isActionButton,
   });
 
-  if (!banner?.content) return null;
+  if (isDefined(!banner?.content)) return null;
 
   return (
     <div className="AnnouncementStatus">
