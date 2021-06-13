@@ -23,7 +23,7 @@ const initialBannerData = {
   buttonUrl: "",
   buttonDisplayText: "",
   isFullScreen: false,
-  isCloseButton: false,
+  hasCloseButton: false,
 };
 
 interface BannerAdminProps {
@@ -163,11 +163,11 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
 
         <Checkbox
           containerClassName="Banner__checkbox"
-          name="isCloseButton"
+          name="hasCloseButton"
           label="Force funnel (users will have to click your button)"
           toggler
           forwardedRef={register}
-          defaultChecked={venue?.banner?.isCloseButton}
+          defaultChecked={venue?.banner?.hasCloseButton}
         />
 
         <div className="Banner__button-container">

@@ -5,5 +5,5 @@ export interface BannerFormData {
   buttonUrl?: string;
   buttonDisplayText?: string;
   isFullScreen?: boolean;
-  isCloseButton?: boolean;
+  hasCloseButton?: boolean;
 }
