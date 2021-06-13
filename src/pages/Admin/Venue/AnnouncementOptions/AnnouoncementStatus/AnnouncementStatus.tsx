@@ -1,10 +1,9 @@
 import React from "react";
 import classNames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { BannerFormData } from "types/banner";
-
-import iconCheck from "assets/icons/icon-checkmark.svg";
-import iconClose from "assets/icons/icon-close.svg";
 
 import "./AnnouncementStatus.scss";
 
@@ -18,8 +17,8 @@ const DISABLED = "disabled";
 export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
   banner,
 }) => {
-  const fullscreenImg = banner?.isFullScreen ? iconCheck : iconClose;
-  const closeImg = banner?.isCloseButton ? iconCheck : iconClose;
+  const fullscreenImg = banner?.isFullScreen ? faCheck : faTimes;
+  const closeImg = banner?.isCloseButton ? faCheck : faTimes;
 
   const fullscreenText = banner?.isFullScreen ? ENABLED : DISABLED;
   const forceText = banner?.isCloseButton ? ENABLED : DISABLED;
@@ -36,15 +35,17 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
     <div className="AnnouncementStatus">
       <div className="AnnouncementStatus__buttons">
         <span className="AnnouncementStatus__checkbox">
-          <img
-            src={fullscreenImg}
-            alt="on"
+          <FontAwesomeIcon
+            icon={fullscreenImg}
             className="AnnouncementStatus__img"
           />
           FullScreen {fullscreenText}
         </span>
         <span className="AnnouncementStatus__checkbox">
-          <img src={closeImg} alt="off" className="AnnouncementStatus__img" />
+          <FontAwesomeIcon
+            icon={closeImg}
+            className="AnnouncementStatus__img"
+          />
           Force funnel {forceText}
         </span>
       </div>
