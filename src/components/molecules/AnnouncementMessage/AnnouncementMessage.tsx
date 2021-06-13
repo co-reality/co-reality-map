@@ -58,7 +58,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
       </div>
     );
 
-  if (!isShownAnnouncementMessage || !banner?.content) return null;
+  if (!isShownAnnouncementMessage) return null;
 
   return (
     <div className={containerClasses} onClick={hideAnnouncementMessage}>
