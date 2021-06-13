@@ -50,28 +50,28 @@ $action-button-padding: 6px;
       text-decoration: underline;
     }
   }
-}
 
-.AnnouncementContainer {
-  position: fixed;
-  top: 66px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: z(announcement);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  &--centered {
-    bottom: 0;
+  &__container {
+    position: fixed;
+    top: 66px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: z(announcement);
     display: flex;
-    align-items: center;
-    background-color: opaque-black(0.6);
-  }
+    justify-content: center;
+    align-items: flex-start;
 
-  &--canceled {
-    position: relative;
-    top: 0;
+    &--centered {
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      background-color: opaque-black(0.6);
+    }
+
+    &--canceled {
+      position: relative;
+      top: 0;
+    }
   }
 }

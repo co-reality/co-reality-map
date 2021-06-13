@@ -43,9 +43,9 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   const isActiveButton =
     banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
 
-  const containerClassNames = classNames("AnnouncementContainer", {
-    "AnnouncementContainer--centered": banner?.isFullScreen,
-    "AnnouncementContainer--canceled": !isUser,
+  const containerClassNames = classNames("AnnouncementMessage__container", {
+    "AnnouncementMessage__container--centered": banner?.isFullScreen,
+    "AnnouncementMessage__container--canceled": !isUser,
   });
 
   if (!isUser && !banner?.content)
