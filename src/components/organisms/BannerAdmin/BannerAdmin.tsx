@@ -16,16 +16,6 @@ import { ConfirmationBannerModal } from "./ConfirmationBannerModal";
 
 import "./BannerAdmin.scss";
 
-const initialBannerData = {
-  title: "",
-  content: "",
-  isActionButton: false,
-  buttonUrl: "",
-  buttonDisplayText: "",
-  isFullScreen: false,
-  hasCloseButton: false,
-};
-
 interface BannerAdminProps {
   venueId?: string;
   venue: AnyVenue;
@@ -51,9 +41,8 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   });
   const isActionButtonValue = watch("isActionButton");
 
-  const [bannerData, setBannerDate] = useState<BannerFormData>(
-    initialBannerData
-  );
+  const [bannerData, setBannerDate] = useState<BannerFormData>();
+
   const {
     isShown: isShowModal,
     show: showModal,
@@ -68,7 +57,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [isActionButtonValue]);
 
   const updateBannerInFirestore = useCallback(
-    (banner: BannerFormData) => {
+    (banner?: BannerFormData) => {
       if (!venueId) return;
       makeUpdateBanner({ venueId, banner });
       onClose();
@@ -85,7 +74,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   );
 
   const clearBanner = useCallback(() => {
-    updateBannerInFirestore(initialBannerData);
+    updateBannerInFirestore(undefined);
     reset();
   }, [updateBannerInFirestore, reset]);
 
