@@ -1,6 +1,7 @@
 #!/usr/bin/env node -r esm -r ts-node/register
 
-import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
+import admin from "firebase-admin";
 
 import {
   checkFileExists,
@@ -10,11 +11,7 @@ import {
   parseCredentialFile,
 } from "./lib/helpers";
 
-// ---------------------------------------------------------
-// Configuration (this is the bit you should edit)
-// ---------------------------------------------------------
-
-const EMAIL_ADDRESSES: string[] = [];
+import "firebase/firestore";
 
 // ---------------------------------------------------------
 // HERE THERE BE DRAGONS (edit below here at your own risk)
@@ -22,17 +19,22 @@ const EMAIL_ADDRESSES: string[] = [];
 
 const usage = makeScriptUsage({
   description: "Bulk register users based on the supplied email address(es).",
-  usageParams: "CREDENTIAL_PATH EMAIL1 EMAIL2 EMAIlN...",
+  usageParams: "CREDENTIAL_PATH EMAIL_FILE_PATH",
   exampleParams: "fooAccountKey.json foouser@example.com baruser@example.com",
 });
 
-const [credentialPath, ...extraEmailAddresses] = process.argv.slice(2);
+const [credentialPath, emailListPath] = process.argv.slice(2);
 if (!credentialPath) {
   usage();
 }
 
 if (!checkFileExists(credentialPath)) {
   console.error("Credential file path does not exists:", credentialPath);
+  process.exit(1);
+}
+
+if (!checkFileExists(emailListPath)) {
+  console.error("Email file path does not exists:", emailListPath);
   process.exit(1);
 }
 
@@ -46,9 +48,13 @@ if (!projectId) {
 const app = initFirebaseAdminApp(projectId, { credentialPath });
 
 (async () => {
-  const allEmailAddresses = [...EMAIL_ADDRESSES, ...extraEmailAddresses];
+  const usersToCreate = fs
+    .readFileSync(emailListPath, "utf-8")
+    .split(/\r?\n/)
+    .map((line) => line.split(","));
 
-  for (const email of allEmailAddresses) {
+  for (const user of usersToCreate) {
+    const [username, email, password, avatarImgSrc] = user;
     const existingUser = await findUserByEmail(app)(email);
 
     if (existingUser) {
@@ -56,9 +62,12 @@ const app = initFirebaseAdminApp(projectId, { credentialPath });
       continue;
     }
 
-    const password = uuidv4();
+    const createdUser = await app.auth().createUser({ email, password });
 
-    await app.auth().createUser({ email, password });
+    await admin.firestore().collection("users").doc(createdUser.uid).set({
+      partyName: username,
+      pictureUrl: avatarImgSrc,
+    });
 
     console.log(`User created: email=${email}, password=${password}`);
   }
