@@ -27,6 +27,7 @@ export const PosterPreview: React.FC<PosterPreviewProps> = ({
   });
 
   const { push: openUrlUsingRouter } = useHistory();
+
   const handleEnterVenue = useCallback(
     () => enterVenue(venueId, { customOpenRelativeUrl: openUrlUsingRouter }),
     [venueId, openUrlUsingRouter]

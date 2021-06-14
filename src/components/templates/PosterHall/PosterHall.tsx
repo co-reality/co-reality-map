@@ -33,11 +33,13 @@ export const PosterHall: React.FC<PosterHallProps> = ({ venue }) => {
 
   const shouldShowMorePosters = isPostersLoaded && hasHiddenPosters;
 
-  const renderedPosterPreviews = useMemo(() => {
-    return posterVenues.map((posterVenue) => (
-      <PosterPreview key={posterVenue.id} posterVenue={posterVenue} />
-    ));
-  }, [posterVenues]);
+  const renderedPosterPreviews = useMemo(
+    () =>
+      posterVenues.map((posterVenue) => (
+        <PosterPreview key={posterVenue.id} posterVenue={posterVenue} />
+      )),
+    [posterVenues]
+  );
 
   return (
     <div className="PosterHall">

@@ -3,13 +3,17 @@
 $modal-width: 50vw;
 $modal-height: calc(#{$modal-width} * 9 / 16);
 
-.IntroVideoPreviewModal {
+.PosterPreviewVideoModal {
   &__iframe {
     width: 100%;
     height: 100%;
     border: none;
     border-radius: $border-radius--lg;
     background-color: $lighter-intermediate-grey;
+  }
+
+  &__title {
+    margin: $spacing--xs 0;
   }
 
   // @debt use contentClassName prop instead of this .modal-content override when we upgrade to a version of react-bootstrap that supports it

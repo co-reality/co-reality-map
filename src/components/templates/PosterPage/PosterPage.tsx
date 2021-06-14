@@ -10,10 +10,10 @@ import { WithId } from "utils/id";
 import { useShowHide } from "hooks/useShowHide";
 
 import { VideoParticipant } from "components/organisms/Video";
+import { PosterPreviewVideoModal } from "components/molecules/PosterPreviewVideoModal";
 import { UserList } from "components/molecules/UserList";
 import { PosterCategory } from "components/atoms/PosterCategory";
 
-import { IntroVideoPreviewModal } from "./components/IntroVideoPreviewModal";
 import { PosterPageControl } from "./components/PosterPageControl";
 import { PosterPageSettingsControl } from "./components/PosterPageSettingsControl";
 import { ShareModal } from "./components/ShareModal";
@@ -148,7 +148,7 @@ export const PosterPage: React.FC<PosterPageProps> = ({ venue }) => {
       />
 
       {introVideoUrl && (
-        <IntroVideoPreviewModal
+        <PosterPreviewVideoModal
           isVisible={isIntroVideoShown}
           onHide={hideIntroVideoModal}
           introVideoUrl={introVideoUrl}
