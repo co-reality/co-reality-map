@@ -32,12 +32,16 @@ export interface ScheduleEventProps {
   event: PersonalizedVenueEvent;
   scheduleStartHour: number;
   personalizedEvent?: boolean;
+  overlapEvents?: number;
+  totalOverlaps?: number;
 }
 
 export const ScheduleEvent: React.FC<ScheduleEventProps> = ({
   event,
   scheduleStartHour,
   personalizedEvent: isPersonalizedEvent = false,
+  overlapEvents,
+  totalOverlaps,
 }) => {
   const { userId } = useUser();
 
@@ -51,9 +55,16 @@ export const ScheduleEvent: React.FC<ScheduleEventProps> = ({
     scheduleStartHour
   );
 
+  const eventMarginTopPx: number = overlapEvents ? overlapEvents * 24 + 4 : 0;
+  const eventHeightPx: number =
+    totalOverlaps !== 1 ? (60 / (totalOverlaps || 24)) * 2.5 : 60;
+  console.log(totalOverlaps, overlapEvents);
+
   const containerCssVars = useCss({
     "--event--margin-left": `${eventMarginLeftPx}px`,
     "--event--width": `${eventWidthPx}px`,
+    "--event--margin-top": `${eventMarginTopPx}px`,
+    "--event--height": `${eventHeightPx}px`,
   });
 
   const containerClasses = classNames(

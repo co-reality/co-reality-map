@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { PersonalizedVenueEvent } from "types/venues";
+import { checkOverlap } from "utils/event";
 
 import { ScheduleEvent } from "components/molecules/ScheduleEvent";
 
@@ -17,14 +18,21 @@ export const _ScheduleRoomEvents: React.FC<ScheduleRoomEventsProps> = ({
   scheduleStartHour,
   personalizedRoom,
 }) => {
+  const { overlapEvents, totalOverlaps, sortedEvents } = useMemo(
+    () => checkOverlap(events),
+    [events]
+  );
+
   return (
     <div className="ScheduleRoomEvents">
-      {events.map((event) => (
+      {sortedEvents.map((event, index) => (
         <ScheduleEvent
           key={`event-${event.id}`}
           personalizedEvent={personalizedRoom}
           event={event}
           scheduleStartHour={scheduleStartHour}
+          overlapEvents={overlapEvents[index]}
+          totalOverlaps={totalOverlaps[index]}
         />
       ))}
     </div>

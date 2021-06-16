@@ -7,7 +7,7 @@ import {
   isWithinInterval,
 } from "date-fns";
 
-import { VenueEvent } from "types/venues";
+import { VenueEvent, PersonalizedVenueEvent } from "types/venues";
 
 import {
   formatUtcSecondsRelativeToNow,
@@ -84,4 +84,36 @@ export const getEventStatus = (event: VenueEvent) => {
   } else {
     return `Starts ${formatUtcSecondsRelativeToNow(event.start_utc_seconds)}`;
   }
+};
+
+export const checkOverlap = (events: PersonalizedVenueEvent[]) => {
+  let overlapEvents: number[] = new Array(events.length).fill(0);
+  let totalOverlaps: number[] = new Array(events.length).fill(1);
+
+  if (events.length === 1)
+    return { overlapEvents, totalOverlaps, sortedEvents: events };
+
+  const sortedEvents = events.sort(
+    (a, b) => a.start_utc_seconds - b.start_utc_seconds
+  );
+
+  let count = 0;
+
+  for (let i = 0; i < sortedEvents.length - 1; i++) {
+    const currentEndTime =
+      sortedEvents[i].start_utc_seconds + sortedEvents[i].duration_minutes * 60;
+    const nextStartTime = sortedEvents[i + 1].start_utc_seconds;
+
+    if (currentEndTime - nextStartTime > 60) {
+      count += 1;
+      overlapEvents[i + 1] = count;
+      for (let j = 0; j < count + 1; j++) {
+        totalOverlaps[i + 1 - j] = count + 1;
+      }
+    } else {
+      count = 0;
+    }
+  }
+
+  return { overlapEvents, totalOverlaps, sortedEvents };
 };
