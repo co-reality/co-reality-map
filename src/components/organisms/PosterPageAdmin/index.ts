@@ -1,0 +1,1 @@
+export { PosterPageAdmin } from "./PosterPageAdmin";

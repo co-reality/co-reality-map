@@ -16,6 +16,7 @@ import { useConnectCurrentVenueNG } from "hooks/useConnectCurrentVenueNG";
 import { LoadingPage } from "components/molecules/LoadingPage";
 import { IframeAdmin } from "components/molecules/IframeAdmin";
 import { BannerAdmin } from "components/organisms/BannerAdmin";
+import { PosterPageAdmin } from "components/organisms/PosterPageAdmin";
 
 import "./VenueAdminPage.scss";
 
@@ -55,6 +56,9 @@ export const VenueAdminPage: React.FC = () => {
       <h4 className="admin-page-title">You are editing venue: {venue.name}</h4>
       <BannerAdmin venueId={venueId} venue={venue} />
       {isIframeVenue && <IframeAdmin venueId={venueId} venue={venue} />}
+      {venue.template === "posterpage" && user && (
+        <PosterPageAdmin user={user} venueId={venueId} venue={venue} />
+      )}
     </>
   );
 };
