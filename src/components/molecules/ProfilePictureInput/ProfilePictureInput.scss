@@ -1,3 +1,5 @@
+@import "scss/constants";
+
 .default-avatars-container {
   display: flex;
   flex-direction: row;
@@ -7,4 +9,50 @@
     height: 40px;
     border: 0px solid;
   }
+}
+
+.profile-picture-preview {
+  width: 80px;
+  height: 80px;
+  border: 3px solid $white;
+  margin-bottom: -10px;
+}
+
+.profile-picture-preview-container {
+  display: flex;
+  justify-content: center;
+  z-index: z(account-profile-picture-preview);
+}
+
+.profile-picture-input {
+  display: none;
+}
+
+.profile-picture-button {
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  border-radius: 22px;
+  border: solid $primary;
+  padding: 10px 30px;
+  margin: 10px 0;
+  font-weight: 700;
+
+  &:hover {
+    transform: translateY(-1px);
+    background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+    background-color: darken($primary, 20%);
+  }
+}
+
+.profile-picture-upload-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
 }
