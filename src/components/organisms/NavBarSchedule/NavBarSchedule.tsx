@@ -42,6 +42,8 @@ import {
   prepareForSchedule,
 } from "./utils";
 
+import { SCHEDULE_SHOW_VENUE_DESCRIPTION_IN_NAVBAR } from "settings";
+
 import "./NavBarSchedule.scss";
 
 const emptyRelatedEvents: WithVenueId<VenueEvent>[] = [];
@@ -208,7 +210,9 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
 
   return (
     <div className={containerClasses}>
-      {venueId && <ScheduleVenueDescription venueId={venueId} />}
+      {venueId && SCHEDULE_SHOW_VENUE_DESCRIPTION_IN_NAVBAR && (
+        <ScheduleVenueDescription venueId={venueId} />
+      )}
       {!isLoadingSchedule && (
         <div className="NavBarSchedule__download-buttons">
           {hasSavedEvents && (
