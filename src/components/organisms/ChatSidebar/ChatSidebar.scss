@@ -10,7 +10,6 @@ $header-height: 45px;
   flex-flow: column;
   top: 66px;
   right: 0;
-  width: $chat-sidebar-width;
   height: calc(100vh - 96px);
   background-color: $saturated-black;
   z-index: z(sidebar);
