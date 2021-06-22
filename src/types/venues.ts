@@ -25,6 +25,7 @@ export enum VenueTemplate {
   friendship = "friendship",
   jazzbar = "jazzbar",
   partymap = "partymap",
+  animatemap = "animatemap",
   performancevenue = "performancevenue",
   playa = "playa",
   posterhall = "posterhall",
@@ -46,6 +47,7 @@ export type GenericVenueTemplates = Exclude<
   | VenueTemplate.embeddable
   | VenueTemplate.jazzbar
   | VenueTemplate.partymap
+  | VenueTemplate.animatemap
   | VenueTemplate.posterpage
   | VenueTemplate.themecamp
 >;
@@ -56,6 +58,7 @@ export type AnyVenue =
   | EmbeddableVenue
   | JazzbarVenue
   | PartyMapVenue
+  | AnimateMapVenue
   | PosterPageVenue;
 
 // --- VENUE V2
@@ -176,6 +179,11 @@ export interface BaseVenue {
 
 export interface GenericVenue extends BaseVenue {
   template: GenericVenueTemplates;
+}
+
+export interface AnimateMapVenue extends BaseVenue {
+  id: string;
+  template: VenueTemplate.animatemap;
 }
 
 // @debt which of these params are exactly the same as on Venue? Can we simplify this?

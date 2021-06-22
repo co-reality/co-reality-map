@@ -17,6 +17,7 @@ const VenueTemplate = {
   friendship: "friendship",
   jazzbar: "jazzbar",
   partymap: "partymap",
+  animatemap: "animatemap",
   performancevenue: "performancevenue",
   playa: "playa",
   posterhall: "posterhall",
@@ -45,6 +46,7 @@ const VALID_CREATE_TEMPLATES = [
   VenueTemplate.friendship,
   VenueTemplate.jazzbar,
   VenueTemplate.partymap,
+  VenueTemplate.animatemap,
   VenueTemplate.performancevenue,
   VenueTemplate.themecamp,
   VenueTemplate.zoomroom,
@@ -227,6 +229,7 @@ const createVenueData = (data, context) => {
   }
 
   switch (data.template) {
+    case VenueTemplate.animatemap:
     case VenueTemplate.partymap:
     case VenueTemplate.themecamp:
       venueData.rooms = data.rooms;

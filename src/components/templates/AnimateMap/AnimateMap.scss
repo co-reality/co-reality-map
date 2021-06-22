@@ -1,0 +1,16 @@
+@import "scss/constants.scss";
+
+.navbar-margin {
+  height: 100%;
+}
+
+.AnimateMap {
+  display: block;
+  height: 100%;
+
+  overflow-x: hidden;
+
+  &__pixi-canvas {
+    display: block;
+  }
+}

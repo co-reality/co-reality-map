@@ -28,6 +28,7 @@ import { UserProfileModal } from "components/organisms/UserProfileModal";
 import { WithNavigationBar } from "components/organisms/WithNavigationBar";
 
 import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
+import { AnimateMap } from "components/templates/AnimateMap";
 
 export interface TemplateWrapperProps {
   venue: WithId<AnyVenue>;
@@ -59,6 +60,10 @@ const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
     case VenueTemplate.partymap:
     case VenueTemplate.themecamp:
       template = <PartyMap venue={venue} />;
+      break;
+
+    case VenueTemplate.animatemap:
+      template = <AnimateMap venue={venue} />;
       break;
 
     case VenueTemplate.artpiece:
