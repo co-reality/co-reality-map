@@ -179,6 +179,7 @@ export interface BaseVenue {
   leftLogo?: string;
   rightLogo?: string;
   canBeBookmarked?: boolean;
+  showCategoriesFilter?: boolean;
 }
 
 export interface GenericVenue extends BaseVenue {

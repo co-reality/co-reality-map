@@ -152,7 +152,7 @@ export const PLAYA_VENUE_STYLES: Record<string, CSSProperties> = {
 };
 
 export const ACCEPTED_IMAGE_TYPES =
-  "image/png,image/x-png,image/gif,image/jpg,image/jpeg,image/tiff,image/bmp,image/gif";
+  "image/png,image/x-png,image/gif,image/jpg,image/jpeg,image/tiff,image/bmp,image/gif,image/webp";
 
 export const VALID_URL_PROTOCOLS = ["http:", "https:"];
 

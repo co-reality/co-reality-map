@@ -14,9 +14,12 @@ import { UserProfilePicture } from "components/molecules/UserProfilePicture";
 
 import { PosterCategory } from "components/atoms/PosterCategory";
 
+import { IntroVideoPreviewModal } from "../../../PosterPage/components/IntroVideoPreviewModal";
+
 import "./PosterPreview.scss";
 
 import { POSTERPAGE_MORE_INFO_URL_TITLE } from "settings";
+import { useShowHide } from "hooks/useShowHide";
 
 export interface PosterPreviewProps {
   posterVenue: WithId<PosterPageVenue>;
@@ -38,6 +41,7 @@ export const PosterPreview: React.FC<PosterPreviewProps> = ({
     moreInfoUrlTitle = POSTERPAGE_MORE_INFO_URL_TITLE,
     contactEmail,
     thumbnailUrl,
+    introVideoUrl,
   } = posterVenue.poster ?? {};
 
   const venueId = posterVenue.id;
@@ -59,6 +63,7 @@ export const PosterPreview: React.FC<PosterPreviewProps> = ({
           ".PosterPreview__info",
           ".PosterPreview__moreInfoUrl",
           ".PosterPreview__avatar",
+          ".PosterPreview__video",
         ])
       )
         return;
@@ -139,54 +144,80 @@ export const PosterPreview: React.FC<PosterPreviewProps> = ({
     "PosterPreview__thumbnail--empty": !renderImg,
   });
 
+  const {
+    isShown: isIntroVideoShown,
+
+    show: showIntroVideoModal,
+    hide: hideIntroVideoModal,
+  } = useShowHide();
+
   return (
-    <div className={posterClassnames} onClick={handleEnterVenue}>
-      <div className="PosterPreview__header">
-        <div className="PosterPreview__info">
-          {canBeBookmarked && (
-            <div className={posterBookmarkClassname}>
-              <PosterBookmark posterVenue={posterVenue} />
-            </div>
-          )}
-          {posterId && (
-            <div className="PosterPreview__posterId">{renderMoreInfoUrl}</div>
+    <>
+      <div className={posterClassnames} onClick={handleEnterVenue}>
+        <div className="PosterPreview__header">
+          <div className="PosterPreview__info">
+            {canBeBookmarked && (
+              <div className={posterBookmarkClassname}>
+                <PosterBookmark posterVenue={posterVenue} />
+              </div>
+            )}
+            {posterId && (
+              <div className="PosterPreview__posterId">{renderMoreInfoUrl}</div>
+            )}
+            {introVideoUrl && (
+              <div
+                className="PosterPreview__video"
+                onClick={showIntroVideoModal}
+              >
+                Play Video
+              </div>
+            )}
+          </div>
+          {hasUsers && (
+            <div className="PosterPreview__visiting">{userCountText}</div>
           )}
         </div>
-        {hasUsers && (
-          <div className="PosterPreview__visiting">{userCountText}</div>
-        )}
-      </div>
 
-      <p className="PosterPreview__title">{title}</p>
+        <p className="PosterPreview__title">{title}</p>
 
-      <div className={thumbnailClassNames}>{renderImg && renderThumbnail}</div>
+        <div className={thumbnailClassNames}>
+          {renderImg && renderThumbnail}
+        </div>
 
-      {!posterId && hasMoreInfo && (
-        <p className="PosterPreview__moreInfoUrl">
-          {renderMoreInfoUrl}
-          {renderMoreInfoUrls}
-        </p>
-      )}
-
-      {contactEmail && (
-        <p className="PosterPreview__contactEmail">{contactEmail}</p>
-      )}
-
-      <div className="PosterPreview__categories">{renderedCategories}</div>
-
-      <div className="PosterPreview__authorBox">
-        {presenterUser && (
-          <UserProfilePicture
-            containerClassName="PosterPreview__avatar"
-            user={presenterUser}
-            showStatus
-          />
+        {!posterId && hasMoreInfo && (
+          <p className="PosterPreview__moreInfoUrl">
+            {renderMoreInfoUrl}
+            {renderMoreInfoUrls}
+          </p>
         )}
 
-        <span className="PosterPreview__author">
-          {authorList ?? authorName}
-        </span>
+        {contactEmail && (
+          <p className="PosterPreview__contactEmail">{contactEmail}</p>
+        )}
+
+        <div className="PosterPreview__categories">{renderedCategories}</div>
+
+        <div className="PosterPreview__authorBox">
+          {presenterUser && (
+            <UserProfilePicture
+              containerClassName="PosterPreview__avatar"
+              user={presenterUser}
+              showStatus
+            />
+          )}
+
+          <span className="PosterPreview__author">
+            {authorList ?? authorName}
+          </span>
+        </div>
       </div>
-    </div>
+      {introVideoUrl && (
+        <IntroVideoPreviewModal
+          isVisible={isIntroVideoShown}
+          onHide={hideIntroVideoModal}
+          introVideoUrl={`${introVideoUrl}?autoplay=1`}
+        />
+      )}
+    </>
   );
 };

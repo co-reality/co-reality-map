@@ -8,6 +8,7 @@ import { tokeniseStringWithQuotesBySpaces } from "utils/text";
 import { posterVenuesSelector } from "utils/selectors";
 import { isEventLive } from "utils/event";
 import { WithVenueId } from "utils/id";
+import { isTruthy } from "utils/types";
 
 import { isLoaded, useFirestoreConnect } from "./useFirestoreConnect";
 import { useSelector } from "./useSelector";
@@ -63,10 +64,27 @@ export const usePosters = (posterHallId: string) => {
     setSearchInputValue,
   } = useDebounceSearch();
 
+  const [categoryFilter, _setCategoryFilter] = useState<string>();
+  const [subCategoryFilter, setSubCategoryFilter] = useState<string>();
   const [liveFilter, setLiveFilter] = useState<boolean>(false);
+  const [bookmarkedFilter, setBookmarkedFilter] = useState<boolean>(false);
   const [displayedPostersCount, setDisplayedPostersAmount] = useState(
     DEFAULT_DISPLAYED_POSTER_PREVIEW_COUNT
   );
+  const { userWithId } = useUser();
+  const userPosterIds = userWithId?.savedPosters ?? emptySavedPosters;
+
+  const setCategoryFilter = useCallback((category: string) => {
+    // Clear previously chosen subcategory
+    setSubCategoryFilter(undefined);
+    _setCategoryFilter(category);
+  }, []);
+
+  const unsetCategoryFilter = useCallback(() => {
+    // Clear chosen subcategory, if any
+    setSubCategoryFilter(undefined);
+    _setCategoryFilter(undefined);
+  }, []);
 
   const increaseDisplayedPosterCount = useCallback(() => {
     setDisplayedPostersAmount(
@@ -75,17 +93,91 @@ export const usePosters = (posterHallId: string) => {
     );
   }, []);
 
+  const categoryList = useMemo(() => {
+    const liveFilterResultsCategory = liveFilter
+      ? posterVenues.filter((posterVenue) => posterVenue.isLive)
+      : posterVenues;
+    const bookmarkedFilterResultsCategory = bookmarkedFilter
+      ? liveFilterResultsCategory.filter(
+          (posterVenue) =>
+            //@ts-ignore
+            userPosterIds[posterVenue.id]?.[0] === posterVenue.id
+        )
+      : liveFilterResultsCategory;
+    return Array.from(
+      new Set(
+        bookmarkedFilterResultsCategory
+          .map((posterVenue) => posterVenue.poster?.categories)
+          .flat()
+      )
+    );
+  }, [liveFilter, posterVenues, bookmarkedFilter, userPosterIds]);
+
+  const filteredPostersByCategory = useMemo(
+    () =>
+      categoryFilter
+        ? posterVenues.filter((posterVenue) =>
+            posterVenue.poster?.categories.includes(categoryFilter)
+          )
+        : posterVenues,
+    [posterVenues, categoryFilter]
+  );
+
+  const subCategoryList = useMemo(() => {
+    const liveFilterResultsSubCategory = liveFilter
+      ? filteredPostersByCategory.filter((posterVenue) => posterVenue.isLive)
+      : filteredPostersByCategory;
+    const bookmarkedFilterResultsSubCategory = bookmarkedFilter
+      ? liveFilterResultsSubCategory.filter(
+          (posterVenue) =>
+            //@ts-ignore
+            userPosterIds[posterVenue.id]?.[0] === posterVenue.id
+        )
+      : liveFilterResultsSubCategory;
+    return categoryFilter
+      ? Array.from(
+          new Set(
+            bookmarkedFilterResultsSubCategory
+              .map((posterVenue) => posterVenue.poster?.subcategories)
+              .flat()
+              .filter((subcategory) =>
+                subcategory?.category.includes(categoryFilter)
+              )
+              .map((subcategory) => subcategory?.subcategory)
+              .flat()
+          )
+        ).filter(isTruthy)
+      : [];
+  }, [
+    liveFilter,
+    filteredPostersByCategory,
+    bookmarkedFilter,
+    categoryFilter,
+    userPosterIds,
+  ]);
+
+  const filteredPostersBySubCategory = useMemo(
+    () =>
+      subCategoryFilter
+        ? filteredPostersByCategory.filter((posterVenue) =>
+            posterVenue.poster?.subcategories
+              ?.map((subcategory) => subcategory?.subcategory)
+              .includes(subCategoryFilter)
+          )
+        : filteredPostersByCategory,
+    [filteredPostersByCategory, subCategoryFilter]
+  );
+
   const liveFilteredPosterVenues = useMemo(
     () =>
       liveFilter
-        ? posterVenues.filter((posterVenue) => posterVenue.isLive)
-        : posterVenues,
-    [posterVenues, liveFilter]
+        ? filteredPostersBySubCategory.filter(
+            (filteredPostersBySubCategory) =>
+              filteredPostersBySubCategory.isLive
+          )
+        : filteredPostersBySubCategory,
+    [filteredPostersBySubCategory, liveFilter]
   );
-
-  const [bookmarkedFilter, setBookmarkedFilter] = useState<boolean>(false);
-  const { userWithId } = useUser();
-  const userPosterIds = userWithId?.savedPosters ?? emptySavedPosters;
 
   const filteredPosterVenues = useMemo(
     () =>
@@ -173,7 +265,12 @@ export const usePosters = (posterHallId: string) => {
     isPostersLoaded,
     hasHiddenPosters,
 
+    categoryList,
+    subCategoryList,
+
     searchInputValue,
+    categoryFilter,
+    subCategoryFilter,
     liveFilter,
     bookmarkedFilter,
 
@@ -181,6 +278,9 @@ export const usePosters = (posterHallId: string) => {
     setSearchInputValue,
     setLiveFilter,
     setBookmarkedFilter,
+    setCategoryFilter,
+    setSubCategoryFilter,
+    unsetCategoryFilter,
   };
 };
 

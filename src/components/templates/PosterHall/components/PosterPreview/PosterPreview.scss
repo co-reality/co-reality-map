@@ -47,13 +47,25 @@ $thumbnail-border-radius: 15px;
 
   &__posterId {
     display: inline;
-    font-size: $font-size--sm;
+    font-size: $font-size--xxs;
+    color: $white;
+    padding: $spacing--xs $spacing--sm;
+    margin: 0 $spacing--xs;
+    border-radius: $border-radius--lg;
+    background-color: $primary--light;
+    font-weight: $font-weight--500;
   }
 
   &__visiting {
     display: inline;
-    font-size: $font-size--sm;
     margin-left: auto;
+    font-size: $font-size--xxs;
+    color: $white;
+    padding: $spacing--xs $spacing--sm;
+    margin: 0 $spacing--xs;
+    border-radius: $border-radius--lg;
+    background-color: $primary--live;
+    font-weight: $font-weight--500;
   }
 
   &__title {
@@ -119,5 +131,16 @@ $thumbnail-border-radius: 15px;
 
   &__img {
     border-radius: $thumbnail-border-radius;
+  }
+
+  &__video {
+    display: inline;
+    font-size: $font-size--xxs;
+    color: $white;
+    padding: $spacing--xs $spacing--sm;
+    margin: 0 $spacing--xs;
+    border-radius: $border-radius--lg;
+    background-color: $dark-green;
+    font-weight: $font-weight--500;
   }
 }
