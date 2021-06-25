@@ -10,8 +10,6 @@ import { getCurrentEvent } from "utils/event";
 
 import { useDispatch } from "hooks/useDispatch";
 
-import { RenderMarkdown } from "components/organisms/RenderMarkdown";
-
 import "./RoomModalOngoingEvent.scss";
 
 interface RoomModalOngoingEventProps {
@@ -57,9 +55,6 @@ export const RoomModalOngoingEvent: React.FC<RoomModalOngoingEventProps> = ({
             <div>
               by <span className="artist-name">{eventToDisplay.host}</span>
             </div>
-          </div>
-          <div className="event-description">
-            <RenderMarkdown text={eventToDisplay.description} />
           </div>
         </>
       )}
