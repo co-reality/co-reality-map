@@ -622,7 +622,7 @@ export const USER_STATUSES = [UserStatus.available, UserStatus.busy];
 // @debt probably would be better to adjust max hour based on user's display size
 export const SCHEDULE_MAX_START_HOUR = 16;
 export const SCHEDULE_HOUR_COLUMN_WIDTH_PX = 200;
-export const SCHEDULE_SHOW_DAYS_AHEAD = 7;
+export const SCHEDULE_SHOW_DAYS_AHEAD = 4;
 /**
  * @see https://firebase.google.com/docs/firestore/query-data/queries#in_not-in_and_array-contains-any
  */
