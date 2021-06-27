@@ -17,12 +17,14 @@ import "./RoomModalOngoingEvent.scss";
 interface RoomModalOngoingEventProps {
   roomEvents: VenueEvent[];
   onRoomEnter: () => void;
+  roomUrl: string;
   joinButtonText?: string;
 }
 
 export const RoomModalOngoingEvent: React.FC<RoomModalOngoingEventProps> = ({
   roomEvents,
   onRoomEnter,
+  roomUrl,
   joinButtonText,
 }) => {
   const dispatch = useDispatch();
@@ -69,7 +71,7 @@ export const RoomModalOngoingEvent: React.FC<RoomModalOngoingEventProps> = ({
         className="btn btn-primary room-entry-button"
         onClick={onRoomEnter}
       >
-        {joinButtonText ?? "Enter"}
+        <a href={roomUrl}>{joinButtonText ?? "Enter"}</a>
       </button>
     </div>
   );
