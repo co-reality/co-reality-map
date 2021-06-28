@@ -203,9 +203,9 @@ export const Map: React.FC<MapProps> = ({
     () =>
       venue?.rooms
         ?.filter(filterEnabledRooms)
-        .map((room) => (
+        .map((room, index) => (
           <MapRoom
-            key={room.title}
+            key={index}
             venue={venue}
             room={room}
             selectRoom={() => selectRoom(room)}
@@ -235,12 +235,13 @@ export const Map: React.FC<MapProps> = ({
           src={venue.mapBackgroundImageUrl ?? DEFAULT_MAP_BACKGROUND}
           alt=""
         />
-
-        <div className="party-map-grid-container" style={gridContainerStyles}>
-          {mapGrid}
-          {partygoersOverlay}
-          {roomOverlay}
-        </div>
+        {totalRows && (
+          <div className="party-map-grid-container" style={gridContainerStyles}>
+            {mapGrid}
+            {partygoersOverlay}
+            {roomOverlay}
+          </div>
+        )}
       </div>
     </div>
   );
