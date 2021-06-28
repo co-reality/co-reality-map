@@ -1,13 +1,15 @@
 import React, { useMemo } from "react";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 import { AnyVenue, isPartyMapVenue } from "types/venues";
 
+import { useShowHide } from "hooks/useShowHide";
+
 import { WithId } from "utils/id";
 
 import { AdminVenueCard } from "components/molecules/AdminVenueCard";
+import { CreateVenueModal } from "components/molecules/CreateVenueModal";
 
 import "./AdminVenues.scss";
 
@@ -16,6 +18,12 @@ export interface AdminVenuesProps {
 }
 
 export const AdminVenues: React.FC<AdminVenuesProps> = ({ venues }) => {
+  const {
+    isShown: isModalVisible,
+    show: showModal,
+    hide: hideModal,
+  } = useShowHide();
+
   const renderedPartyVenues = useMemo(
     () =>
       venues
@@ -30,9 +38,7 @@ export const AdminVenues: React.FC<AdminVenuesProps> = ({ venues }) => {
     <div className="admin-venue">
       <div className="admin-venue__header">
         <div className="admin-venue__title">Admin Dashboard</div>
-        <Button as={Link} to="/admin-ng/venue/creation">
-          Create a new space
-        </Button>
+        <Button onClick={showModal}>Create a new space</Button>
       </div>
       <div
         className={classNames("admin-venue__cards", {
@@ -49,6 +55,7 @@ export const AdminVenues: React.FC<AdminVenuesProps> = ({ venues }) => {
         )}
         {hasVenues && renderedPartyVenues}
       </div>
+      <CreateVenueModal isVisible={isModalVisible} onHide={hideModal} />
     </div>
   );
 };

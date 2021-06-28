@@ -1,0 +1,87 @@
+@import "scss/constants.scss";
+
+// Styles that change bootstraps Modal component
+.modal-backdrop.in {
+  background-color: $black;
+}
+
+.modal-content.in {
+  background-color: $saturated-black;
+}
+
+.CreateVenueModal {
+  background-color: $saturated-black;
+  padding: 20px;
+
+  &__content {
+    padding: 10px 20px;
+  }
+
+  &__title {
+    text-align: center;
+    padding-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  &__url-info {
+    padding: 1rem 0;
+    font-size: 1rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  &__url {
+    padding: 1rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+
+    &--back {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      background-color: $cancel-button-background;
+      color: $white;
+      padding: 16px 18px;
+      border-radius: 22px;
+      border-width: 0px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        background-color: $cancel-button-hover-background;
+      }
+    }
+
+    &--next {
+      display: flex;
+      flex: 4;
+      justify-content: center;
+      background-color: $primary;
+      color: $white;
+      margin-left: 10px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      border-width: 0px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        background-color: $confirm-button-hover-background;
+      }
+    }
+  }
+}

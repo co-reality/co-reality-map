@@ -51,12 +51,11 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
     rooms,
     mapBackgroundImageUrl = DEFAULT_MAP_BACKGROUND,
   } = venue;
-  const {
-    subtitle,
-    description,
-    coverImageUrl,
-  } = venue.config.landingPageConfig;
-  const { icon } = venue.host;
+
+  const { subtitle, description, coverImageUrl } =
+    venue.config?.landingPageConfig ?? {};
+
+  const icon = venue.host?.icon;
   const { user } = useUser();
 
   const [ownersData, setOwnersData] = useState<Owner[]>([]);

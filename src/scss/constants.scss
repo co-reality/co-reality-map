@@ -47,8 +47,11 @@ $chat-open: rgba(80, 227, 194, 0.35);
 $chat-closed: rgba(dodgerblue, 0.35);
 $chat-busy: rgba($primary, 0.35);
 $chat-busy-me: rgba(#ffffff, 0.35);
+$gradient: linear-gradient(124deg, #00f6d5 0%, $secondary 50%, #e15ada 100%);
+$cancel-button-background: lighten($saturated-black, 10);
+$cancel-button-hover-background: lighten($saturated-black, 20);
+$confirm-button-hover-background: lighten($primary, 10);
 
-$gradient: linear-gradient(124deg, #00f6d5 0%, $primary 50%, #e15ada 100%);
 $danger-gradient: linear-gradient(
   124deg,
   #e15a5a 0%,

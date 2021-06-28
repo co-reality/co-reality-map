@@ -13,12 +13,12 @@ export interface WizardState {
 
 export interface SetBannerUrl {
   type: typeof ActionTypes.SET_BANNER_URL;
-  payload: string;
+  payload?: string;
 }
 
 export interface SetSquareLogoUrl {
   type: typeof ActionTypes.SET_SQUARE_LOGO_URL;
-  payload: string;
+  payload?: string;
 }
 
 export interface SetFormValues {

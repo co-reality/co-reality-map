@@ -35,14 +35,14 @@ const VenueWizardEdit: React.FC<VenueWizardEditProps> = ({
       type: SET_FORM_VALUES,
       payload: {
         name: data.name,
-        subtitle: data.config.landingPageConfig.subtitle,
-        description: data.config.landingPageConfig.description,
+        subtitle: data.config?.landingPageConfig?.subtitle,
+        description: data.config?.landingPageConfig?.description,
         showGrid: data.showGrid,
         columns: data.columns,
       },
     });
-    setBannerURL(dispatch, data.config.landingPageConfig.coverImageUrl);
-    setSquareLogoUrl(dispatch, data.host.icon);
+    setBannerURL(dispatch, data.config?.landingPageConfig?.coverImageUrl);
+    setSquareLogoUrl(dispatch, data.host?.icon);
   }, [dispatch, firestore, venueId]);
 
   useEffect(() => {

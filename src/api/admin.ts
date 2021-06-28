@@ -13,7 +13,7 @@ import {
 import { RoomData_v2 } from "types/rooms";
 import { UsernameVisibility } from "types/User";
 
-import { venueInsideUrl } from "utils/url";
+import { venueInsideUrl, venueLandingUrl } from "utils/url";
 import { WithId } from "utils/id";
 
 export interface EventInput {
@@ -157,6 +157,16 @@ const randomPrefix = () => Math.random().toString();
 
 export const createUrlSafeName = (name: string) =>
   name.replace(/\W/g, "").toLowerCase();
+
+export const generateVenueLandingUrl = (
+  venueName?: string
+): string | undefined => {
+  if (!venueName) return undefined;
+
+  const path = venueLandingUrl(createUrlSafeName(venueName));
+
+  return new URL(path, "https://" + window.location.host).toString();
+};
 
 export const getVenueOwners = async (venueId: string): Promise<string[]> => {
   const owners = (
@@ -314,9 +324,12 @@ export const createVenue_v2 = async (input: VenueInput_v2, user: UserInfo) => {
     },
     user
   );
-  return await firebase.functions().httpsCallable("venue-createVenue_v2")(
-    firestoreVenueInput
-  );
+  return await firebase
+    .functions()
+    .httpsCallable("venue-createVenue_v2")(firestoreVenueInput)
+    .catch((error) => {
+      throw Error(error.message);
+    });
 };
 
 export const updateVenue = async (

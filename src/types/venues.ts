@@ -67,15 +67,15 @@ export interface Venue_v2
 
 export interface Venue_v2_Base {
   name: string;
-  config: {
-    landingPageConfig: {
-      subtitle: string;
-      description: string;
-      coverImageUrl: string;
+  config?: {
+    landingPageConfig?: {
+      subtitle?: string;
+      description?: string;
+      coverImageUrl?: string;
     };
   };
-  host: {
-    icon: string;
+  host?: {
+    icon?: string;
   };
   owners: string[];
   theme?: {
