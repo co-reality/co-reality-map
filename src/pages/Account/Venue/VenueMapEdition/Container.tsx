@@ -22,6 +22,7 @@ const styles: React.CSSProperties = {
 };
 export interface SubVenueIconMap {
   [key: string]: {
+    title?: string;
     top: number;
     left: number;
     url: string;
@@ -232,30 +233,47 @@ export const Container: React.FC<PropsType> = (props) => {
         >
           {useMemo(
             () =>
-              Object.keys(otherIcons).map((key, index) => (
-                <img
-                  key={`${otherIcons[key].top}-${otherIcons[key].left}-${otherIcons[key].url}-${index}`}
-                  src={otherIcons[key].url || DEFAULT_MAP_ICON_URL}
-                  style={{
-                    position: "absolute",
-                    top: `${
-                      (100 * otherIcons[key].top) / coordinatesBoundary.height
-                    }%`,
-                    left: `${
-                      (100 * otherIcons[key].left) / coordinatesBoundary.width
-                    }%`,
-                    width: resizable
-                      ? `${otherIcons[key].width}%`
-                      : otherIcons[key].width, //resizable dimensions are in percentages
-                    height: resizable
-                      ? `${otherIcons[key].height}%`
-                      : otherIcons[key].width,
-                    borderRadius: rounded ? "50%" : "none",
-                    ...otherIconsStyle,
-                  }}
-                  alt={`${otherIcons[key].url} map icon`}
-                  onClick={() => onOtherIconClick && onOtherIconClick(key)}
-                />
+              Object.values(otherIcons).map((icon, index) => (
+                <>
+                  <img
+                    key={`${icon.top}-${icon.left}-${icon.url}-${index}`}
+                    src={icon.url || DEFAULT_MAP_ICON_URL}
+                    style={{
+                      position: "absolute",
+                      top: `${(100 * icon.top) / coordinatesBoundary.height}%`,
+                      left: `${(100 * icon.left) / coordinatesBoundary.width}%`,
+                      width: resizable ? `${icon.width}%` : icon.width, //resizable dimensions are in percentages
+                      height: resizable ? `${icon.height}%` : icon.width,
+                      borderRadius: rounded ? "50%" : "none",
+                      ...otherIconsStyle,
+                    }}
+                    alt={`${icon.url} map icon`}
+                    onClick={() =>
+                      onOtherIconClick &&
+                      icon.title &&
+                      onOtherIconClick(icon.title)
+                    }
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: `${
+                        (100 * icon.top) / coordinatesBoundary.height +
+                        icon.height
+                      }%`,
+                      left: `${
+                        (100 * icon.left) / coordinatesBoundary.width +
+                        icon.width / 3
+                      }%`,
+                      width: resizable ? `${icon.width}%` : icon.width, //resizable dimensions are in percentages
+                      height: resizable ? `${icon.height}%` : icon.height,
+                      borderRadius: rounded ? "50%" : "none",
+                      ...otherIconsStyle,
+                    }}
+                  >
+                    {icon.title}
+                  </div>
+                </>
               )),
             [
               otherIcons,

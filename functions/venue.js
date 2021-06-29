@@ -676,6 +676,11 @@ exports.updateVenue_v2 = functions.https.onCall(async (data, context) => {
     updated.config.landingPageConfig.coverImageUrl = data.bannerImageUrl;
   }
 
+  // @debt Maybe we should add this to admin v1 update as well until it's removed.
+  if (data.rooms) {
+    updated.rooms = data.rooms;
+  }
+
   // @debt aside from the data.columns part, this is exactly the same as in updateVenue
   if (typeof data.showGrid === "boolean") {
     updated.showGrid = data.showGrid;

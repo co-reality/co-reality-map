@@ -120,7 +120,7 @@ export interface VenueInput_v2
   bannerImageUrl?: string;
   logoImageFile?: FileList;
   logoImageUrl?: string;
-  rooms?: Room[];
+  rooms?: Room[] | RoomData_v2[];
   mapBackgroundImageFile?: FileList;
   mapBackgroundImageUrl?: string;
   template?: VenueTemplate;
