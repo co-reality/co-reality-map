@@ -58,11 +58,19 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
     closeUserProfileModal();
   }, [selectRecipientChat, closeUserProfileModal, chosenUserId]);
 
-  const renderStatus = useMemo(
-    () =>
-      status === RecentUserStatusType.offline ? status : `is ${status} in `,
-    [status]
-  );
+  const renderStatus = useMemo(() => {
+    if (status === RecentUserStatusType.incognito) return;
+
+    return (
+      <>
+        {status === RecentUserStatusType.offline ? status : `is ${status} in `}
+        <a href={lastSeenAt.venueUrl} className="profile-text__recent-venue">
+          {lastSeenAt.venueName}
+        </a>
+      </>
+    );
+  }, [status, lastSeenAt]);
+
   const renderedProfileQuestionAnswers = useMemo(
     () =>
       selectedUserProfile
@@ -135,12 +143,6 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                   {selectedUserProfile.partyName || DEFAULT_PARTY_NAME}
                 </h2>
                 {renderStatus}
-                <a
-                  href={lastSeenAt.venueUrl}
-                  className="profile-text__recent-venue"
-                >
-                  {lastSeenAt.venueName}
-                </a>
               </div>
             </div>
             <div className="profile-extras">

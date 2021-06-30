@@ -23,7 +23,11 @@ export const updateProfileEnteredVenueIds = async (
 export const getUserDisplayStatus = (
   user?: WithId<User>
 ): RecentUserStatusType => {
-  if (user?.status) return RecentUserStatusType.busy;
+  if (user?.status === RecentUserStatusType.busy)
+    return RecentUserStatusType.busy;
+
+  if (user?.status === RecentUserStatusType.incognito)
+    return RecentUserStatusType.incognito;
 
   return user ? RecentUserStatusType.online : RecentUserStatusType.offline;
 };

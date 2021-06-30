@@ -3,7 +3,8 @@ import classNames from "classnames";
 
 import { DEFAULT_PARTY_NAME, DEFAULT_PROFILE_IMAGE } from "settings";
 
-import { User, UsernameVisibility } from "types/User";
+import { User, UsernameVisibility, RecentUserStatusType } from "types/User";
+
 import { useRecentUserStatus, useRecentWorldUsers } from "hooks/users";
 
 import { WithId } from "utils/id";
@@ -67,6 +68,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
     "UserAvatar__status-indicator--large": large,
   });
 
+  const isStatusRender =
+    showStatus && !(RecentUserStatusType.incognito === status);
+
   return (
     <div className={containerClasses}>
       {showNametag && <div className={nametagClasses}>{user?.partyName}</div>}
@@ -76,7 +80,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
         alt={`${userDisplayName}'s avatar`}
         onClick={onClick}
       />
-      {showStatus && <span className={statusIndicatorClasses} />}
+      {isStatusRender && <span className={statusIndicatorClasses} />}
     </div>
   );
 };

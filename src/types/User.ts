@@ -47,12 +47,14 @@ export interface User {
 export enum UserStatus {
   available = "available",
   busy = "busy",
+  incognito = "incognito",
 }
 
 export enum RecentUserStatusType {
   online = "online",
   offline = "offline",
   busy = "busy",
+  incognito = "incognito",
 }
 
 export enum UsernameVisibility {
