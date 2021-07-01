@@ -1,6 +1,6 @@
 export interface Banner {
   title?: string;
-  content?: string;
+  content: string;
   isActionButton?: boolean;
   buttonUrl?: string;
   buttonDisplayText?: string;

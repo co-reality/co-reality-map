@@ -27,11 +27,11 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
 
   const urlText = banner?.isActionButton ? banner?.buttonUrl : "blank";
 
-  const urlTextClassNames = classNames("AnnouncementStatus__url-text", {
+  const urlTextClasses = classNames("AnnouncementStatus__url-text", {
     "AnnouncementStatus__url-text--empty": !banner?.isActionButton,
   });
 
-  if (isDefined(!banner?.content)) return null;
+  if (!isDefined(banner?.content)) return null;
 
   return (
     <div className="AnnouncementStatus">
@@ -43,6 +43,7 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
           />
           FullScreen {fullscreenText}
         </span>
+
         <span className="AnnouncementStatus__checkbox">
           <FontAwesomeIcon
             icon={closeImg}
@@ -51,8 +52,9 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
           Force funnel {forceText}
         </span>
       </div>
+
       <div className="AnnouncementStatus__url">
-        URL: <span className={urlTextClassNames}>{urlText}</span>
+        URL: <span className={urlTextClasses}>{urlText}</span>
       </div>
     </div>
   );

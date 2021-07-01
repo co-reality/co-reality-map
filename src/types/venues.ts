@@ -139,6 +139,7 @@ export interface BaseVenue {
   radioTitle?: string;
   dustStorm?: boolean;
   activity?: string;
+  bannerMessage?: string; // @deprecated + @debt was used as banner message previously to banner
   banner?: Banner;
   playaIcon?: PlayaIcon;
   playaIcon2?: PlayaIcon;

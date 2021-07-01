@@ -8,8 +8,17 @@ interface ConfirmationModalProps {
   show?: boolean;
   header?: string;
   message: string;
+  cancelBtnLabel?: string;
+  saveBtnLabel?: string;
   onConfirm: () => void;
   onCancel?: () => void;
+  containerClassName?: string;
+  headerClassName?: string;
+  messageClassName?: string;
+  buttonsContainerClassName?: string;
+  buttonClassName?: string;
+  cancelButtonClassName?: string;
+  isCentered?: boolean;
 }
 
 export const ConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -18,6 +27,15 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = ({
   message,
   onConfirm,
   onCancel,
+  cancelBtnLabel = "No",
+  saveBtnLabel = "Yes",
+  containerClassName = "confirmation-modal",
+  headerClassName = "confirm-header",
+  messageClassName = "confirm-message",
+  buttonsContainerClassName = "confirmation-buttons",
+  buttonClassName = "cancel-button",
+  cancelButtonClassName = "confirm-button",
+  isCentered = false,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -40,17 +58,17 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = ({
   const isShown = show !== undefined ? show : isVisible;
 
   return (
-    <Modal show={isShown} onHide={hide}>
+    <Modal show={isShown} onHide={hide} centered={isCentered}>
       <Modal.Body>
-        <div className="confirmation-modal">
-          {hasHeader && <h2 className="confirm-header">{header}</h2>}
-          <div className="confirm-message">{message}</div>
-          <div className="confirmation-buttons">
-            <Button className="cancel-button" onClick={cancel}>
-              No
+        <div className={containerClassName}>
+          {hasHeader && <h2 className={headerClassName}>{header}</h2>}
+          <div className={messageClassName}>{message}</div>
+          <div className={buttonsContainerClassName}>
+            <Button className={cancelButtonClassName} onClick={cancel}>
+              {cancelBtnLabel}
             </Button>
-            <Button className="confirm-button" onClick={confirm}>
-              Yes
+            <Button className={buttonClassName} onClick={confirm}>
+              {saveBtnLabel}
             </Button>
           </div>
         </div>

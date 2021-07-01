@@ -15,7 +15,6 @@ import { useShowHide } from "hooks/useShowHide";
 import { LoadingPage } from "components/molecules/LoadingPage";
 
 import { BannerAdmin } from "components/organisms/BannerAdmin";
-import { UserProfileModal } from "components/organisms/UserProfileModal";
 import { WithNavigationBar } from "components/organisms/WithNavigationBar";
 
 import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
@@ -31,7 +30,7 @@ export const VenueAdminPage: React.FC = () => {
   const venueRequestStatus = useSelector(isCurrentVenueNGRequestedSelector);
   const venueRequestingStatus = useSelector(isCurrentVenueNGRequestingSelector);
   const {
-    isShown: isShowBannerAdmin,
+    isShown: isBannerAdminVisibile,
     show: showBannerAdmin,
     hide: hideBannerAdmin,
   } = useShowHide();
@@ -60,27 +59,28 @@ export const VenueAdminPage: React.FC = () => {
 
   return (
     <WithNavigationBar>
-      <div className="AdminPage">
-        <h4 className="AdminPage__title">
+      <div className="VenueAdminPage">
+        <h4 className="VenueAdminPage__title">
           Current Announcement in Space Title
         </h4>
-        {isShowBannerAdmin ? (
+
+        {isBannerAdminVisibile ? (
           <BannerAdmin
             venueId={venueId}
             venue={venue}
             onClose={hideBannerAdmin}
           />
-        ) : (
+        ) : venue?.banner ? (
           <>
-            <AnnouncementMessage banner={venue?.banner} />
+            <AnnouncementMessage banner={venue.banner} />
+
             <AnnouncementOptions
-              banner={venue?.banner}
+              banner={venue.banner}
               onEdit={showBannerAdmin}
             />
           </>
-        )}
+        ) : null}
       </div>
-      <UserProfileModal venue={venue} />
     </WithNavigationBar>
   );
 };

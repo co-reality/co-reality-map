@@ -32,7 +32,6 @@ import { WithNavigationBar } from "components/organisms/WithNavigationBar";
 import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
 import { LoadingPage } from "components/molecules/LoadingPage";
 
-
 const PlayaRouter = lazy(() =>
   tracePromise("TemplateWrapper::lazy-import::PlayaRouter", () =>
     import("components/templates/Playa/Router").then(({ PlayaRouter }) => ({
@@ -170,7 +169,10 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
       <RelatedVenuesProvider venueId={venue.id}>
         <ReactionsProvider venueId={venue.id}>
           <WithNavigationBar hasBackButton={hasBackButton}>
+
+            {venue?.banner && (
             <AnnouncementMessage banner={venue.banner} announcementForUser />
+            )}
 
             <Suspense fallback={<LoadingPage />}>{template}</Suspense>
 

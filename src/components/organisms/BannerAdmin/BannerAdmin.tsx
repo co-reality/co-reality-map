@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { makeUpdateBanner } from "api/bannerAdmin";
@@ -12,14 +12,14 @@ import { Button } from "components/atoms/Button";
 import { Checkbox } from "components/atoms/Checkbox";
 import { InputField } from "components/atoms/InputField";
 
-import { ConfirmationBannerModal } from "./ConfirmationBannerModal";
-
 import "./BannerAdmin.scss";
+import classNames from "classnames";
+import { ConfirmationModal } from "components/atoms/ConfirmationModal/ConfirmationModal";
 
 interface BannerAdminProps {
   venueId?: string;
   venue: AnyVenue;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 // @debt This component is almost exactly the same as IframeAdmin, we should refactor them both to use the same generic base component
@@ -27,59 +27,60 @@ interface BannerAdminProps {
 export const BannerAdmin: React.FC<BannerAdminProps> = ({
   venueId,
   venue,
-  onClose,
+  onClose = () => {},
 }) => {
   const { register, handleSubmit, errors, reset, watch } = useForm<Banner>({
     mode: "onChange",
     reValidateMode: "onChange",
   });
-  const isActionButtonValue = watch("isActionButton");
+  const isUrlButtonActive = watch("isActionButton");
 
-  const [bannerData, setBannerDate] = useState<Banner>();
-
-  const {
-    isShown: isShowModal,
-    show: showModal,
-    hide: hideModal,
-  } = useShowHide();
   const [isDisabledUrlFields, setIsDisabledUrlFields] = useState(
     venue?.banner?.isActionButton
   );
 
   useEffect(() => {
-    setIsDisabledUrlFields(isActionButtonValue);
-  }, [isActionButtonValue]);
+    setIsDisabledUrlFields(isUrlButtonActive);
+  }, [isUrlButtonActive]);
+
+  const {
+    isShown: isShowBannerChangeModal,
+    show: showBannerChangeModal,
+    hide: hideBannerChangeModal,
+  } = useShowHide();
 
   const updateBannerInFirestore = useCallback(
     (banner?: Banner) => {
       if (!venueId) return;
+
       makeUpdateBanner({ venueId, banner });
       onClose();
     },
     [venueId, onClose]
   );
 
-  const onSubmit = useCallback(
-    (data: Banner) => {
-      showModal();
-      setBannerDate(data);
-    },
-    [showModal]
-  );
+  const saveBanner = async (data: Banner) => {
+    await updateBannerInFirestore(data);
+  };
 
   const clearBanner = useCallback(() => {
-    updateBannerInFirestore(undefined);
+    showBannerChangeModal();
+
     reset();
-  }, [updateBannerInFirestore, reset]);
+  }, [showBannerChangeModal, reset]);
 
   const confirmChangeBannerData = useCallback(() => {
-    updateBannerInFirestore(bannerData);
-    hideModal();
-  }, [bannerData, updateBannerInFirestore, hideModal]);
+    updateBannerInFirestore(undefined);
+    hideBannerChangeModal();
+  }, [updateBannerInFirestore, hideBannerChangeModal]);
+
+  const forceFunnelLabelClasses = classNames("BannerAdmin__checkbox__label", {
+    BannerAdmin__checkbox__label__disabled: !isUrlButtonActive,
+  });
 
   return (
     <div className="BannerAdmin">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(saveBanner)}>
         <InputField
           ref={register}
           name="title"
@@ -92,11 +93,11 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
 
         <div className="form-group">
           <textarea
+            ref={register({ required: true })}
             name="content"
             defaultValue={venue?.banner?.content}
             className="BannerAdmin__input-text"
             placeholder="Please type your announcement content"
-            ref={register({ required: true })}
           />
           {errors.content && errors.content.type === "required" && (
             <span className="input-error">Display content is required</span>
@@ -105,7 +106,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
 
         <Checkbox
           containerClassName="BannerAdmin__checkbox BannerAdmin__checkbox--action"
-          labelClassName="BannerAdmin__checkbox-label"
+          labelClassName="BannerAdmin__checkbox__label"
           name="isActionButton"
           label="Call to Action Button"
           toggler
@@ -136,21 +137,24 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           />
         </div>
         <Checkbox
+          forwardedRef={register}
           containerClassName="BannerAdmin__checkbox"
+          labelClassName="BannerAdmin__checkbox__label"
           name="isFullScreen"
           label="Set fullscreen announcement"
           toggler
-          forwardedRef={register}
           defaultChecked={venue?.banner?.isFullScreen}
         />
 
         <Checkbox
+          forwardedRef={register}
           containerClassName="BannerAdmin__checkbox"
+          labelClassName={forceFunnelLabelClasses}
           name="hasCloseButton"
           label="Force funnel (users will have to click your button)"
           toggler
-          forwardedRef={register}
           defaultChecked={venue?.banner?.hasCloseButton}
+          disabled={!isDisabledUrlFields}
         />
 
         <div className="BannerAdmin__button-container">
@@ -166,10 +170,23 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         </div>
       </form>
 
-      <ConfirmationBannerModal
-        show={isShowModal}
+      <ConfirmationModal
+        show={isShowBannerChangeModal}
         onConfirm={confirmChangeBannerData}
-        onCancel={hideModal}
+        onCancel={hideBannerChangeModal}
+        header={"Erase your beautiful work?"}
+        message={"Are you sure?"}
+        saveBtnLabel="Clear & Save"
+        cancelBtnLabel="Cancel"
+        containerClassName={"ConfirmationBannerModal"}
+        headerClassName={"ConfirmationBannerModal__header"}
+        messageClassName={"ConfirmationBannerModal__message"}
+        buttonsContainerClassName={"ConfirmationBannerModal__buttons"}
+        buttonClassName={
+          "ConfirmationBannerModal__button ConfirmationBannerModal__button--cancel"
+        }
+        cancelButtonClassName={"ConfirmationBannerModal__button"}
+        isCentered
       />
     </div>
   );

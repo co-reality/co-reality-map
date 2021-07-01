@@ -4,7 +4,7 @@ import { Banner } from "types/banner";
 
 import { Button } from "components/atoms/Button";
 
-import { AnnouncementStatus } from "./AnnouoncementStatus";
+import { AnnouncementStatus } from "../AnnouncementStatus";
 
 import "./AnnouncementOptions.scss";
 

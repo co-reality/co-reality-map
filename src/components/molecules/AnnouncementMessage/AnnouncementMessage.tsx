@@ -3,30 +3,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
-
-import { RenderMarkdown } from "components/organisms/RenderMarkdown";
-import { isDefined } from "utils/types";
-
-import { useShowHide } from "hooks/useShowHide";
-
 import { Banner } from "types/banner";
-
+import { isDefined } from "utils/types";
+import { RenderMarkdown } from "components/organisms/RenderMarkdown";
+import { useShowHide } from "hooks/useShowHide";
 import { LinkButton } from "components/atoms/LinkButton";
 
 import "./AnnouncementMessage.scss";
 
 export interface AnnouncementMessageProps {
-  banner?: Banner;
+  banner: Banner;
   announcementForUser?: boolean;
 }
 
 export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   banner,
-  announcementForUser = false,
+  announcementForUser: isAnnouncementForUser = false,
 }) => {
-
   const {
-    isShown: isShownAnnouncementMessage,
+    isShown: isAnnouncementMessageVisible,
     show: showAnnouncementMessage,
     hide: hideAnnouncementMessage,
   } = useShowHide();
@@ -44,12 +39,16 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   const isActiveButton =
     banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
 
+  const isButtonShown = isActiveButton && banner.buttonUrl;
+  const isAnnouncementCloseable =
+    isAnnouncementForUser && banner?.hasCloseButton;
+
   const containerClasses = classNames("AnnouncementMessage__container", {
     "AnnouncementMessage__container--centered": banner?.isFullScreen,
-    "AnnouncementContainer--canceled": !announcementForUser,
+    "AnnouncementMessage__container--admin": !isAnnouncementForUser,
   });
 
-  if (!announcementForUser && !banner?.content)
+  if (!isAnnouncementForUser && !banner?.content)
     return (
       <div className="AnnouncementMessage">
         <span className="AnnouncementMessage__default-text">
@@ -58,7 +57,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
       </div>
     );
 
-  if (!isShownAnnouncementMessage) return null;
+  if (!isAnnouncementMessageVisible) return null;
 
   return (
     <div className={containerClasses} onClick={hideAnnouncementMessage}>
@@ -66,26 +65,28 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
         {banner?.title && (
           <h2 className="AnnouncementMessage__title">{banner.title}</h2>
         )}
+
         <div className="AnnouncementMessage__content">
-          <RenderMarkdown text={banner.content} />
-          {/* {getLinkFromText(banner.content)} */}
+          <RenderMarkdown text={banner?.content} />
         </div>
-        {isActiveButton && banner.buttonUrl && (
+
+        {isButtonShown && (
           <LinkButton
-            href={banner.buttonUrl}
+            href={banner.buttonUrl || ""}
             className="AnnouncementMessage__action-button"
           >
-            {banner.buttonDisplayText}
+            {banner?.buttonDisplayText}
           </LinkButton>
         )}
-        {announcementForUser && banner.hasCloseButton ? (
+
+        {isAnnouncementCloseable && (
           <span
             className="AnnouncementMessage__close-button"
             onClick={hideAnnouncementMessage}
           >
             <FontAwesomeIcon icon={faTimesCircle} />
           </span>
-        ) : null}
+        )}
       </div>
     </div>
   );

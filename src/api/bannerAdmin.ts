@@ -1,7 +1,8 @@
+import Bugsnag from "@bugsnag/js";
 import firebase from "firebase/app";
 import { Banner } from "types/banner";
 
-export interface makeUpdateBannerProps {
+export interface MakeUpdateBannerProps {
   venueId: string;
   banner?: Banner;
 }
@@ -9,13 +10,20 @@ export interface makeUpdateBannerProps {
 export const makeUpdateBanner = async ({
   venueId,
   banner,
-}: makeUpdateBannerProps): Promise<void> => {
+}: MakeUpdateBannerProps): Promise<void> => {
   const params = {
     venueId,
     banner: banner ?? firebase.firestore.FieldValue.delete(),
   };
 
-  await firebase.functions().httpsCallable("venue-adminUpdateBannerMessage")(
-    params
-  );
+  await firebase
+    .functions()
+    .httpsCallable("venue-adminUpdateBannerMessage")(params)
+    .catch((err) =>
+      Bugsnag.notify(err, (event) => {
+        event.addMetadata("Venue::Admin::UpdateBannerMessage::onSubmit", {
+          venueId,
+        });
+      })
+    );
 };

@@ -104,7 +104,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
       showGrid: venue.showGrid,
       showRadio: venue.showRadio,
       showRangers: venue.showRangers,
-      bannerMessage: venue.bannerMessage,
+      bannerMessage: venue.bannerMessage, // @deprecated + @debt probably need to change bannerMessage to banner
       attendeesTitle: venue.attendeesTitle,
       chatTitle: venue.chatTitle,
     },
@@ -120,6 +120,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
     updateVenue_v2(
       {
         name: venue.name,
+        // @deprecated + @debt probably need to change bannerMessage to banner
         ...data,
       },
       user

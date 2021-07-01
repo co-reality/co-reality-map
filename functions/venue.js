@@ -851,7 +851,6 @@ exports.adminHideVenue = functions.https.onCall(async (data, context) => {
   admin.firestore().collection("venues").doc(venueId).update(updated);
 });
 
-//This will be change
 exports.adminUpdateBannerMessage = functions.https.onCall(
   async (data, context) => {
     await checkUserIsOwner(data.venueId, context.auth.token.user_id);

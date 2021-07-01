@@ -52,7 +52,6 @@ $action-button-padding: 6px;
   }
 
   &__container {
-    position: fixed;
     top: 66px;
     left: 0;
     right: 0;
@@ -64,9 +63,14 @@ $action-button-padding: 6px;
 
     &--centered {
       bottom: 0;
+      position: fixed;
       display: flex;
       align-items: center;
       background-color: opaque-black(0.6);
+    }
+
+    &--admin {
+      position: initial;
     }
 
     &--canceled {

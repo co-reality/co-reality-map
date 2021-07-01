@@ -38,8 +38,12 @@
     }
   }
 
-  &__checkbox-label {
+  &__checkbox__label {
     font-size: $font-size--lg;
+  }
+  &__checkbox__label__disabled {
+    color: --white;
+    opacity: 20%;
   }
 }
 
