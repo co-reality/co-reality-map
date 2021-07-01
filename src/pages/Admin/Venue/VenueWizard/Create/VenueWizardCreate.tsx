@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 
 import { useUser } from "hooks/useUser";
+import { useVenueId } from "hooks/useVenueId";
 
 import Details from "pages/Admin/Details";
 
@@ -19,6 +20,7 @@ const VenueWizardCreate: React.FC<VenueWizardCreateProps> = ({
 }) => {
   const history = useHistory();
   const { user } = useUser();
+  const venueId = useVenueId();
 
   const previous = useCallback(
     () => history.push(`${history.location.pathname}`),
@@ -27,7 +29,7 @@ const VenueWizardCreate: React.FC<VenueWizardCreateProps> = ({
 
   if (!user) {
     return (
-      <WithNavigationBar fullscreen>
+      <WithNavigationBar venueId={venueId} fullscreen>
         <AuthenticationModal
           show={true}
           onHide={() => {}}
@@ -38,7 +40,7 @@ const VenueWizardCreate: React.FC<VenueWizardCreateProps> = ({
   }
 
   return (
-    <WithNavigationBar>
+    <WithNavigationBar venueId={venueId}>
       <Details previous={previous} dispatch={dispatch} data={state} />
     </WithNavigationBar>
   );

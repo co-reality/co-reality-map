@@ -90,5 +90,9 @@ service cloud.firestore {
       allow read: if request.auth.uid != null;
       allow write: if false;
     }
+    match /videoRooms/{videoRoomId} {
+      allow read: if request.auth.uid != null;
+      allow write: if false;
+    }
   }
 }

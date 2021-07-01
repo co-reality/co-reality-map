@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from "react";
-import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
+
+import { inviteToVideoRoom } from "api/videoRoom";
 
 import {
   ENABLE_SUSPECTED_LOCATION,
@@ -23,7 +25,6 @@ import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 import { useChatSidebarControls } from "hooks/chatSidebar";
 
 import { Badges } from "components/organisms/Badges";
-import Button from "components/atoms/Button";
 
 import "./UserProfileModal.scss";
 
@@ -35,6 +36,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   venue,
 }) => {
   const { user } = useUser();
+  const history = useHistory();
 
   const { selectRecipientChat } = useChatSidebarControls();
 
@@ -55,6 +57,18 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
     // NOTE: Hide the modal, after the chat is opened;
     closeUserProfileModal();
   }, [selectRecipientChat, closeUserProfileModal, chosenUserId]);
+
+  const startVideoRoom = useCallback(async () => {
+    if (!user?.uid || !chosenUserId || !venue.id) return;
+
+    const response = await inviteToVideoRoom(user.uid, venue.id, chosenUserId);
+
+    const videoRoomId = response.data;
+
+    if (videoRoomId) {
+      history.push(`/video-room/${videoRoomId}`);
+    }
+  }, [chosenUserId, history, user?.uid, venue.id]);
 
   const renderedProfileQuestionAnswers = useMemo(
     () =>
@@ -149,7 +163,10 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             <Badges user={selectedUserProfile} currentVenue={venue} />
           )}
           {chosenUserId !== user.uid && (
-            <Button onClick={openChosenUserChat}>Send message</Button>
+            <>
+              <Button onClick={startVideoRoom}>Start a Video Chat</Button>
+              <Button onClick={openChosenUserChat}>Send message</Button>
+            </>
           )}
         </div>
       </Modal.Body>

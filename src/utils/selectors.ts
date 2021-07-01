@@ -10,6 +10,7 @@ import { SparkleSelector } from "types/SparkleSelector";
 import { User } from "types/User";
 import { AnyVenue, PosterPageVenue, VenueEvent } from "types/venues";
 import { ScreeningRoomVideo } from "types/screeningRoom";
+import { VideoRoomRequest } from "types/videoRoom";
 
 import { SovereignVenueState } from "store/reducers/SovereignVenue";
 
@@ -84,6 +85,33 @@ export const venuesSelector: SparkleSelector<Record<string, AnyVenue>> = (
 ) => state.firestore.data.venues || {};
 
 /**
+ * Selector to retrieve video room invite requests from the Redux Firestore.
+ *
+ * @param state the Redux store
+ */
+export const videoRoomInvitesByIdSelector: SparkleSelector<
+  Partial<Record<string, VideoRoomRequest>>
+> = (state) => state.firestore.data.videoRoomInvites || {};
+
+/**
+ * Selector to retrieve video room invite requests from the Redux Firestore.
+ *
+ * @param state the Redux store
+ */
+export const videoRoomInvitesSelector: SparkleSelector<
+  WithId<VideoRoomRequest>[]
+> = (state) => state.firestore.ordered.videoRoomInvites || [];
+
+/**
+ * Selector to retrieve the current video room from the Redux Firestore.
+ *
+ * @param state the Redux store
+ */
+export const currentVideoRoomSelector: SparkleSelector<
+  WithId<VideoRoomRequest> | undefined
+> = (state) => state.firestore.ordered.currentVideoRoom?.[0];
+
+/**
  * @deprecated This selector requires all of the venues data in firebase to be loaded into memory. Find a different way.
  * @debt Refactor all places that rely on this, then remove it from the codebase
  */
@@ -150,6 +178,10 @@ export const isCurrentEventRequestedSelector: SparkleSelector<boolean> = makeIsR
 
 export const isUserPurchaseHistoryRequestedSelector: SparkleSelector<boolean> = makeIsRequestedSelector(
   "userPurchaseHistory"
+);
+
+export const isCurrentVideoRoomRequestedSelector: SparkleSelector<boolean> = makeIsRequestedSelector(
+  "currentVideoRoom"
 );
 
 export const venueChatMessagesSelector: SparkleSelector<

@@ -6,6 +6,10 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import { DEFAULT_REDIRECT_URL, SPARKLEVERSE_HOMEPAGE_URL } from "settings";
+
+import { venueLandingUrl } from "utils/url";
+
 // import { SplashPage } from "pages/Account/SplashPage";
 import Step1 from "pages/Account/Step1";
 import Step2 from "pages/Account/Step2";
@@ -20,19 +24,16 @@ import CodeOfConduct from "pages/Account/CodeOfConduct";
 import { LoginWithCustomToken } from "pages/Account/LoginWithCustomToken";
 import Admin from "pages/Admin/Admin";
 import Admin_v2 from "pages/Admin/Admin_v2";
+import VenueWizard_v2 from "pages/Admin/Venue/VenueWizard/VenueWizard";
+import VenuePage from "pages/VenuePage";
 
 import { VenueLandingPage } from "pages/VenueLandingPage";
 import { VenueEntrancePage } from "pages/VenueEntrancePage";
 import { VenueWizard } from "pages/Admin/Venue/VenueWizard";
-import VenueWizard_v2 from "pages/Admin/Venue/VenueWizard/VenueWizard";
-
 import { VersionPage } from "pages/VersionPage/VersionPage";
-import { DEFAULT_REDIRECT_URL, SPARKLEVERSE_HOMEPAGE_URL } from "settings";
-
-import VenuePage from "pages/VenuePage";
-import { venueLandingUrl } from "utils/url";
 import { RoomsForm } from "pages/Admin/Venue/Rooms/RoomsForm";
 import { VenueAdminPage } from "pages/Admin/Venue/VenueAdminPage";
+import { VenuePrivateRoom } from "pages/VenuePrivateRoom";
 import { AdminAdvancedSettings } from "pages/AdminAdvancedSettings";
 import { AdminVenueView } from "components/organisms/AdminVenueView";
 
@@ -85,6 +86,8 @@ const AppRouter = () => {
         <Route path="/e/:step/:venueId" component={VenueEntrancePage} />
         <Route path="/in/:venueId/admin" component={VenueAdminPage} />
         <Route path="/in/:venueId" component={VenuePage} />
+        <Route path="/video-room/:videoRoomId" component={VenuePrivateRoom} />
+
         <Route path="/version" component={VersionPage} />
         <Route
           path="/venue/*"

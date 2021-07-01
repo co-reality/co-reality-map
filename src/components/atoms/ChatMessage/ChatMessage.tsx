@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from "react";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faReply } from "@fortawesome/free-solid-svg-icons";
+import { faReply, faVideo } from "@fortawesome/free-solid-svg-icons";
 
 import { MessageToDisplay } from "types/chat";
 
 import { WithId } from "utils/id";
+import { formatTimestampToDisplayHoursMinutes } from "utils/time";
 
 import { useShowHide } from "hooks/useShowHide";
 
@@ -66,6 +67,24 @@ export const ChatMessage: React.FC<ChatProps> = ({
   const replyButtonText = !isRepliesShown
     ? `${repliesCount} ${replyText}`
     : `hide ${replyText}`;
+
+  if (message.isVideo) {
+    return (
+      <div className="ChatMessage__video-chat">
+        <div className="ChatMessage__video-info">
+          <FontAwesomeIcon
+            icon={faVideo}
+            className="ChatMessage__video-icon"
+            size="sm"
+          />
+          <div>Video call has ended.</div>
+        </div>
+        <div className="ChatMessage__video-timestamp">
+          {formatTimestampToDisplayHoursMinutes(message.ts_utc.toMillis())}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={containerStyles}>

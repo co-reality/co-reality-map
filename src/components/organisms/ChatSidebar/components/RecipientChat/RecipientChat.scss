@@ -16,12 +16,27 @@
     justify-content: flex-start;
     z-index: z(recipient-chat-breadcrumbs);
     padding: 0 8px;
+    justify-content: space-between;
+  }
+
+  &__profile {
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   &__back-icon {
     cursor: pointer;
     margin-right: 8px;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__video-icon {
+    cursor: pointer;
     opacity: 0.8;
 
     &:hover {

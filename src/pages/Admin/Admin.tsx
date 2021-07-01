@@ -455,7 +455,7 @@ const Admin: React.FC = () => {
   }
 
   return (
-    <WithNavigationBar fullscreen>
+    <WithNavigationBar venueId={venueId} fullscreen>
       <div className="admin-dashboard">
         <div className="page-container page-container_adminview">
           <div className="page-container-adminsidebar">

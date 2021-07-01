@@ -85,6 +85,18 @@ export const useWorldUsersByIdWorkaround = () => {
   return { worldUsersById, isWorldUsersLoaded };
 };
 
+export const useWorldUserById = (id?: string) => {
+  useConnectWorldUsers();
+
+  const worldUsersById = useSelector(worldUsersByIdSelector) ?? {};
+
+  if (!id) return;
+
+  const user = worldUsersById[id];
+
+  return user;
+};
+
 export const useRecentWorldUsers = (): {
   recentWorldUsers: readonly WithId<User>[];
   isRecentWorldUsersLoaded: boolean;

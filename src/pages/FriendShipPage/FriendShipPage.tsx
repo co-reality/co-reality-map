@@ -1,23 +1,29 @@
 import React, { useState } from "react";
-import WithNavigationBar from "components/organisms/WithNavigationBar";
-// import ChatBox from "components/organisms/Chatbox";
+
+import { useVenueId } from "hooks/useVenueId";
+import { useSelector } from "hooks/useSelector";
+
+import { currentVenueSelectorData } from "utils/selectors";
+
 import Room from "components/organisms/Room";
+import WithNavigationBar from "components/organisms/WithNavigationBar";
 import TablesUserList from "components/molecules/TablesUserList";
-import "./FriendShipPage.scss";
-import { FRIENDSHIP_CUSTOM_TABLES } from "./constants";
 import TableComponent from "components/molecules/TableComponent";
 import TableHeader from "components/molecules/TableHeader";
-import { useSelector } from "hooks/useSelector";
-import { currentVenueSelectorData } from "utils/selectors";
+
+import { FRIENDSHIP_CUSTOM_TABLES } from "./constants";
+
+import "./FriendShipPage.scss";
 
 export const FriendShipPage: React.FunctionComponent = () => {
   const [seatedAtTable, setSeatedAtTable] = useState("");
   const venue = useSelector(currentVenueSelectorData);
+  const venueId = useVenueId();
 
   if (!venue) return <>Loading...</>;
 
   return (
-    <WithNavigationBar>
+    <WithNavigationBar venueId={venueId}>
       <div className="friendship-container">
         <div className="title">
           <h1>{venue.name}</h1>

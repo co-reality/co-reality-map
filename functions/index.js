@@ -33,6 +33,7 @@ const access = require("./access");
 const auth = require("./auth");
 const payment = require("./payment");
 const stats = require("./stats");
+const videoRoom = require("./videoRoom");
 const venue = require("./venue");
 const video = require("./video");
 
@@ -66,3 +67,10 @@ exports.checkPassword = functions.https.onCall(async (data) => {
       );
     });
 });
+
+exports.video = video;
+exports.payment = payment;
+exports.venue = venue;
+exports.stats = stats;
+exports.access = access;
+exports.videoRoom = videoRoom;

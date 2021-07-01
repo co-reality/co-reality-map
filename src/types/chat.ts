@@ -15,6 +15,7 @@ export type BaseChatMessage = {
   deleted?: boolean;
   threadId?: string;
   isQuestion?: boolean;
+  isVideo?: boolean;
 };
 
 export type PrivateChatMessage = BaseChatMessage & {

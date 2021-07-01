@@ -10,6 +10,9 @@ $replies-max-height: 200px;
 
 $reply-icon-radius: 20px;
 
+$video-info-padding: 20px;
+$video-icon-margin: 0 10px 0 0;
+
 .ChatMessage {
   align-self: flex-start;
   display: flex;
@@ -21,6 +24,33 @@ $reply-icon-radius: 20px;
     .ChatMessage__reply-icon {
       display: flex;
     }
+  }
+
+  &__video-chat {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__video-icon {
+    margin: $video-icon-margin;
+    align-self: center;
+  }
+
+  &__video-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: $secondary--light;
+    border-radius: $border-radius--sm;
+    padding: $video-info-padding;
+  }
+
+  &__video-timestamp {
+    align-self: flex-end;
+    opacity: 0.6;
+    font-weight: $font-weight--300;
+    font-size: $font-size--sm;
   }
 
   &--me {

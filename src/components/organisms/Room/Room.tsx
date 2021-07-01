@@ -24,8 +24,8 @@ import "./Room.scss";
 
 interface RoomProps {
   roomName: string;
-  venueName: string;
-  setUserList: (val: User[]) => void;
+  venueName?: string;
+  setUserList?: (val: User[]) => void;
   setParticipantCount?: (val: number) => void;
   setSeatedAtTable?: (val: string) => void;
   onBack?: () => void;
@@ -101,7 +101,7 @@ const Room: React.FC<RoomProps> = ({
   }, [room]);
 
   const leaveSeat = useCallback(async () => {
-    if (!user || !profile) return;
+    if (!user || !profile || !venueName) return;
     const doc = `users/${user.uid}`;
     const existingData = profile.data;
     const update = {
@@ -183,7 +183,7 @@ const Room: React.FC<RoomProps> = ({
   }, [roomName, token, setParticipantCount]);
 
   useEffect(() => {
-    if (!room) return;
+    if (!room || !setUserList) return;
 
     setUserList([
       ...participants.map((p) => worldUsersById[p.identity]),

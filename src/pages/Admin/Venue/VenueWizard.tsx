@@ -100,6 +100,7 @@ const VenueWizardCreate: React.FC = () => {
   const history = useHistory();
   const { user } = useUser();
   const queryParams = useQuery();
+  const venueId = useVenueId();
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -140,5 +141,9 @@ const VenueWizardCreate: React.FC = () => {
     return <Redirect to={venueInsideUrl(DEFAULT_VENUE)} />;
   }
 
-  return <WithNavigationBar fullscreen>{Page}</WithNavigationBar>;
+  return (
+    <WithNavigationBar venueId={venueId} fullscreen>
+      {Page}
+    </WithNavigationBar>
+  );
 };

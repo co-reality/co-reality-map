@@ -1,0 +1,12 @@
+.VideoRoomRequestModal {
+  &__host-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+  }
+
+  &__host-title {
+    align-self: center;
+  }
+}
