@@ -22,7 +22,7 @@
   }
 
   &__button {
-    width: $button-width;
+    width: $announce-button-width;
   }
 
   &__action-container {
@@ -45,13 +45,12 @@
     color: --white;
     opacity: 20%;
   }
-}
 
-// Override global styles button
-button.BannerAdmin__button {
-  background-color: $primary--live;
+  & .BannerAdmin__button {
+    background-color: $primary--live;
 
-  &--close {
-    background-color: $red;
+    &--close {
+      background-color: $red;
+    }
   }
 }

@@ -9,12 +9,11 @@
     font-size: $font-size--lg;
     margin-top: $spacing--xs;
   }
-}
 
-// Override global styles button
-button.AnnouncementOptions__edit-button {
-  height: $submit-button-diameter;
-  width: $button-width;
-  background-color: $white;
-  color: $primary--live;
+  & .AnnouncementOptions__edit-button {
+    height: $submit-button-diameter;
+    width: $announce-button-width;
+    background-color: $white;
+    color: $primary--live;
+  }
 }

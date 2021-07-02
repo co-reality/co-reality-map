@@ -2,12 +2,12 @@
 
 .VenueAdminPage {
   position: relative;
-  max-width: 638px;
+  max-width: $announcement-container-width;
   margin: 0 auto;
 
   &__title {
     text-align: center;
-    margin-top: 41px;
+    margin-top: $spacing--xxxl;
     padding: $spacing--xs;
     font-size: $font-size--sm;
     background: $dark;

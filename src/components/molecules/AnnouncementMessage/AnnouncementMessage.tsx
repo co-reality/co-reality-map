@@ -5,8 +5,10 @@ import classNames from "classnames";
 
 import { Banner } from "types/banner";
 import { isDefined } from "utils/types";
-import { RenderMarkdown } from "components/organisms/RenderMarkdown";
+
 import { useShowHide } from "hooks/useShowHide";
+
+import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 import { LinkButton } from "components/atoms/LinkButton";
 
 import "./AnnouncementMessage.scss";
@@ -48,6 +50,11 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
     "AnnouncementMessage__container--admin": !isAnnouncementForUser,
   });
 
+  const announcementMessageClasses = classNames("AnnouncementMessage", {
+    "AnnouncementMessage--fullscreen":
+      banner?.isFullScreen && isAnnouncementForUser,
+  });
+
   if (!isAnnouncementForUser && !banner?.content)
     return (
       <div className="AnnouncementMessage">
@@ -61,7 +68,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
 
   return (
     <div className={containerClasses} onClick={hideAnnouncementMessage}>
-      <div className="AnnouncementMessage" onClick={noop}>
+      <div className={announcementMessageClasses} onClick={noop}>
         {banner?.title && (
           <h2 className="AnnouncementMessage__title">{banner.title}</h2>
         )}

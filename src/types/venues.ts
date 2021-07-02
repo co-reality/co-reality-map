@@ -4,16 +4,16 @@ import { HAS_ROOMS_TEMPLATES } from "settings";
 
 import { WithVenueId } from "utils/id";
 
+import { Banner } from "./banner";
+import { Table } from "./Table";
 import { EntranceStepConfig } from "./EntranceStep";
 import { Poster } from "./posters";
 import { Quotation } from "./Quotation";
 import { Room } from "./rooms";
-import { Table } from "./Table";
-import { UpcomingEvent } from "./UpcomingEvent";
-import { UserStatus, UsernameVisibility } from "./User";
 import { VenueAccessMode } from "./VenueAcccess";
 import { VideoAspectRatio } from "./VideoAspectRatio";
-import { Banner } from "./banner";
+import { UpcomingEvent } from "./UpcomingEvent";
+import { UserStatus, UsernameVisibility } from "./User";
 
 // These represent all of our templates (they should remain alphabetically sorted, deprecated should be separate from the rest)
 // @debt unify this with VenueTemplate in functions/venue.js + share the same code between frontend/backend

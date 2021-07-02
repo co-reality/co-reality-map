@@ -39,15 +39,14 @@
     display: flex;
     justify-content: space-around;
   }
-}
 
-// Override global styles button
-button.ConfirmationBannerModal__button {
-  width: $button-width;
-  font-weight: $font-weight--500;
-  background-color: $primary--live;
+  & .ConfirmationBannerModal__button {
+    width: $announce-button-width;
+    font-weight: $font-weight--500;
+    background-color: $primary--live;
 
-  &--cancel {
-    background-color: opaque-white(0.2);
+    &--cancel {
+      background-color: opaque-white(0.2);
+    }
   }
 }

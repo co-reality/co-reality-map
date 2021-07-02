@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 
 import { makeUpdateBanner } from "api/bannerAdmin";
@@ -27,21 +27,16 @@ interface BannerAdminProps {
 export const BannerAdmin: React.FC<BannerAdminProps> = ({
   venueId,
   venue,
-  onClose = () => {},
+  onClose,
 }) => {
   const { register, handleSubmit, errors, reset, watch } = useForm<Banner>({
     mode: "onChange",
     reValidateMode: "onChange",
   });
-  const isUrlButtonActive = watch("isActionButton");
-
-  const [isDisabledUrlFields, setIsDisabledUrlFields] = useState(
+  const isUrlButtonActive = watch(
+    "isActionButton",
     venue?.banner?.isActionButton
   );
-
-  useEffect(() => {
-    setIsDisabledUrlFields(isUrlButtonActive);
-  }, [isUrlButtonActive]);
 
   const {
     isShown: isShowBannerChangeModal,
@@ -54,7 +49,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
       if (!venueId) return;
 
       makeUpdateBanner({ venueId, banner });
-      onClose();
+      onClose && onClose();
     },
     [venueId, onClose]
   );
@@ -122,7 +117,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
             defaultValue={venue?.banner?.buttonUrl}
             containerClassName="BannerAdmin__input-container"
             inputClassName="BannerAdmin__input-text"
-            disabled={!isDisabledUrlFields}
+            disabled={!isUrlButtonActive}
             autoComplete="off"
           />
           <InputField
@@ -132,7 +127,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
             defaultValue={venue?.banner?.buttonDisplayText}
             containerClassName="BannerAdmin__input-container"
             inputClassName="BannerAdmin__input-text"
-            disabled={!isDisabledUrlFields}
+            disabled={!isUrlButtonActive}
             autoComplete="off"
           />
         </div>
@@ -154,7 +149,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           label="Force funnel (users will have to click your button)"
           toggler
           defaultChecked={venue?.banner?.hasCloseButton}
-          disabled={!isDisabledUrlFields}
+          disabled={!isUrlButtonActive}
         />
 
         <div className="BannerAdmin__button-container">

@@ -10,12 +10,16 @@ $action-button-padding: 6px;
   display: block;
   position: relative;
   background: $primary;
-  width: 638px;
+  width: $announcement-container-width;
   transition: left 0.1s linear;
 
   padding: $spacing 0;
   border-radius: $border-radius--xl;
   text-align: center;
+
+  &--fullscreen {
+    width: $announcement-container-width-fullscreen;
+  }
 
   &__default-text {
     opacity: 0.6;
@@ -33,7 +37,7 @@ $action-button-padding: 6px;
   &__action-button {
     display: inline-block;
     background-color: $primary--darker;
-    min-width: $button-width;
+    min-width: $announce-button-width;
     min-height: $action-button-height;
     font-size: $font-size--md;
     font-weight: $font-weight--500;
