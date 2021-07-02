@@ -5,5 +5,5 @@ export interface Banner {
   buttonUrl?: string;
   buttonDisplayText?: string;
   isFullScreen?: boolean;
-  hasCloseButton?: boolean;
+  isForceFunnel?: boolean;
 }

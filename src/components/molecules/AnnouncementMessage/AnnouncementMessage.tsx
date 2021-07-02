@@ -34,16 +34,16 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
     }
   }, [banner, showAnnouncementMessage]);
 
-  const noop = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-  };
+  // const noop = (e: React.MouseEvent<HTMLElement>) => {
+  //   e.stopPropagation();
+  // };
 
   const isActiveButton =
     banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
 
   const isButtonShown = isActiveButton && banner.buttonUrl;
   const isAnnouncementCloseable =
-    isAnnouncementForUser && banner?.hasCloseButton;
+    isAnnouncementForUser && !banner?.isForceFunnel;
 
   const containerClasses = classNames("AnnouncementMessage__container", {
     "AnnouncementMessage__container--centered": banner?.isFullScreen,
@@ -54,6 +54,12 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
     "AnnouncementMessage--fullscreen":
       banner?.isFullScreen && isAnnouncementForUser,
   });
+
+  const handleBannerModalClose = () => {
+    if (banner?.isForceFunnel) return;
+
+    hideAnnouncementMessage();
+  };
 
   if (!isAnnouncementForUser && !banner?.content)
     return (
@@ -67,8 +73,10 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   if (!isAnnouncementMessageVisible) return null;
 
   return (
-    <div className={containerClasses} onClick={hideAnnouncementMessage}>
-      <div className={announcementMessageClasses} onClick={noop}>
+    <>
+      <div className={containerClasses} onClick={handleBannerModalClose} />
+
+      <div className={announcementMessageClasses}>
         {banner?.title && (
           <h2 className="AnnouncementMessage__title">{banner.title}</h2>
         )}
@@ -95,6 +103,6 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
           </span>
         )}
       </div>
-    </div>
+    </>
   );
 };

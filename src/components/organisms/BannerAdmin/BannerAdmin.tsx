@@ -145,10 +145,10 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           forwardedRef={register}
           containerClassName="BannerAdmin__checkbox"
           labelClassName={forceFunnelLabelClasses}
-          name="hasCloseButton"
+          name="isForceFunnel"
           label="Force funnel (users will have to click your button)"
           toggler
-          defaultChecked={venue?.banner?.hasCloseButton}
+          defaultChecked={venue?.banner?.isForceFunnel}
           disabled={!isUrlButtonActive}
         />
 

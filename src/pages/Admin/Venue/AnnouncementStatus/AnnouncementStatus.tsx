@@ -20,10 +20,10 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
   banner,
 }) => {
   const fullscreenImg = banner?.isFullScreen ? faCheck : faTimes;
-  const closeImg = banner?.hasCloseButton ? faCheck : faTimes;
+  const closeImg = banner?.isForceFunnel ? faCheck : faTimes;
 
   const fullscreenText = banner?.isFullScreen ? ENABLED__TEXT : DISABLED__TEXT;
-  const forceText = banner?.hasCloseButton ? ENABLED__TEXT : DISABLED__TEXT;
+  const forceText = banner?.isForceFunnel ? ENABLED__TEXT : DISABLED__TEXT;
 
   const urlText = banner?.isActionButton ? banner?.buttonUrl : "blank";
 
