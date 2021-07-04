@@ -1,8 +1,4 @@
-import {
-  PLACEABLE_VENUE_TEMPLATES,
-  PLAYA_TEMPLATES,
-  SUBVENUE_TEMPLATES,
-} from "settings";
+import { PLAYA_TEMPLATES, SUBVENUE_TEMPLATES } from "settings";
 
 import { User } from "types/User";
 import {
@@ -15,9 +11,6 @@ import {
 import { FormValues } from "pages/Admin/Venue/DetailsForm";
 
 import { WithId } from "./id";
-
-export const canHaveEvents = (venue: AnyVenue): boolean =>
-  PLACEABLE_VENUE_TEMPLATES.includes(venue.template);
 
 export const canHaveSubvenues = (venue: AnyVenue): boolean =>
   SUBVENUE_TEMPLATES.includes(venue.template);

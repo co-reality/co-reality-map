@@ -18,7 +18,7 @@ import Profile from "pages/Account/Profile";
 import Questions from "pages/Account/Questions";
 import CodeOfConduct from "pages/Account/CodeOfConduct";
 import { LoginWithCustomToken } from "pages/Account/LoginWithCustomToken";
-import Admin from "pages/Admin/Admin";
+import { Admin } from "pages/Admin/Admin";
 import Admin_v2 from "pages/Admin/Admin_v2";
 
 import { VenueLandingPage } from "pages/VenueLandingPage";
