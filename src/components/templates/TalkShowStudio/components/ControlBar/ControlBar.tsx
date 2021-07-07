@@ -36,7 +36,7 @@ export const ControlBar: FC<ControlBarProps> = ({
 }) => {
   const venueId = useVenueId();
   const { userId } = useUser();
-  const stage = useStage();
+  const stage = useStage({ venueId });
 
   const {
     isShown: isLeaveStageModalVisible,

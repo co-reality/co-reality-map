@@ -1,15 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
-import { IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng";
+import { IAgoraRTCClient, IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng";
+import { useAsync } from "react-use";
 
-import { AGORA_APP_ID, AGORA_CHANNEL, AGORA_TOKEN } from "secrets";
-
-import { UseAgoraRemotesProps, UseAgoraRemotesReturn } from "types/agora";
 import { ReactHook } from "types/utility";
+
+import { getAgoraToken } from "api/video";
+
+export interface UseAgoraRemotesProps {
+  userId?: string;
+  channelName?: string;
+  client?: IAgoraRTCClient;
+}
+export type UseAgoraRemotesReturn = IAgoraRTCRemoteUser[];
 
 export const useAgoraRemotes: ReactHook<
   UseAgoraRemotesProps,
   UseAgoraRemotesReturn
-> = ({ client }) => {
+> = ({ userId, channelName, client }) => {
   const [remoteUsers, setRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
 
   const updateRemoteUsers = useCallback(() => {
@@ -28,8 +35,16 @@ export const useAgoraRemotes: ReactHook<
     [client, updateRemoteUsers]
   );
 
+  const { value: agoraTokenData } = useAsync(async () => {
+    if (!channelName) return;
+
+    return getAgoraToken({ channelName });
+  }, [channelName]);
+
   useEffect(() => {
-    if (!client) return;
+    if (!client || !agoraTokenData || !channelName) return;
+
+    const { appId, account, token } = agoraTokenData;
 
     updateRemoteUsers();
 
@@ -39,7 +54,7 @@ export const useAgoraRemotes: ReactHook<
     client.on("user-left", updateRemoteUsers);
 
     // @debt promise returned from .join is ignored
-    client.join(AGORA_APP_ID || "", AGORA_CHANNEL || "", AGORA_TOKEN || null);
+    client.join(appId, channelName, token, account);
 
     return () => {
       client.off("user-published", handleUserPublished);
@@ -50,7 +65,14 @@ export const useAgoraRemotes: ReactHook<
       // @debt promise returned from .leave is ignored
       client.leave();
     };
-  }, [client, handleUserPublished, updateRemoteUsers]);
+  }, [
+    agoraTokenData,
+    channelName,
+    client,
+    handleUserPublished,
+    updateRemoteUsers,
+    userId,
+  ]);
 
   return remoteUsers;
 };

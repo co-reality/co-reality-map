@@ -27,7 +27,7 @@ const generateAgoraTokenForAccount = ({ channelName, account, role }) => {
   if (![RtcRole.PUBLISHER, RtcRole.SUBSCRIBER].includes(role))
     throw new Error("role must be a valid value from the RtcRole enum");
 
-  return RtcTokenBuilder.buildTokenWithAccount(
+  const token = RtcTokenBuilder.buildTokenWithAccount(
     appId,
     appCertificate,
     channelName,
@@ -35,6 +35,8 @@ const generateAgoraTokenForAccount = ({ channelName, account, role }) => {
     role,
     getExpirationTime()
   );
+
+  return { appId, token };
 };
 
 exports.getExpirationTime = getExpirationTime;

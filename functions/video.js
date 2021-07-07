@@ -32,6 +32,9 @@ exports.getAgoraToken = functions.https.onCall((data, context) => {
     );
   }
 
+  const account = context.auth.uid;
+  const channelName = data.channelName;
+
   // TODO: Figure out how we decide between using RtcRole.PUBLISHER / RtcRole.SUBSCRIBER, and when they are used
   //   From the docs:
   //     role
@@ -45,13 +48,16 @@ exports.getAgoraToken = functions.https.onCall((data, context) => {
   //   tl;dr We need to enable 'Co-Host token authentication' in the Agora admin console
   //     In a live streaming channel, when an audience member applies to co-host, you can use a token to authenticate whether the user can publish a stream. This feature is co-host token authentication.
   //   We need to check against firebase to ensure that the user requesting the host permissions is actually allowed to have them.
-  const token = generateAgoraTokenForAccount({
+  const { appId, token } = generateAgoraTokenForAccount({
     channelName: data.channelName,
-    account: context.auth.uid,
+    account,
     role: RtcRole.PUBLISHER,
   });
 
   return {
+    appId,
+    channelName,
+    account,
     token,
   };
 });

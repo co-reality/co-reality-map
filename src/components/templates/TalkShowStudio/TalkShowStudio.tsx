@@ -24,41 +24,50 @@ import SettingsSidebar from "./components/SettingsSidebar/SettingsSidebar";
 
 import "./TalkShowStudio.scss";
 
-const remotesClient: IAgoraRTCClient = AgoraRTC.createClient({
+// @debt Should these be created in static scope like this? Are client's meant to be static?
+//   Do we need unique clients for each of the modes here?
+const agoraClient: IAgoraRTCClient = AgoraRTC.createClient({
   codec: "h264",
-  mode: "rtc",
+  mode: "live",
 });
 
-const screenClient: IAgoraRTCClient = AgoraRTC.createClient({
-  codec: "h264",
-  mode: "rtc",
-});
-
-const cameraClient: IAgoraRTCClient = AgoraRTC.createClient({
-  codec: "h264",
-  mode: "rtc",
-});
+agoraClient.setClientRole("host");
 
 export interface TalkShowStudioProps {
   venue: WithId<FullTalkShowVenue>;
 }
 
 export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
-  const stage = useStage();
   const { userId, profile } = useUser();
   const currentVenue = useSelector(currentVenueSelectorData);
-  const remoteUsers = useAgoraRemotes({ client: remotesClient });
+
+  // @debt retrieve/generate this in a better/more secure way
+  const channelName = venue.id;
+
   const isRequestToJoinStageEnabled = venue.requestToJoinStage;
+
+  const stage = useStage({ venueId: venue.id });
+
+  const remoteUsers = useAgoraRemotes({
+    userId,
+    channelName,
+    client: agoraClient,
+  });
 
   const {
     localCameraTrack,
     toggleCamera,
     toggleMicrophone,
-    isCameraOn,
-    isMicrophoneOn,
+    isCameraEnabled,
+    isMicrophoneEnabled,
     joinChannel: cameraClientJoin,
     leaveChannel: cameraClientLeave,
-  } = useAgoraCamera({ client: cameraClient });
+  } = useAgoraCamera({
+    venueId: venue.id,
+    userId,
+    channelName,
+    client: agoraClient,
+  });
 
   const {
     localScreenTrack,
@@ -66,7 +75,12 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
     stopShare,
     joinChannel: screenClientJoin,
     leaveChannel: screenClientLeave,
-  } = useAgoraScreenShare({ client: screenClient });
+  } = useAgoraScreenShare({
+    venueId: venue.id,
+    userId,
+    channelName,
+    client: agoraClient,
+  });
 
   const localUser = useMemo(
     () => stage.peopleOnStage.find(({ id }) => id === userId),
@@ -85,6 +99,7 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
       ),
     [stage.peopleOnStage, venue.id]
   );
+
   const remoteScreenTrack = useMemo(
     () =>
       remoteUsers.find(
@@ -94,6 +109,7 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
       ),
     [userOnStageSharingScreen?.data, remoteUsers, venue.id]
   );
+
   const remoteCameraTrack = useMemo(
     () =>
       remoteUsers.find(
@@ -107,11 +123,11 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
   const remoteUsersPlayers = useMemo(() => {
     const setRemoteUserAvatar = (remoteUserId: number | string) => {
       if (!venue.id) return;
-      const remoteUser = stage.peopleOnStage.find(
+
+      return stage.peopleOnStage.find(
         ({ data }) =>
           data?.[`${venue.id}`]?.cameraClientUid === `${remoteUserId}`
       );
-      return remoteUser;
     };
     return remoteUsers
       .filter(
@@ -158,11 +174,11 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
   }, [cameraClientLeave, stage, screenClientLeave]);
 
   useEffect(() => {
-    cameraClient.connectionState === AgoraClientConnectionState.DISCONNECTED &&
+    agoraClient.connectionState === AgoraClientConnectionState.DISCONNECTED &&
       stage.isUserOnStage &&
       onStageJoin();
 
-    cameraClient.connectionState === AgoraClientConnectionState.CONNECTED &&
+    agoraClient.connectionState === AgoraClientConnectionState.CONNECTED &&
       !stage.isUserOnStage &&
       onStageLeaving();
   }, [stage.isUserOnStage, onStageJoin, onStageLeaving]);
@@ -174,18 +190,24 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
   useEffect(() => {
     const isUserMicOff = profile?.data?.[venue.id]?.isMuted;
 
-    if ((isUserMicOff && isMicrophoneOn) || !(isUserMicOff || isMicrophoneOn)) {
+    if (
+      (isUserMicOff && isMicrophoneEnabled) ||
+      !(isUserMicOff || isMicrophoneEnabled)
+    ) {
       toggleMicrophone();
     }
-  }, [isMicrophoneOn, profile?.data, toggleMicrophone, venue.id]);
+  }, [isMicrophoneEnabled, profile?.data, toggleMicrophone, venue.id]);
 
   useEffect(() => {
     const isUserCameraOff = profile?.data?.[venue.id]?.isUserCameraOff;
 
-    if ((isUserCameraOff && isCameraOn) || !(isUserCameraOff || isCameraOn)) {
+    if (
+      (isUserCameraOff && isCameraEnabled) ||
+      !(isUserCameraOff || isCameraEnabled)
+    ) {
       toggleCamera();
     }
-  }, [isCameraOn, profile?.data, toggleCamera, venue.id]);
+  }, [isCameraEnabled, profile?.data, toggleCamera, venue.id]);
 
   const isJoinStageButtonDisplayed =
     isRequestToJoinStageEnabled &&
@@ -212,8 +234,8 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
             user={localUser}
             videoTrack={cameraTrack}
             showButtons
-            isCamOn={isCameraOn}
-            isMicOn={isMicrophoneOn}
+            isCamOn={isCameraEnabled}
+            isMicOn={isMicrophoneEnabled}
             isSharing={!!screenTrack}
             toggleCam={toggleCamera}
             toggleMic={toggleMicrophone}
@@ -239,8 +261,8 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
                   user={localUser}
                   videoTrack={localCameraTrack}
                   showButtons
-                  isCamOn={isCameraOn}
-                  isMicOn={isMicrophoneOn}
+                  isCamOn={isCameraEnabled}
+                  isMicOn={isMicrophoneEnabled}
                   isSharing={!!localScreenTrack}
                   toggleCam={stage.toggleCamera}
                   toggleMic={stage.toggleMicrophone}
@@ -254,7 +276,7 @@ export const TalkShowStudio: FC<TalkShowStudioProps> = ({ venue }) => {
           <ControlBar
             isSharing={!!localScreenTrack}
             loading={
-              screenClient.connectionState !==
+              agoraClient.connectionState !==
               AgoraClientConnectionState.CONNECTED
             }
             onStageJoin={onStageJoin}

@@ -21,7 +21,6 @@ import { WithId } from "utils/id";
 import { useShowHide } from "hooks/useShowHide";
 import { useStage } from "hooks/useStage";
 import { useUser } from "hooks/useUser";
-import { useVenueId } from "hooks/useVenueId";
 
 import { Button } from "components/atoms/Button";
 
@@ -38,9 +37,9 @@ export interface AdminPanelProps {
 }
 
 export const AdminPanel: FC<AdminPanelProps> = ({ venue }) => {
-  const venueId = useVenueId();
+  const venueId = venue.id;
   const { user: loggedUser, userId: loggedUserId } = useUser();
-  const stage = useStage();
+  const stage = useStage({ venueId });
   const [userToRemove, setUserToRemove] = useState<WithId<User>>();
   const {
     isShown: isLeaveStageModalVisible,

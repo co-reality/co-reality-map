@@ -30,7 +30,7 @@ const Audience: React.FC<AudienceProps> = ({ venue }) => {
   const { name, id: venueId } = venue;
   const { userId, profile } = useUser();
   const { recentVenueUsers } = useRecentVenueUsers();
-  const { peopleRequesting } = useStage();
+  const { peopleRequesting } = useStage({ venueId });
 
   const isHidden = isDefined(profile?.data?.[venueId]?.row);
 

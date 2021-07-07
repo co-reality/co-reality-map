@@ -36,17 +36,26 @@ export interface GetAgoraTokenProps {
   channelName: string;
 }
 
-export type AgoraToken = string;
+export interface AgoraTokenData {
+  appId: string;
+  channelName: string;
+  account: string;
+  token: string;
+}
 
 export const getAgoraToken = async ({
   channelName,
-}: GetAgoraTokenProps): Promise<AgoraToken> => {
+}: GetAgoraTokenProps): Promise<AgoraTokenData> => {
   return firebase
     .functions()
     .httpsCallable("video-getAgoraToken")({
       channelName,
     })
-    .then<AgoraToken>((result) => result.data.token)
+    .then<AgoraTokenData>((result) => {
+      const { appId, channelName, account, token } = result.data;
+
+      return { appId, channelName, account, token };
+    })
     .catch((err) => {
       Bugsnag.notify(err, (event) => {
         event.addMetadata("context", {

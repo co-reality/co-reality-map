@@ -1,52 +1,78 @@
 import { useCallback, useEffect, useState } from "react";
-import AgoraRTC, { ILocalAudioTrack, ILocalVideoTrack } from "agora-rtc-sdk-ng";
+import { useUnmount } from "react-use";
+import AgoraRTC, {
+  IAgoraRTCClient,
+  ILocalAudioTrack,
+  ILocalVideoTrack,
+} from "agora-rtc-sdk-ng";
 
-import { AGORA_APP_ID, AGORA_CHANNEL, AGORA_TOKEN } from "secrets";
-
-import { UseAgoraCameraProps, UseAgoraCameraReturn } from "types/agora";
 import { ReactHook } from "types/utility";
 
 import { updateTalkShowStudioExperience } from "api/profile";
+import { getAgoraToken } from "api/video";
 
 import { useShowHide } from "hooks/useShowHide";
-import { useUser } from "hooks/useUser";
-import { useVenueId } from "hooks/useVenueId";
+
+export interface UseAgoraCameraProps {
+  venueId?: string;
+  userId?: string;
+  channelName?: string;
+  client?: IAgoraRTCClient;
+}
+
+export interface UseAgoraCameraReturn {
+  isCameraEnabled: boolean;
+  isMicrophoneEnabled: boolean;
+  localCameraTrack?: ILocalVideoTrack;
+  toggleCamera(): void;
+  toggleMicrophone(): void;
+  joinChannel(): Promise<void>;
+  leaveChannel(): Promise<void>;
+}
 
 export const useAgoraCamera: ReactHook<
   UseAgoraCameraProps,
   UseAgoraCameraReturn
-> = ({ client }) => {
-  const { userId } = useUser();
-  const venueId = useVenueId();
-
+> = ({ venueId, userId, channelName, client }) => {
   const [localCameraTrack, setLocalCameraTrack] = useState<ILocalVideoTrack>();
+
   const [
     localMicrophoneTrack,
     setLocalMicrophoneTrack,
   ] = useState<ILocalAudioTrack>();
-  const { isShown: isCameraOn, setShown: setIsCameraOn } = useShowHide();
+
   const {
-    isShown: isMicrophoneOn,
-    setShown: setIsMicrophoneOn,
+    isShown: isCameraEnabled,
+    show: enableCamera,
+    toggle: toggleCamera,
   } = useShowHide();
 
-  const toggleCamera = () => {
-    localCameraTrack?.setEnabled(!isCameraOn);
-    setIsCameraOn(!isCameraOn);
-  };
+  const {
+    isShown: isMicrophoneEnabled,
+    show: enableMicrophone,
+    toggle: toggleMicrophone,
+  } = useShowHide();
 
-  const toggleMicrophone = () => {
-    localMicrophoneTrack?.setEnabled(!isMicrophoneOn);
-    setIsMicrophoneOn(!isMicrophoneOn);
-  };
+  useEffect(() => {
+    localCameraTrack?.setEnabled(isCameraEnabled);
+  }, [isCameraEnabled, localCameraTrack]);
+
+  useEffect(() => {
+    localMicrophoneTrack?.setEnabled(isMicrophoneEnabled);
+  }, [isMicrophoneEnabled, localMicrophoneTrack]);
 
   const joinChannel = async () => {
-    if (!client || !venueId || !userId) return;
+    if (!client || !venueId || !userId || !channelName) return;
+
+    const { appId, account, token } = await getAgoraToken({
+      channelName,
+    });
 
     const cameraClientUid = await client.join(
-      AGORA_APP_ID || "",
-      AGORA_CHANNEL || "",
-      AGORA_TOKEN || null
+      appId,
+      channelName,
+      token,
+      account
     );
 
     const experience = {
@@ -55,13 +81,15 @@ export const useAgoraCamera: ReactHook<
 
     updateTalkShowStudioExperience({ venueId, userId, experience });
 
-    setIsCameraOn(true);
-    setIsMicrophoneOn(true);
+    enableCamera();
+    enableMicrophone();
+
     const cameraTrack = await AgoraRTC.createCameraVideoTrack();
     const microphoneTrack = await AgoraRTC.createMicrophoneAudioTrack();
 
     setLocalCameraTrack(cameraTrack);
     setLocalMicrophoneTrack(microphoneTrack);
+
     await client.publish([microphoneTrack, cameraTrack]);
   };
 
@@ -78,21 +106,16 @@ export const useAgoraCamera: ReactHook<
     await client?.leave();
   }, [client, localCameraTrack, localMicrophoneTrack]);
 
-  useEffect(() => {
-    return () => {
-      leaveChannel();
-    };
-    // Otherwise, it will fire when local tracks are updated
-    // @debt We shouldn't be disabling our linting rules like this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useUnmount(async () => {
+    await leaveChannel();
+  });
 
   return {
     localCameraTrack,
     toggleCamera,
     toggleMicrophone,
-    isCameraOn,
-    isMicrophoneOn,
+    isCameraEnabled,
+    isMicrophoneEnabled,
     joinChannel,
     leaveChannel,
   };

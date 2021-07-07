@@ -1,26 +1,35 @@
-import { useCallback, useEffect, useState } from "react";
-import AgoraRTC, { ILocalAudioTrack, ILocalVideoTrack } from "agora-rtc-sdk-ng";
+import { useCallback, useState } from "react";
+import { useUnmount } from "react-use";
+import AgoraRTC, {
+  IAgoraRTCClient,
+  ILocalAudioTrack,
+  ILocalVideoTrack,
+} from "agora-rtc-sdk-ng";
 
-import { AGORA_APP_ID, AGORA_CHANNEL, AGORA_TOKEN } from "secrets";
-
-import {
-  UseAgoraScreenShareProps,
-  UseAgoraScreenShareReturn,
-} from "types/agora";
 import { ReactHook } from "types/utility";
 
 import { updateTalkShowStudioExperience } from "api/profile";
+import { getAgoraToken } from "api/video";
 
-import { useUser } from "hooks/useUser";
-import { useVenueId } from "hooks/useVenueId";
+export interface UseAgoraScreenShareProps {
+  venueId?: string;
+  userId?: string;
+  channelName?: string;
+  client?: IAgoraRTCClient;
+}
+
+export interface UseAgoraScreenShareReturn {
+  localScreenTrack?: ILocalVideoTrack;
+  stopShare(): void;
+  shareScreen(): Promise<void>;
+  joinChannel(): Promise<void>;
+  leaveChannel(): Promise<void>;
+}
 
 export const useAgoraScreenShare: ReactHook<
   UseAgoraScreenShareProps,
   UseAgoraScreenShareReturn
-> = ({ client }) => {
-  const { userId } = useUser();
-  const venueId = useVenueId();
-
+> = ({ venueId, userId, channelName, client }) => {
   const [localScreenTrack, setLocalScreenTrack] = useState<ILocalVideoTrack>();
   const [localAudioTrack, setLocalAudioTrack] = useState<ILocalAudioTrack>();
 
@@ -31,10 +40,13 @@ export const useAgoraScreenShare: ReactHook<
 
     if (Array.isArray(screenTrack)) {
       const [screenVideoTrack, screenAudioTrack] = screenTrack;
+
       setLocalScreenTrack(screenVideoTrack);
       setLocalAudioTrack(screenAudioTrack);
+
       await client.publish(screenVideoTrack);
       await client.publish(screenAudioTrack);
+
       return;
     }
 
@@ -56,12 +68,17 @@ export const useAgoraScreenShare: ReactHook<
   }, [client, localAudioTrack, localScreenTrack]);
 
   const joinChannel = async () => {
-    if (!client || !venueId || !userId) return;
+    if (!client || !venueId || !userId || !channelName) return;
+
+    const { appId, account, token } = await getAgoraToken({
+      channelName,
+    });
 
     const screenClientUid = await client?.join(
-      AGORA_APP_ID || "",
-      AGORA_CHANNEL || "",
-      AGORA_TOKEN || null
+      appId,
+      channelName,
+      token,
+      account
     );
 
     const experience = {
@@ -76,14 +93,9 @@ export const useAgoraScreenShare: ReactHook<
     await client?.leave();
   }, [client, stopShare]);
 
-  useEffect(() => {
-    return () => {
-      leaveChannel();
-    };
-    // Otherwise, it will fire when local tracks are updated
-    // @debt We shouldn't be disabling our linting rules like this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useUnmount(async () => {
+    await leaveChannel();
+  });
 
   return {
     localScreenTrack,
