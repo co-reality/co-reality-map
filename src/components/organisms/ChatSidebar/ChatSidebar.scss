@@ -8,10 +8,11 @@ $header-height: 45px;
   position: fixed;
   display: flex;
   flex-flow: column;
-  top: 66px;
+  top: $navbar-height;
   right: 0;
+  bottom: $footer-height;
   width: $chat-sidebar-width;
-  height: calc(100vh - 96px);
+  // height: calc(100vh - 96px);
   background-color: $saturated-black;
   z-index: z(sidebar);
 
@@ -20,6 +21,12 @@ $header-height: 45px;
     transition: transform 0.3s;
     background-color: rgba($saturated-black, 0.9);
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+  }
+
+  &--pinned {
+    position: relative;
+    top: 0;
+    min-width: $chat-sidebar-width;
   }
 
   &__header {
@@ -68,9 +75,6 @@ $header-height: 45px;
     background-color: $secondary;
     border-radius: 16px 0 0 16px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     position: absolute;
     top: 0;

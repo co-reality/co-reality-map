@@ -1,6 +1,10 @@
 @import "scss/constants.scss";
 
 .navbar-margin {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
   padding-top: $navbar-height;
   padding-bottom: $footer-height;
 }

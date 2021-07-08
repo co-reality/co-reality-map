@@ -551,6 +551,11 @@ export const ALL_BURN_TEMPLATES: Array<VenueTemplate> = [
   VenueTemplate.themecamp,
 ];
 
+export const CHATBAR_NEVER_PINNED_TEMPLATES = [
+  VenueTemplate.audience,
+  VenueTemplate.jazzbar,
+];
+
 export const FIREBASE_CONFIG = {
   apiKey: API_KEY,
   appId: APP_ID,
@@ -598,6 +603,8 @@ export const DEFAULT_SHOW_REACTIONS = true;
 export const DEFAULT_SHOW_SHOUTOUTS = true;
 
 export const ZENDESK_URL_PREFIXES = ["/admin"];
+
+export const LARGE_SCREEN_WIDTH = 1920; // width in px
 
 // Max questions number for Poll inside Chat
 export const MAX_POLL_QUESTIONS = 8;

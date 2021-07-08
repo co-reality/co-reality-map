@@ -68,6 +68,7 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
 
     case VenueTemplate.partymap:
     case VenueTemplate.themecamp:
+      fullscreen = true;
       template = <PartyMap venue={venue} />;
       break;
 
@@ -117,6 +118,7 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
 
     case VenueTemplate.conversationspace:
       template = <ConversationSpace />;
+      fullscreen = true;
       break;
 
     case VenueTemplate.embeddable:
@@ -151,6 +153,7 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
     default:
       // Technically TypeScript should prevent us missing a case here, but just in case, we work around it with an explicit cast to be able to render this
       template = <div>Unknown Template: ${(venue as AnyVenue).template}</div>;
+      fullscreen = true;
   }
 
   // @debt remove backButton from Navbar

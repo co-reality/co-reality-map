@@ -1,5 +1,8 @@
+@import "scss/constants.scss";
+
 .full-page-container.art-piece-container {
   padding: 0;
+  height: calc(100vh - 2 *#{$navbar-height + $footer-height});
 
   .content {
     display: flex;

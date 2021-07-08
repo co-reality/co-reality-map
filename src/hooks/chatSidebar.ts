@@ -1,4 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import { useWindowSize } from "react-use";
+
+import { LARGE_SCREEN_WIDTH, CHATBAR_NEVER_PINNED_TEMPLATES } from "settings";
+
+import { AnyVenue } from "types/venues";
 
 import {
   chatVisibilitySelector,
@@ -77,5 +82,26 @@ export const useChatSidebarInfo = (venue: AnyVenue) => {
       numberOfUnreadChats ? `(${numberOfUnreadChats})` : ""
     }`,
     venueChatTabTitle: `${chatTitle} Chat`,
+  };
+};
+
+export const useChatSidebarPinned = (venue: AnyVenue) => {
+  const dispatch = useDispatch();
+  const { width } = useWindowSize();
+  const isPinned = useMemo(
+    () =>
+      width > LARGE_SCREEN_WIDTH &&
+      !CHATBAR_NEVER_PINNED_TEMPLATES.includes(venue?.template),
+    [width, venue]
+  );
+
+  useEffect(() => {
+    if (isPinned) {
+      dispatch(setChatSidebarVisibility(true));
+    }
+  }, [dispatch, isPinned]);
+
+  return {
+    isPinned,
   };
 };
