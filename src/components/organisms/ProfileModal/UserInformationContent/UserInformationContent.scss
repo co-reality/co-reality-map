@@ -60,6 +60,11 @@ $button-size: 30px;
     margin-bottom: $spacing--lg;
   }
 }
+button.UserInformationContent__contacts {
+  width: 100%;
+  margin-bottom: $spacing--lg;
+  background-color: $secondary;
+}
 
 button.UserInformationContent__edit {
   padding: 0;

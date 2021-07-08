@@ -1,6 +1,9 @@
 import React, { useCallback, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 
 import {
   ENABLE_SUSPECTED_LOCATION,
@@ -8,6 +11,8 @@ import {
   DEFAULT_PROFILE_PIC,
   DEFAULT_PARTY_NAME,
 } from "settings";
+
+import { addToContactsList, removeFromContactsList } from "api/profile";
 
 import { orderedVenuesSelector } from "utils/selectors";
 import { WithId } from "utils/id";
@@ -34,7 +39,7 @@ export interface UserProfileModalProps {
 export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   venue,
 }) => {
-  const { user } = useUser();
+  const { user, userWithId } = useUser();
 
   const { selectRecipientChat } = useChatSidebarControls();
 
@@ -92,6 +97,28 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
     [selectedUserProfile?.profileLinks]
   );
 
+  const isInContactsList = useMemo(() => {
+    if (!userWithId || !chosenUserId) return false;
+
+    return userWithId?.contactsList?.includes(chosenUserId);
+  }, [userWithId, chosenUserId]);
+
+  const handleContactListUpdate = useCallback(async () => {
+    if (!user || !chosenUserId) return;
+
+    if (isInContactsList) {
+      await removeFromContactsList({
+        contactsListUserId: chosenUserId,
+        userId: user.uid,
+      });
+    } else {
+      await addToContactsList({
+        contactsListUserId: chosenUserId,
+        userId: user.uid,
+      });
+    }
+  }, [user, chosenUserId, isInContactsList]);
+
   if (!selectedUserProfile || !chosenUserId || !user) {
     return null;
   }
@@ -105,6 +132,13 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
       <Modal.Body>
         <div className="modal-container modal-container_profile">
           <div className="profile-information-container">
+            {chosenUserId !== user.uid && (
+              <FontAwesomeIcon
+                className="UserProfileModal__icon--bookmark"
+                icon={isInContactsList ? solidBookmark : regularBookmark}
+                onClick={handleContactListUpdate}
+              />
+            )}
             <div className="profile-basics">
               <div className="profile-pic">
                 {/* @debt Refactor this to use our useImage hook? Or just UserAvatar / UserProfilePicture directly? */}

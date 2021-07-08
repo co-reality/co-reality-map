@@ -7,3 +7,4 @@ export {
 export { useRecentWorldUsers } from "./useRecentWorldUsers";
 export { useRecentLocationUsers } from "./useRecentLocationUsers";
 export { useRecentVenueUsers } from "./useRecentVenueUsers";
+export { useContactsListToDisplay } from "./useContactsListToDisplay";

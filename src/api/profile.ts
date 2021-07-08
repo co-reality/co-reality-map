@@ -142,6 +142,64 @@ export const updateProfileLinks = async ({
   });
 };
 
+// ================================================= Contacts List
+export interface UpdateContactsListProps {
+  contactsListUserId: string;
+  userId: string;
+}
+
+export const addToContactsList = async ({
+  contactsListUserId,
+  userId,
+}: UpdateContactsListProps): Promise<void> => {
+  const userProfileRef = getUserRef(userId);
+
+  return userProfileRef
+    .update({
+      contactsList: firebase.firestore.FieldValue.arrayUnion(
+        contactsListUserId
+      ),
+    })
+    .catch((err) => {
+      Bugsnag.notify(err, (event) => {
+        event.addMetadata("context", {
+          location: "api/profile::updateProfileLinks",
+          contactsListUserId,
+          userId,
+          event,
+        });
+
+        throw err;
+      });
+    });
+};
+
+export const removeFromContactsList = async ({
+  contactsListUserId,
+  userId,
+}: UpdateContactsListProps): Promise<void> => {
+  const userProfileRef = getUserRef(userId);
+
+  return userProfileRef
+    .update({
+      contactsList: firebase.firestore.FieldValue.arrayRemove(
+        contactsListUserId
+      ),
+    })
+    .catch((err) => {
+      Bugsnag.notify(err, (event) => {
+        event.addMetadata("context", {
+          location: "api/profile::updateProfileLinks",
+          contactsListUserId,
+          userId,
+          event,
+        });
+
+        throw err;
+      });
+    });
+};
+
 // ================================================= User Collection
 export interface UpdateUserCollectionProps {
   collectionKey: string;

@@ -56,6 +56,11 @@
     }
   }
 
+  &--contact {
+    box-shadow: 0 0 0 3px $primary--lightest;
+    border-radius: $border-radius--max;
+  }
+
   &--clickable {
     cursor: pointer;
 

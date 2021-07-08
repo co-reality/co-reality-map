@@ -42,6 +42,7 @@ export interface User {
   status?: string;
   myPersonalizedSchedule?: MyPersonalizedSchedule;
   profileLinks?: ProfileLink[];
+  contactsList?: string[];
 }
 
 export enum UserStatus {

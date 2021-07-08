@@ -1,0 +1,63 @@
+@import "scss/constants";
+
+$button-size: 30px;
+$contact-size: 53px;
+
+.ContactsList {
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    font-size: $font-size--md;
+    line-height: $spacing--xl;
+    color: opaque-white(0.5);
+    text-align: start;
+    margin-bottom: $spacing--md;
+  }
+
+  &__users {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: $spacing--md;
+  }
+
+  &__user {
+    width: 100%;
+    display: flex;
+    height: $contact-size;
+    margin-bottom: $spacing--sm;
+    background: $black;
+    border-radius: $border-radius--lg;
+    padding: $spacing--md;
+
+    &--name {
+      font-weight: $font-weight--500;
+      font-size: $font-size--md;
+      line-height: $spacing--lg;
+      margin: auto $spacing--md;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: #2b2a2a;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // @debt had to increase specificity because Button styles go later
+  & .ContactsList__button--cancel {
+    padding: 0;
+    width: 100%;
+    height: $button-size;
+    font-size: $font-size--md;
+    background-color: $secondary;
+
+    &:hover {
+      background-color: $secondary--light;
+    }
+  }
+}

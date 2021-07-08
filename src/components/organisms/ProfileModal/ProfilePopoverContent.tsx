@@ -5,6 +5,7 @@ import { isDefined } from "utils/types";
 
 import { useUser } from "hooks/useUser";
 
+import { ContactsList } from "./ContactsList";
 import { EditPasswordForm } from "./EditPasswordForm";
 import { EditProfileForm } from "./EditProfileForm";
 import { EditProfileLinkForm } from "./EditProfileLinkForm";
@@ -17,6 +18,7 @@ export enum UserProfileMode {
   EDIT_PROFILE,
   EDIT_PASSWORD,
   EDIT_PROFILE_LINK,
+  CONTACTS_LIST,
 }
 
 export const ProfilePopoverContent: React.FC = () => {
@@ -42,6 +44,9 @@ export const ProfilePopoverContent: React.FC = () => {
       )}
       {mode === UserProfileMode.EDIT_PASSWORD && (
         <EditPasswordForm setUserProfileMode={setMode} />
+      )}
+      {mode === UserProfileMode.CONTACTS_LIST && (
+        <ContactsList setUserProfileMode={setMode} />
       )}
       {mode === UserProfileMode.EDIT_PROFILE_LINK && (
         <EditProfileLinkForm

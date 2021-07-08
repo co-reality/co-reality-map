@@ -15,6 +15,7 @@ import {
 } from "utils/selectors";
 import { venueLandingUrl } from "utils/url";
 
+import { useContactsListToDisplay } from "hooks/users";
 import { useVenueId } from "hooks/useVenueId";
 import { useSelector } from "hooks/useSelector";
 
@@ -44,6 +45,7 @@ export const UserInformationContent: React.FunctionComponent<UserInformationCont
   user,
   email,
 }) => {
+  const contactsList = useContactsListToDisplay();
   const profileQuestions = useSelector(
     (state) => currentVenueSelectorData(state)?.profile_questions
   );
@@ -162,6 +164,12 @@ export const UserInformationContent: React.FunctionComponent<UserInformationCont
           <img src={editIcon} alt="edit" />
         </Button>
       </div>
+      <Button
+        customClass="UserInformationContent__contacts"
+        onClick={() => setUserProfileMode(UserProfileMode.CONTACTS_LIST)}
+      >
+        {`${contactsList.length} Contacts`}
+      </Button>
       {questions}
 
       {profileLinks}

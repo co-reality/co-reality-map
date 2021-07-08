@@ -10,6 +10,13 @@ $profile-link--spacing: 10px;
 $profile-link--padding: 6px 18px;
 
 .UserProfileModal {
+  &__icon--bookmark {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
   &__profile-link {
     margin-right: $profile-link--spacing;
     margin-bottom: $profile-link--spacing;
@@ -54,6 +61,7 @@ $profile-link--padding: 6px 18px;
 .modal-container.modal-container_profile {
   .profile-information-container {
     padding: $side-padding;
+    position: relative;
   }
 
   .private-chat-container {
