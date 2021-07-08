@@ -49,6 +49,12 @@ export enum UserStatus {
   busy = "busy",
 }
 
+export enum RecentUserStatusType {
+  online = "online",
+  offline = "offline",
+  busy = "busy",
+}
+
 export enum UsernameVisibility {
   none = "none",
   hover = "hover",

@@ -84,6 +84,15 @@ $profile-link--padding: 6px 18px;
     .profile-text {
       grid-column: 2;
       grid-row: 1;
+
+      &__recent-venue {
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+          color: $yellow;
+        }
+      }
     }
   }
 }

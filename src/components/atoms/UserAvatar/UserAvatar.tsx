@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { DEFAULT_PARTY_NAME, DEFAULT_PROFILE_IMAGE } from "settings";
 
 import { User, UsernameVisibility } from "types/User";
-import { useRecentWorldUsers } from "hooks/users";
+import { useRecentUserStatus, useRecentWorldUsers } from "hooks/users";
 
 import { WithId } from "utils/id";
 
@@ -53,7 +53,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
     [user, recentWorldUsers]
   );
 
-  const status = user?.status;
+  const status = useRecentUserStatus(user);
 
   const nametagClasses = classNames("UserAvatar__nametag", {
     "UserAvatar__nametag--hover": showNametag === UsernameVisibility.hover,

@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 
-import { User } from "types/User";
+import { User, RecentUserStatusType } from "types/User";
 
 import { worldUsersByIdSelector } from "utils/selectors";
+import { normalizeTimestampToMilliseconds } from "utils/time";
 
 import { isLoaded } from "hooks/useFirestoreConnect";
 import { useSelector } from "hooks/useSelector";
+import { useUserLastSeenThreshold } from "hooks/useUserLastSeenThreshold";
 
 import { useConnectWorldUsers } from "./useConnectWorldUsers";
 
@@ -38,4 +40,21 @@ export const useWorldUsersByIdWorkaround = () => {
   const worldUsersById: Partial<Record<string, User>> = _worldUsersById;
 
   return { worldUsersById, isWorldUsersLoaded };
+};
+
+export const useRecentWorldUser = (userId: string): { recentUser?: User } => {
+  const { worldUsersById } = useWorldUsersByIdWorkaround();
+
+  return { recentUser: worldUsersById[userId] };
+};
+
+export const useRecentUserStatus = (user?: User): RecentUserStatusType => {
+  const lastSeenThreshold = useUserLastSeenThreshold();
+  if (!user) return RecentUserStatusType.offline;
+
+  if (user.status === RecentUserStatusType.busy)
+    return RecentUserStatusType.busy;
+  if (normalizeTimestampToMilliseconds(user.lastSeenAt) > lastSeenThreshold)
+    return RecentUserStatusType.online;
+  return RecentUserStatusType.offline;
 };

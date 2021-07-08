@@ -9,11 +9,13 @@ import {
   DEFAULT_PARTY_NAME,
 } from "settings";
 
+import { createUrlSafeName } from "api/admin";
+
 import { orderedVenuesSelector } from "utils/selectors";
 import { WithId } from "utils/id";
 import { venueInsideUrl, venuePreviewUrl } from "utils/url";
 
-import { User } from "types/User";
+import { RecentUserStatusType, User } from "types/User";
 import { AnyVenue, isVenueWithRooms } from "types/venues";
 
 import { useUser } from "hooks/useUser";
@@ -21,6 +23,7 @@ import { useProfileModalControls } from "hooks/useProfileModalControls";
 import { useSelector } from "hooks/useSelector";
 import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 import { useChatSidebarControls } from "hooks/chatSidebar";
+import { useRecentWorldUser, useRecentUserStatus } from "hooks/users";
 
 import { Badges } from "components/organisms/Badges";
 import Button from "components/atoms/Button";
@@ -45,7 +48,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   } = useProfileModalControls();
 
   const chosenUserId = selectedUserProfile?.id;
-
+  const { recentUser } = useRecentWorldUser(chosenUserId ?? "");
+  const status = useRecentUserStatus(recentUser);
   const profileQuestions = venue?.profile_questions;
 
   const openChosenUserChat = useCallback(() => {
@@ -55,6 +59,24 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
     // NOTE: Hide the modal, after the chat is opened;
     closeUserProfileModal();
   }, [selectRecipientChat, closeUserProfileModal, chosenUserId]);
+
+  const renderStatus = useMemo(() => {
+    if (!recentUser) return;
+
+    const venueName = Object.keys(recentUser.lastSeenIn)[0] ?? "";
+
+    return (
+      <>
+        {status !== RecentUserStatusType.offline ? `is ${status} in ` : status}
+        <a
+          href={createUrlSafeName(venueName)}
+          className="profile-text__recent-venue"
+        >
+          {venueName}
+        </a>
+      </>
+    );
+  }, [recentUser, status]);
 
   const renderedProfileQuestionAnswers = useMemo(
     () =>
@@ -127,6 +149,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 <h2 className="italic">
                   {selectedUserProfile.partyName || DEFAULT_PARTY_NAME}
                 </h2>
+                {renderStatus}
               </div>
             </div>
             <div className="profile-extras">
