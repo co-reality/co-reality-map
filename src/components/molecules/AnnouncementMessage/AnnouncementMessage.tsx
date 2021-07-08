@@ -34,10 +34,6 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
     }
   }, [banner, showAnnouncementMessage]);
 
-  // const noop = (e: React.MouseEvent<HTMLElement>) => {
-  //   e.stopPropagation();
-  // };
-
   const isActiveButton =
     banner?.buttonDisplayText && banner?.buttonUrl && banner?.isActionButton;
 
@@ -53,6 +49,7 @@ export const AnnouncementMessage: React.FC<AnnouncementMessageProps> = ({
   const announcementMessageClasses = classNames("AnnouncementMessage", {
     "AnnouncementMessage--fullscreen":
       banner?.isFullScreen && isAnnouncementForUser,
+    "AnnouncementMessage--user": isAnnouncementForUser,
   });
 
   const handleBannerModalClose = () => {
