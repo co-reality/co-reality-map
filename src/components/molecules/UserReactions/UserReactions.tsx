@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useCss } from "react-use";
 import classNames from "classnames";
 import { getSeconds } from "date-fns";
@@ -96,6 +96,21 @@ export const DisplayEmojiReaction: React.FC<EmojiReactionProps> = ({
 }) => {
   const { ariaLabel, text: emojiText, audioPath } = emojiReaction;
   useAudio({ audioPath, isMuted });
+
+  useEffect(() => {
+    if (isMuted) return;
+
+    const audio = new Audio(audioPath);
+
+    audio.play();
+
+    return () => {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement/Audio#memory_usage_and_management
+      //   the audio will keep playing and the object will remain in memory until playback ends or is paused (such as by calling pause()).
+      //   At that time, the object becomes subject to garbage collection.
+      audio.pause();
+    };
+  }, [audioPath, isMuted]);
 
   return (
     <div className="UserReactions__reaction" role="img" aria-label={ariaLabel}>

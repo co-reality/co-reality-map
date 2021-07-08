@@ -24,24 +24,29 @@ export const useAgoraCamera: ReactHook<
     localMicrophoneTrack,
     setLocalMicrophoneTrack,
   ] = useState<ILocalAudioTrack>();
-  const { isShown: isCameraOn, setShown: setIsCameraOn } = useShowHide();
+  const {
+    isShown: isCameraOn,
+    setShown: setIsCameraOn,
+    toggle: toggleCameraOn,
+  } = useShowHide();
   const {
     isShown: isMicrophoneOn,
     setShown: setIsMicrophoneOn,
+    toggle: toggleMicrophoneOn,
   } = useShowHide();
 
   const toggleCamera = () => {
     localCameraTrack?.setEnabled(!isCameraOn);
-    setIsCameraOn(!isCameraOn);
+    toggleCameraOn();
   };
 
   const toggleMicrophone = () => {
     localMicrophoneTrack?.setEnabled(!isMicrophoneOn);
-    setIsMicrophoneOn(!isMicrophoneOn);
+    toggleMicrophoneOn();
   };
 
   const joinChannel = async () => {
-    if (!client || !venueId || !userId) return;
+    if (!venueId || !userId) return;
 
     const cameraClientUid = await client.join(
       AGORA_APP_ID || "",
@@ -75,7 +80,7 @@ export const useAgoraCamera: ReactHook<
     setLocalCameraTrack(undefined);
     setLocalMicrophoneTrack(undefined);
 
-    await client?.leave();
+    await client.leave();
   }, [client, localCameraTrack, localMicrophoneTrack]);
 
   useEffect(() => {

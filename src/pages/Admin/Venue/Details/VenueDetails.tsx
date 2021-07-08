@@ -14,7 +14,7 @@ import { Room, RoomData_v2 } from "types/rooms";
 import { VenueDetailsProps } from "./VenueDetails.types";
 
 import { VenueCard } from "components/molecules/VenueCard";
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 import AdminEventModal from "pages/Admin/AdminEventModal";
 import { RoomEditModal } from "pages/Admin/Room/Edit";
 import RoomModal from "pages/Admin/Room/Modal";

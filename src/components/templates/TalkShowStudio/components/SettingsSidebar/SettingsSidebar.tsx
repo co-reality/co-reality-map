@@ -23,7 +23,7 @@ export interface SettingsSidebarProps {
   venue: WithId<FullTalkShowVenue>;
 }
 
-const SettingsSidebar: FC<SettingsSidebarProps> = ({ venue }) => {
+export const SettingsSidebar: FC<SettingsSidebarProps> = ({ venue }) => {
   const [isOpened, setIsOpened] = useState(false);
   const currentVenue = useSelector(currentVenueSelectorData);
   const { userId } = useUser();
@@ -60,5 +60,3 @@ const SettingsSidebar: FC<SettingsSidebarProps> = ({ venue }) => {
     </div>
   );
 };
-
-export default SettingsSidebar;

@@ -18,7 +18,7 @@ import { useRoles } from "hooks/useRoles";
 import { useUser } from "hooks/useUser";
 
 import { ChatMessageInfo } from "components/atoms/ChatMessageInfo";
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 
 import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 

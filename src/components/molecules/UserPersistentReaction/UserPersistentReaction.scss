@@ -21,7 +21,7 @@ $shoutBounceTranslateXOffset: 50%;
     position: absolute;
     bottom: $reactionOffset;
 
-    z-index: z(user-reactions-emoji);
+    z-index: z(user-persistent-reaction-emoji);
 
     font-size: $persistentReactionSize;
 

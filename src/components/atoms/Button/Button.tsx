@@ -18,7 +18,7 @@ export interface ButtonProps extends LinkProps {
   disabled?: boolean;
 }
 
-export const AppButton: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   customClass,
   loading,
   onClick,
@@ -63,5 +63,3 @@ export const AppButton: React.FC<ButtonProps> = ({
     </S.Button>
   );
 };
-
-export default AppButton;

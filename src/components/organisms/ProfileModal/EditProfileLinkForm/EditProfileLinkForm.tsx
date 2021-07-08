@@ -9,7 +9,7 @@ import { ProfileLink, User } from "types/User";
 import { WithId } from "utils/id";
 import { isDefined } from "utils/types";
 
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 import { InputField } from "components/atoms/InputField";
 
 import { UserProfileMode } from "../ProfilePopoverContent";

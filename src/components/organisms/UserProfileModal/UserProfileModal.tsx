@@ -23,7 +23,7 @@ import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 import { useChatSidebarControls } from "hooks/chatSidebar";
 
 import { Badges } from "components/organisms/Badges";
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 
 import "./UserProfileModal.scss";
 

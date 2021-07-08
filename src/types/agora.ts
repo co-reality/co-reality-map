@@ -13,12 +13,12 @@ export enum AgoraClientConnectionState {
 }
 
 export interface UseAgoraRemotesProps {
-  client?: IAgoraRTCClient;
+  client: IAgoraRTCClient;
 }
 export type UseAgoraRemotesReturn = IAgoraRTCRemoteUser[];
 
 export interface UseAgoraScreenShareProps {
-  client?: IAgoraRTCClient;
+  client: IAgoraRTCClient;
 }
 export interface UseAgoraScreenShareReturn {
   localScreenTrack?: ILocalVideoTrack;
@@ -29,7 +29,7 @@ export interface UseAgoraScreenShareReturn {
 }
 
 export interface UseAgoraCameraProps {
-  client?: IAgoraRTCClient;
+  client: IAgoraRTCClient;
 }
 export interface UseAgoraCameraReturn {
   isCameraOn: boolean;

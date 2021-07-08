@@ -27,6 +27,7 @@ $saturated-black: $secondary--dark;
 $saturated-black-alt: #262427;
 $lighter-intermediate-grey: #3d3a3f;
 $light-grey: #292929;
+$cod-gray: #191919;
 $pale-slate: #bab9ba;
 $concrete: #a3a6ab;
 $black: #000000;
@@ -167,6 +168,7 @@ $z-layers: (
   // UserReactions
   user-reactions-shout: 2,
   user-reactions-emoji: 1,
+  user-persistent-reaction-emoji: 2,
   // Map
   map-room--hovered: 7,
   map-avatar: 6,

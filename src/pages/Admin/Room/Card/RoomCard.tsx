@@ -12,7 +12,7 @@ import VenueEventDetails from "pages/Admin/VenueEventDetails";
 
 import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 import { Checkbox } from "components/atoms/Checkbox";
 
 import * as S from "./RoomCard.styles";

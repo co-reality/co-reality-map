@@ -26,7 +26,7 @@ export interface AudienceProps {
 const TOTAL_COLUMNS = 30;
 const TOTAL_ROWS = 8;
 
-const Audience: React.FC<AudienceProps> = ({ venue }) => {
+export const Audience: React.FC<AudienceProps> = ({ venue }) => {
   const { name, id: venueId } = venue;
   const { userId, profile } = useUser();
   const { recentVenueUsers } = useRecentVenueUsers();
@@ -116,5 +116,3 @@ const Audience: React.FC<AudienceProps> = ({ venue }) => {
     </div>
   );
 };
-
-export default Audience;

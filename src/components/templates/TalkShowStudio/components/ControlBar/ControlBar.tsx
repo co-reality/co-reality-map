@@ -3,9 +3,12 @@ import classNames from "classnames";
 
 import { updateTalkShowStudioExperience } from "api/profile";
 
+import { currentVenueSelectorData } from "utils/selectors";
+
 import { useShowHide } from "hooks/useShowHide";
 import { useStage } from "hooks/useStage";
 import { useUser } from "hooks/useUser";
+import { useSelector } from "hooks/useSelector";
 import { useVenueId } from "hooks/useVenueId";
 
 import { Button } from "components/atoms/Button";
@@ -22,7 +25,7 @@ export interface ControlBarProps {
   onStageLeaving: () => void;
   onStageJoin: () => void;
   loading?: boolean;
-  showJoinStageButton?: boolean;
+  isRequestToJoinStageEnabled?: boolean;
 }
 
 export const ControlBar: FC<ControlBarProps> = ({
@@ -32,8 +35,9 @@ export const ControlBar: FC<ControlBarProps> = ({
   onStageLeaving,
   onStageJoin,
   loading = false,
-  showJoinStageButton = false,
+  isRequestToJoinStageEnabled = false,
 }) => {
+  const currentVenue = useSelector(currentVenueSelectorData);
   const venueId = useVenueId();
   const { userId } = useUser();
   const stage = useStage();
@@ -43,6 +47,11 @@ export const ControlBar: FC<ControlBarProps> = ({
     show: showLeaveStageModal,
     hide: hideLeaveStageModal,
   } = useShowHide();
+
+  const isUserOwner = useMemo(
+    () => !!userId && currentVenue?.owners.includes(userId),
+    [currentVenue?.owners, userId]
+  );
 
   const showSharingControl = useMemo(
     () => stage.isUserOnStage && (stage.canShareScreen || isSharing),
@@ -62,12 +71,19 @@ export const ControlBar: FC<ControlBarProps> = ({
     isSharing ? stopShare() : shareScreen();
   }, [venueId, userId, isSharing, stopShare, shareScreen]);
 
+  const isJoinStageButtonDisplayed =
+    isRequestToJoinStageEnabled &&
+    stage.canJoinStage &&
+    !isUserOwner &&
+    !stage.isUserOnStage &&
+    !stage.isUserRequesting;
+
   const controlBarClasses = classNames("ControlBar", {
-    "ControlBar--one-item": !showSharingControl,
+    "ControlBar__sharing-off": !showSharingControl,
   });
 
   if (!stage.isUserOnStage) {
-    if (stage.canJoinStage && showJoinStageButton) {
+    if (stage.canJoinStage && isUserOwner) {
       return (
         <div className="JoinStage">
           <Button customClass={"JoinStage__button"} onClick={onStageJoin}>
@@ -115,6 +131,14 @@ export const ControlBar: FC<ControlBarProps> = ({
             onSubmit={onStageLeaving}
           />
         </>
+      )}
+      {isJoinStageButtonDisplayed && (
+        <Button
+          customClass="ControlBar__requestButton"
+          onClick={stage.requestJoinStage}
+        >
+          <span>✋</span> Request to join
+        </Button>
       )}
     </div>
   );

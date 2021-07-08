@@ -1,14 +1,28 @@
 @import "scss/constants";
 
+$requestButton: 143px;
+
 .ControlBar {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   justify-content: space-between;
   padding: $spacing--lg;
 
-  &--one-item {
+  &__sharing-off {
     justify-content: flex-end;
+  }
+
+  &__requestButton {
+    position: absolute;
+    width: $requestButton;
+    left: calc(50% - #{$requestButton / 2});
+    bottom: -80%;
+    background-color: opaque-white(0.2) !important;
+    padding: $spacing--sm $spacing--md !important;
+    font-weight: $font-weight--500 !important;
+    font-size: $font-size--md !important;
   }
 }
 

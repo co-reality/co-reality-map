@@ -5,7 +5,7 @@ import { User } from "types/User";
 
 import { WithId } from "utils/id";
 
-import AppButton from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 
 import "./LeaveStageModal.scss";
 
@@ -42,18 +42,18 @@ export const LeaveStageModal: React.FC<LeaveStageModalProps> = ({
               : "leave"
           } the stage?`}</p>
           <div className="LeaveStageModal__buttons">
-            <AppButton
+            <Button
               customClass={"LeaveStageModal__cancelButton"}
               onClick={onHide}
             >
               Cancel
-            </AppButton>
-            <AppButton
+            </Button>
+            <Button
               customClass={"LeaveStageModal__removeButton"}
               onClick={onRemove}
             >
               {userToRemove?.partyName ? "Remove user" : "Leave stage"}
-            </AppButton>
+            </Button>
           </div>
         </div>
       </Modal.Body>

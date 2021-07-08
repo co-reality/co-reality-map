@@ -1,5 +1,9 @@
 @import "scss/constants";
 
+$shareMode-height: 614px;
+$playMode-height: 178px;
+$playMode-width: 326px;
+
 .TalkShowStudio {
   height: 100%;
   display: flex;
@@ -7,27 +11,38 @@
   align-items: center;
   padding: $spacing--xl;
 
-  &__mode--share {
-    height: 613px;
-    width: 100%;
-  }
+  &__mode {
+    &--share {
+      height: $shareMode-height;
+      width: 100%;
+    }
 
-  &__mode--play {
-    width: 326px;
-    height: 178px;
-    margin: 10px;
+    &--play {
+      width: $playMode-width;
+      height: $playMode-height;
+      margin: $spacing--md;
+    }
+
+    &--local-play {
+      position: absolute;
+      bottom: $spacing--lg;
+      right: $spacing--lg;
+      width: 18.2%;
+      height: 21.3%;
+    }
   }
 
   &__scene {
     display: flex;
-    background-color: #191919;
+    background-color: $cod-gray;
     width: calc(35 * 30px);
     border: solid 0;
-    border-radius: 22px;
+    border-radius: $border-radius--xl;
     flex-direction: column;
     align-items: center;
 
     &--sharing {
+      position: relative;
       border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: $border-radius--lg;
       margin-bottom: $spacing--lg;
@@ -39,10 +54,5 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-  }
-
-  &__request-button {
-    background-color: opaque-white(0.2) !important;
-    padding: $spacing--sm $spacing--md !important;
   }
 }

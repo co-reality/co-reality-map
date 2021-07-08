@@ -13,15 +13,11 @@ export const useAgoraRemotes: ReactHook<
   const [remoteUsers, setRemoteUsers] = useState<IAgoraRTCRemoteUser[]>([]);
 
   const updateRemoteUsers = useCallback(() => {
-    if (!client) return;
-
     setRemoteUsers(() => Array.from(client.remoteUsers));
   }, [client]);
 
   const handleUserPublished = useCallback(
     async (user: IAgoraRTCRemoteUser, mediaType: "audio" | "video") => {
-      if (!client) return;
-
       await client.subscribe(user, mediaType);
       updateRemoteUsers();
     },
@@ -29,8 +25,6 @@ export const useAgoraRemotes: ReactHook<
   );
 
   useEffect(() => {
-    if (!client) return;
-
     updateRemoteUsers();
 
     client.on("user-published", handleUserPublished);
