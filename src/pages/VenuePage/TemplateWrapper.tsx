@@ -169,9 +169,8 @@ export const TemplateWrapper: React.FC<TemplateWrapperProps> = ({ venue }) => {
       <RelatedVenuesProvider venueId={venue.id}>
         <ReactionsProvider venueId={venue.id}>
           <WithNavigationBar hasBackButton={hasBackButton}>
-
             {venue?.banner && (
-            <AnnouncementMessage banner={venue.banner} announcementForUser />
+              <AnnouncementMessage banner={venue.banner} announcementForUser />
             )}
 
             <Suspense fallback={<LoadingPage />}>{template}</Suspense>
