@@ -299,10 +299,6 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
     [venueId, userId]
   );
 
-  const leaveSeat = useCallback(() => {
-    takeSeat(null, null);
-  }, [takeSeat]);
-
   // @debt this return useMemo antipattern should be rewritten
   return useMemo(() => {
     // @debt This should probably be all rolled up into a single canonical component. Possibly CallOutMessageForm by the looks of things?
@@ -355,6 +351,7 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
           ))}
           <div
             className="mute-button"
+            title="(Un)Mute audience reactions"
             onClick={() => setIsAudioEffectDisabled((state) => !state)}
           >
             <FontAwesomeIcon
@@ -362,9 +359,6 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
               icon={isAudioEffectDisabled ? faVolumeMute : faVolumeUp}
             />
           </div>
-          <button className="leave-seat-button" onClick={leaveSeat}>
-            Leave Seat
-          </button>
         </div>
 
         {venue.showShoutouts && (
@@ -498,7 +492,6 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
     reset,
     columnsForSizedAuditorium,
     isAudioEffectDisabled,
-    leaveSeat,
     handleSubmit,
     register,
     isShoutSent,

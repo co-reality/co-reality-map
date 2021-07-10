@@ -87,27 +87,6 @@ $spacing: calc(1 * min(var(--seat-size), var(--seat-size-min)));
             font-size: 20px;
             cursor: pointer;
           }
-
-          .leave-seat-button {
-            display: inline-block;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.7em;
-            transition: all 400ms $transition-function;
-            line-height: 1.5;
-            border: 1px solid transparent;
-            transform: translateY(0);
-            cursor: pointer;
-            padding: 4px 10px;
-            background: rgb(0, 0, 0);
-            color: $white;
-
-            &:hover {
-              background-color: rgba(255, 255, 255, 0.5);
-            }
-          }
         }
 
         .shout-container {
