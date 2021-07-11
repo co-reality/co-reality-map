@@ -16,18 +16,18 @@ $action-button-padding: 6px;
   border-radius: $border-radius--xl;
   text-align: center;
 
+  &--user {
+    left: 25%;
+    position: absolute;
+    z-index: z(z-layer-announcement-banner);
+  }
+
   &--fullscreen {
     top: 35%;
     left: 35%;
     position: fixed;
-    z-index: 123;
+    z-index: z(z-layer-announcement-banner);
     width: $announcement-container-width-fullscreen;
-  }
-
-  &--user {
-    left: 25%;
-    position: absolute;
-    z-index: 2;
   }
 
   &__default-text {
@@ -65,7 +65,7 @@ $action-button-padding: 6px;
   }
 
   &__container {
-    top: 66px;
+    top: $navbar-height;
     left: 0;
     right: 0;
     width: 100%;

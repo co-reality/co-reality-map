@@ -4,6 +4,7 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
 import { Banner } from "types/banner";
+
 import { isDefined } from "utils/types";
 
 import { useShowHide } from "hooks/useShowHide";

@@ -21,7 +21,7 @@ export const makeUpdateBanner = async ({
     .httpsCallable("venue-adminUpdateBannerMessage")(params)
     .catch((err) =>
       Bugsnag.notify(err, (event) => {
-        event.addMetadata("Venue::Admin::UpdateBannerMessage::onSubmit", {
+        event.addMetadata("api/bannerAdmin::makeUpdateBanner", {
           venueId,
         });
       })

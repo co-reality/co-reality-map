@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import classNames from "classnames";
 
 import { makeUpdateBanner } from "api/bannerAdmin";
 
@@ -11,10 +12,10 @@ import { useShowHide } from "hooks/useShowHide";
 import { Button } from "components/atoms/Button";
 import { Checkbox } from "components/atoms/Checkbox";
 import { InputField } from "components/atoms/InputField";
+import { ConfirmationModal } from "components/atoms/ConfirmationModal/ConfirmationModal";
 
 import "./BannerAdmin.scss";
-import classNames from "classnames";
-import { ConfirmationModal } from "components/atoms/ConfirmationModal/ConfirmationModal";
+import { useAsyncFn } from "react-use";
 
 interface BannerAdminProps {
   venueId?: string;
@@ -44,19 +45,15 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
     hide: hideBannerChangeModal,
   } = useShowHide();
 
-  const updateBannerInFirestore = useCallback(
-    (banner?: Banner) => {
+  const [{ loading: isUpdatingBanner }, saveBanner] = useAsyncFn(
+    async (banner?: Banner) => {
       if (!venueId) return;
 
-      makeUpdateBanner({ venueId, banner });
+      await makeUpdateBanner({ venueId, banner });
       onClose && onClose();
     },
     [venueId, onClose]
   );
-
-  const saveBanner = async (data: Banner) => {
-    await updateBannerInFirestore(data);
-  };
 
   const clearBanner = useCallback(() => {
     showBannerChangeModal();
@@ -65,9 +62,9 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [showBannerChangeModal, reset]);
 
   const confirmChangeBannerData = useCallback(() => {
-    updateBannerInFirestore(undefined);
+    saveBanner(undefined);
     hideBannerChangeModal();
-  }, [updateBannerInFirestore, hideBannerChangeModal]);
+  }, [saveBanner, hideBannerChangeModal]);
 
   const forceFunnelLabelClasses = classNames("BannerAdmin__checkbox__label", {
     BannerAdmin__checkbox__label__disabled: !isUrlButtonActive,
@@ -156,10 +153,15 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
           <Button
             customClass="BannerAdmin__button BannerAdmin__button--close"
             onClick={clearBanner}
+            disabled={isUpdatingBanner}
           >
             Clear
           </Button>
-          <Button customClass="BannerAdmin__button" type="submit">
+          <Button
+            customClass="BannerAdmin__button"
+            type="submit"
+            disabled={isUpdatingBanner}
+          >
             Save
           </Button>
         </div>
@@ -173,14 +175,14 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         message={"Are you sure?"}
         saveBtnLabel="Clear & Save"
         cancelBtnLabel="Cancel"
-        containerClassName={"ConfirmationBannerModal"}
-        headerClassName={"ConfirmationBannerModal__header"}
-        messageClassName={"ConfirmationBannerModal__message"}
-        buttonsContainerClassName={"ConfirmationBannerModal__buttons"}
-        buttonClassName={
-          "ConfirmationBannerModal__button ConfirmationBannerModal__button--cancel"
+        containerClassName={"ConfirmationModal"}
+        headerClassName={"ConfirmationModal__header"}
+        messageClassName={"ConfirmationModal__message"}
+        buttonsContainerClassName={"ConfirmationModal__buttons"}
+        buttonClassName={"ConfirmationModal__button"}
+        cancelButtonClassName={
+          "ConfirmationModal__button  ConfirmationModal__button--cancel"
         }
-        cancelButtonClassName={"ConfirmationBannerModal__button"}
         isCentered
       />
     </div>

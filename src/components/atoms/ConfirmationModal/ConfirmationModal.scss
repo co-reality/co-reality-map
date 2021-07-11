@@ -23,7 +23,7 @@
   }
 }
 
-.ConfirmationBannerModal {
+.ConfirmationModal {
   text-align: center;
 
   &__header {
@@ -40,13 +40,17 @@
     justify-content: space-around;
   }
 
-  & .ConfirmationBannerModal__button {
+  & .ConfirmationModal__button {
     width: $announce-button-width;
     font-weight: $font-weight--500;
     background-color: $primary--live;
+  }
 
-    &--cancel {
-      background-color: opaque-white(0.2);
+  & .ConfirmationModal__button--cancel {
+    background-color: rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }

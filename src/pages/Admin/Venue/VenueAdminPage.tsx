@@ -13,11 +13,10 @@ import { useConnectCurrentVenueNG } from "hooks/useConnectCurrentVenueNG";
 import { useShowHide } from "hooks/useShowHide";
 
 import { LoadingPage } from "components/molecules/LoadingPage";
+import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
 
 import { BannerAdmin } from "components/organisms/BannerAdmin";
 import { WithNavigationBar } from "components/organisms/WithNavigationBar";
-
-import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
 
 import { AnnouncementOptions } from "./AnnouncementOptions";
 
@@ -64,13 +63,15 @@ export const VenueAdminPage: React.FC = () => {
           Current Announcement in Space Title
         </h4>
 
-        {isBannerAdminVisibile ? (
+        {isBannerAdminVisibile && (
           <BannerAdmin
             venueId={venueId}
             venue={venue}
             onClose={hideBannerAdmin}
           />
-        ) : venue?.banner ? (
+        )}
+
+        {!isBannerAdminVisibile && venue?.banner && (
           <>
             <AnnouncementMessage banner={venue.banner} />
 
@@ -79,7 +80,7 @@ export const VenueAdminPage: React.FC = () => {
               onEdit={showBannerAdmin}
             />
           </>
-        ) : null}
+        )}
       </div>
     </WithNavigationBar>
   );

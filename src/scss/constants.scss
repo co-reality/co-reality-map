@@ -66,6 +66,7 @@ $chat-input-height: 114px;
 $announcement-banner-height: 50px;
 $announcement-container-width: 640px;
 $announcement-container-width-fullscreen: 430px;
+$announcement-banner-admin-height: 55px;
 
 $avatarSize: max(4vh, 3vw);
 $avatarSizeMin: 25px;
@@ -125,6 +126,7 @@ $transition-function: cubic-bezier(0.23, 1, 0.32, 1);
 $z-layer-navbar: 30;
 $z-layer-live-schedule: 20;
 $z-layer-sidebar: 15;
+$z-layer-announcement-banner: 15;
 
 // @debt hack-fix to hide dropdown under navbar (reason: navbar stacking context)
 //       a better solution discussed here https://github.com/sparkletown/sparkle/pull/1350#discussion_r622895298
@@ -179,6 +181,8 @@ $z-layers: (
   account-profile-picture-preview: 1,
   duststorm-container: 100,
   duststorm-modal-content: 220,
+  // Announcement banner
+  z-layer-announcement-banner: $z-layer-announcement-banner,
   // Unsorted
   announcement: $z-layer-sidebar,
   footer: $z-layer-sidebar,

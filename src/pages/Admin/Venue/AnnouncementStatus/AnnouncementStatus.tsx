@@ -41,7 +41,7 @@ export const AnnouncementStatus: React.FC<AnnouncementStatusProps> = ({
             icon={fullscreenImg}
             className="AnnouncementStatus__img"
           />
-          FullScreen {fullscreenText}
+          Fullscreen {fullscreenText}
         </span>
 
         <span className="AnnouncementStatus__checkbox">
