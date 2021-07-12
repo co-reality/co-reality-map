@@ -181,7 +181,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         buttonsContainerClassName={"ConfirmationModal__buttons"}
         buttonClassName={"ConfirmationModal__button"}
         cancelButtonClassName={
-          "ConfirmationModal__button  ConfirmationModal__button--cancel"
+          "ConfirmationModal__button ConfirmationModal__button--cancel"
         }
         isCentered
       />
