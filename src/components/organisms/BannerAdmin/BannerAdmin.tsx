@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
+import { useAsyncFn } from "react-use";
 
 import { makeUpdateBanner } from "api/bannerAdmin";
 
@@ -15,7 +16,6 @@ import { InputField } from "components/atoms/InputField";
 import { ConfirmationModal } from "components/atoms/ConfirmationModal/ConfirmationModal";
 
 import "./BannerAdmin.scss";
-import { useAsyncFn } from "react-use";
 
 interface BannerAdminProps {
   venueId?: string;
@@ -62,7 +62,7 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   }, [showBannerChangeModal, reset]);
 
   const confirmChangeBannerData = useCallback(() => {
-    saveBanner(undefined);
+    saveBanner();
     hideBannerChangeModal();
   }, [saveBanner, hideBannerChangeModal]);
 

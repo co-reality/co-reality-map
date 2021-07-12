@@ -1,5 +1,6 @@
 import Bugsnag from "@bugsnag/js";
 import firebase from "firebase/app";
+
 import { Banner } from "types/banner";
 
 export interface MakeUpdateBannerProps {
@@ -23,6 +24,7 @@ export const makeUpdateBanner = async ({
       Bugsnag.notify(err, (event) => {
         event.addMetadata("api/bannerAdmin::makeUpdateBanner", {
           venueId,
+          banner,
         });
       })
     );

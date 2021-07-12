@@ -19,14 +19,14 @@ $action-button-padding: 6px;
   &--user {
     left: 25%;
     position: absolute;
-    z-index: z(z-layer-announcement-banner);
+    z-index: z(announcement-banner);
   }
 
   &--fullscreen {
     top: 35%;
     left: 35%;
     position: fixed;
-    z-index: z(z-layer-announcement-banner);
+    z-index: z(announcement-banner);
     width: $announcement-container-width-fullscreen;
   }
 
