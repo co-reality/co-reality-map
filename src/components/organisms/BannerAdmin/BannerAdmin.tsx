@@ -176,12 +176,12 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
         saveBtnLabel="Clear & Save"
         cancelBtnLabel="Cancel"
         containerClassName={"ConfirmationModal"}
-        headerClassName={"ConfirmationModal__header"}
-        messageClassName={"ConfirmationModal__message"}
-        buttonsContainerClassName={"ConfirmationModal__buttons"}
-        buttonClassName={"ConfirmationModal__button"}
+        headerClassName={"BannerAdminModal__header"}
+        messageClassName={"BannerAdminModal__message"}
+        buttonsContainerClassName={"BannerAdminModal__buttons"}
+        buttonClassName={"BannerAdminModal__button"}
         cancelButtonClassName={
-          "ConfirmationModal__button ConfirmationModal__button--cancel"
+          "BannerAdminModal__button BannerAdminModal__button--cancel"
         }
         isCentered
       />

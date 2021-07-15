@@ -1,57 +1,28 @@
 @import "scss/constants.scss";
 
-.confirmation-modal {
-  .confirm-message {
-    padding: 10px 0 30px 0;
-  }
-
-  .confirmation-buttons {
-    display: flex;
-    justify-content: space-around;
-
-    .confirm-button {
-      width: 50%;
-    }
-
-    .cancel-button {
-      background-image: none;
-      background-color: $black;
-      border: solid $white 1px;
-      border-color: $white;
-      width: 50%;
-    }
-  }
-}
-
 .ConfirmationModal {
-  text-align: center;
-
   &__header {
-    font-size: $font-size--xl;
-    margin: 0;
+    //
   }
 
   &__message {
-    padding: $spacing--md 0 $spacing--xl;
+    padding: 10px 0 30px 0;
   }
 
   &__buttons {
     display: flex;
     justify-content: space-around;
-  }
 
-  & .ConfirmationModal__button {
-    width: $announce-button-width;
-    font-weight: $font-weight--500;
-    background-color: $primary--live;
-  }
+    &-confirm {
+      width: 50%;
+    }
 
-  & button.btn.ConfirmationModal__button--cancel {
-    background-color: opaque-white(0.2);
-    border: none;
-
-    &:hover {
-      background-color: opaque-white(0.2);
+    &-cancel {
+      background-image: none;
+      background-color: $black;
+      border: solid $white 1px;
+      border-color: $white;
+      width: 50%;
     }
   }
 }

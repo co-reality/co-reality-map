@@ -54,3 +54,36 @@
     }
   }
 }
+
+.BannerAdminModal {
+  text-align: center;
+
+  &__header {
+    font-size: $font-size--xl;
+    margin: 0;
+  }
+
+  &__message {
+    padding: $spacing--md 0 $spacing--xl;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__button {
+    width: $announce-button-width;
+    font-weight: $font-weight--500;
+    background-color: $primary--live;
+
+    &--cancel.btn.btn-primary {
+      background-color: opaque-white(0.2);
+      border: none;
+
+      &:hover {
+        background-color: opaque-white(0.2);
+      }
+    }
+  }
+}
