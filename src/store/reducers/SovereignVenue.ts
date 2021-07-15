@@ -38,6 +38,13 @@ export const sovereignVenueReducer = (
         isLoading: false,
         sovereignVenue: undefined,
       };
+    case SovereignVenueActionTypes.RESET_SOVEREIGN_VENUE:
+      return {
+        ...state,
+        sovereignVenue: undefined,
+        isLoading: false,
+        errorMsg: undefined,
+      };
     default:
       return state;
   }

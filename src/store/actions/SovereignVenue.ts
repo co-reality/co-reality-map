@@ -7,6 +7,7 @@ export enum SovereignVenueActionTypes {
   SET_SOVEREIGN_VENUE = "SET_SOVEREIGN_VENUE",
   SET_SOVEREIGN_VENUE_IS_LOADING = "SET_SOVEREIGN_VENUE_IS_LOADING",
   SET_SOVEREIGN_VENUE_ERROR = "SET_SOVEREIGN_VENUE_ERROR",
+  RESET_SOVEREIGN_VENUE = "RESET_SOVEREIGN_VENUE",
 }
 
 type SetSovereignVenueIsLoadingAction = ReduxAction<
@@ -22,6 +23,11 @@ type SetSovereignVenueErrorAction = ReduxAction<
 type SetSovereignVenueAction = ReduxAction<
   SovereignVenueActionTypes.SET_SOVEREIGN_VENUE,
   { sovereignVenue: WithId<AnyVenue> }
+>;
+
+type ResetSovereignVenueAction = ReduxAction<
+  SovereignVenueActionTypes.RESET_SOVEREIGN_VENUE,
+  {}
 >;
 
 export const setSovereignVenueIsLoading = (
@@ -45,7 +51,13 @@ export const setSovereignVenue = (
   payload: { sovereignVenue },
 });
 
+export const resetSovereignVenue = (): ResetSovereignVenueAction => ({
+  type: SovereignVenueActionTypes.RESET_SOVEREIGN_VENUE,
+  payload: {},
+});
+
 export type SovereignVenueActions =
   | SetSovereignVenueIsLoadingAction
   | SetSovereignVenueErrorAction
-  | SetSovereignVenueAction;
+  | SetSovereignVenueAction
+  | ResetSovereignVenueAction;
