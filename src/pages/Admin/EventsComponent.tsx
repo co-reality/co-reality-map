@@ -5,14 +5,12 @@ import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 import { WithId } from "utils/id";
 import InformationCard from "components/molecules/InformationCard";
 import Fuse from "fuse.js";
-import AdminEventModal from "./AdminEventModal";
-import AdminDeleteEvent from "./AdminDeleteEvent";
 import VenueEventDetails from "./VenueEventDetails";
 
 export type EventsComponentProps = {
   venue: WithId<AnyVenue>;
   roomIndex?: number;
-  showCreateEventModal: boolean;
+  setShowDeleteEventModal: Function;
   setShowCreateEventModal: Function;
   editedEvent?: WithId<VenueEvent>;
   setEditedEvent?: Function;
@@ -20,9 +18,8 @@ export type EventsComponentProps = {
 
 const EventsComponent: React.FC<EventsComponentProps> = ({
   venue,
-  showCreateEventModal,
   setShowCreateEventModal,
-  editedEvent,
+  setShowDeleteEventModal,
   setEditedEvent,
 }) => {
   useFirestoreConnect([
@@ -36,7 +33,6 @@ const EventsComponent: React.FC<EventsComponentProps> = ({
   ]);
 
   const events = useSelector((state) => state.firestore.ordered.events);
-  const [showDeleteEventModal, setShowDeleteEventModal] = useState(false);
   const [filterPastEvents, setFilterPastEvents] = useState(false);
   const [filterText, setFilterText] = useState("");
 
@@ -116,27 +112,6 @@ const EventsComponent: React.FC<EventsComponentProps> = ({
           Create an Event
         </button>
       </div>
-      <AdminEventModal
-        show={showCreateEventModal}
-        onHide={() => {
-          setShowCreateEventModal(false);
-          setEditedEvent && setEditedEvent(undefined);
-        }}
-        venueId={venue.id}
-        event={editedEvent}
-        template={venue.template}
-        setEditedEvent={setEditedEvent}
-        setShowDeleteEventModal={setShowDeleteEventModal}
-      />
-      <AdminDeleteEvent
-        show={showDeleteEventModal}
-        onHide={() => {
-          setShowDeleteEventModal(false);
-          setEditedEvent && setEditedEvent(undefined);
-        }}
-        venueId={venue.id}
-        event={editedEvent}
-      />
     </>
   );
 };
