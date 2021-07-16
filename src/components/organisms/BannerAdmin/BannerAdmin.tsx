@@ -16,6 +16,7 @@ import { InputField } from "components/atoms/InputField";
 import { ConfirmationModal } from "components/atoms/ConfirmationModal/ConfirmationModal";
 
 import "./BannerAdmin.scss";
+import { useEffect } from "react";
 
 interface BannerAdminProps {
   venueId?: string;
@@ -30,7 +31,14 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
   venue,
   onClose,
 }) => {
-  const { register, handleSubmit, errors, reset, watch } = useForm<Banner>({
+  const {
+    register,
+    handleSubmit,
+    errors,
+    reset,
+    watch,
+    setValue,
+  } = useForm<Banner>({
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -65,6 +73,12 @@ export const BannerAdmin: React.FC<BannerAdminProps> = ({
     saveBanner();
     hideBannerChangeModal();
   }, [saveBanner, hideBannerChangeModal]);
+
+  useEffect(() => {
+    if (!isUrlButtonActive) {
+      setValue("isForceFunnel", false);
+    }
+  }, [isUrlButtonActive, setValue]);
 
   const forceFunnelLabelClasses = classNames("BannerAdmin__checkbox__label", {
     BannerAdmin__checkbox__label__disabled: !isUrlButtonActive,
