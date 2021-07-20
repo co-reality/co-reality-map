@@ -46,6 +46,7 @@ const validationSchema = Yup.object().shape<EventInput>({
   duration_hours: Yup.number()
     .typeError("Duration must be a number")
     .required("Duration required"),
+  duration_minutes: Yup.number().typeError().required(),
   price: Yup.number()
     .typeError("Price must be a number")
     .required("Price is required")

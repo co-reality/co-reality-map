@@ -8,6 +8,7 @@ import { useUser } from "hooks/useUser";
 import { useIsAdminUser } from "hooks/roles";
 
 import { LoadingPage } from "components/molecules/LoadingPage";
+import { Timing } from "./components/Timing";
 
 import "./AdminVenueView.scss";
 
@@ -33,7 +34,9 @@ export const AdminVenueView: React.FC = () => {
   const { isAdminUser } = useIsAdminUser(userId);
 
   // Get and pass venue to child components when working on tabs
-  const { isCurrentVenueLoaded } = useConnectCurrentVenueNG(venueId);
+  const { currentVenue, isCurrentVenueLoaded } = useConnectCurrentVenueNG(
+    venueId
+  );
 
   const renderAdminVenueTabs = useMemo(() => {
     return Object.entries(adminVenueTabLabelMap).map(([key, text]) => (
@@ -73,7 +76,13 @@ export const AdminVenueView: React.FC = () => {
         </Nav>
       </div>
       {selectedTab === AdminVenueTab.spaces && <div>Spaces</div>}
-      {selectedTab === AdminVenueTab.timing && <div>Timing</div>}
+      {selectedTab === AdminVenueTab.timing && (
+        <Timing
+          venue={currentVenue}
+          onClickNext={() => setSelectedTab(AdminVenueTab.run)}
+          onClickBack={() => setSelectedTab(AdminVenueTab.spaces)}
+        />
+      )}
       {selectedTab === AdminVenueTab.run && <div>Run</div>}
     </>
   );

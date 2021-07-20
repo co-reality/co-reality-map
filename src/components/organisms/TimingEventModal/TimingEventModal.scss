@@ -1,0 +1,36 @@
+@import "scss/constants.scss";
+.TimingEventModal {
+  .modal-content {
+    background-color: $light-grey;
+  }
+
+  .input-group {
+    position: relative;
+
+    &__modal-input {
+      width: 100%;
+      border: 0.1px solid rgba(255, 255, 255, 0.2);
+      text-align: left;
+    }
+
+    &__dropdown {
+      appearance: none;
+      border-radius: 22px;
+      color: #fff;
+      transform: translateY(0);
+      background-color: rgba(255, 255, 255, 0.12);
+      padding: 12px 26px 12px 12px;
+      width: 100%;
+    }
+
+    &__flex {
+      display: flex;
+      justify-content: space-between;
+
+      input {
+        width: 49%;
+        display: inline-block;
+      }
+    }
+  }
+}

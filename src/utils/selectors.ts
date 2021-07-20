@@ -204,6 +204,9 @@ export const venueEventsSelector: SparkleSelector<
   WithId<VenueEvent>[] | undefined
 > = (state) => state.firestore.ordered.venueEvents;
 
+export const venueEventsNGSelector = (state: RootState) =>
+  state.firestore.ordered.events;
+
 export const userModalVisitsSelector = (state: RootState) =>
   state.firestore.ordered.userModalVisits;
 

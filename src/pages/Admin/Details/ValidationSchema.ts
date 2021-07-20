@@ -1,6 +1,12 @@
 import * as Yup from "yup";
+import dayjs from "dayjs";
 
-import { createUrlSafeName, VenueInput, PlacementInput } from "api/admin";
+import {
+  createUrlSafeName,
+  VenueInput,
+  PlacementInput,
+  EventInput,
+} from "api/admin";
 
 import firebase from "firebase/app";
 import "firebase/functions";
@@ -251,4 +257,35 @@ export const editPlacementSchema = Yup.object().shape<PlacementInput>({
       y: Yup.number().required("Required").min(0).max(PLAYA_HEIGHT),
     })
     .default(initialMapIconPlacement),
+});
+
+export const eventEditSchema = Yup.object().shape<EventInput>({
+  name: Yup.string().required("Name required"),
+  description: Yup.string().required("Description required"),
+  start_date: Yup.string()
+    .required("Start date required")
+    .matches(
+      /\d{4}-\d{2}-\d{2}/,
+      'Start date must have the format "yyyy-mm-dd"'
+    )
+    .test(
+      "start_date_future",
+      "Start date must be in the futur",
+      (start_date) => {
+        return dayjs(start_date).isSameOrAfter(dayjs(), "day");
+      }
+    ),
+  start_time: Yup.string().required("Start time required"),
+  duration_hours: Yup.number()
+    .typeError("Hours must be a number")
+    .required("Hours required"),
+  duration_minutes: Yup.number()
+    .typeError("Minutes must be a number")
+    .required("Minutes equired"),
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .required("Price is required")
+    .default(0),
+  host: Yup.string().required("Host required"),
+  room: Yup.string().matches(/^(?!Select a room...$).*$/, "Room is required"),
 });

@@ -1,0 +1,106 @@
+@import "scss/constants.scss";
+
+.EventsView {
+  background-color: #000;
+  position: relative;
+  height: 75%;
+  width: 85%;
+  margin: 75px 75px 10px;
+  border-radius: $border-radius--xl;
+  box-shadow: 0px 0px 15px -4px #000000;
+  overflow: scroll;
+
+  &__title {
+    margin: 20px;
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  &__content > .TimingEvent:nth-of-type(odd) {
+    background-color: $secondary--dark;
+  }
+
+  .TimingEvent {
+    display: flex;
+    width: 100%;
+    color: $concrete;
+    padding: 20px;
+
+    &__time {
+      position: relative;
+      display: inline;
+      float: left;
+      width: 15%;
+
+      p {
+        margin: 0px;
+      }
+
+      &-start {
+        font-weight: bold;
+        color: white;
+        margin-top: 20px;
+      }
+    }
+
+    &__details {
+      &-name {
+        font-weight: bold;
+        color: white;
+        font-size: 18px;
+      }
+
+      &-host {
+        font-weight: 600;
+      }
+
+      &-room {
+        span {
+          font-weight: bold;
+        }
+
+        font-size: 13px;
+      }
+
+      p {
+        margin: 0px;
+      }
+
+      position: relative;
+      display: inline;
+      width: 75%;
+    }
+
+    &__edit-button {
+      outline: none;
+      border: none;
+      width: $submit-button-diameter;
+      height: $submit-button-diameter;
+      border-radius: $border-radius--max;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: $spacing--md;
+      background-color: $primary;
+    }
+  }
+
+  &__no-events {
+    width: 300px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.create-button {
+  margin: 0px 75px;
+
+  .btn {
+    width: 200px;
+    display: inline;
+    float: right;
+  }
+}
