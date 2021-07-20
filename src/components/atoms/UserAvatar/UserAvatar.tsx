@@ -13,6 +13,9 @@ import { useVenueUserStatuses } from "hooks/useVenueUserStatuses";
 import { useVenueId } from "hooks/useVenueId";
 
 import "./UserAvatar.scss";
+import { useImage } from "hooks/useImage";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export interface UserAvatarProps {
   user?: WithId<User>;
@@ -36,6 +39,7 @@ export const _UserAvatar: React.FC<UserAvatarProps> = ({
   large,
   medium,
 }) => {
+  const [userAvatar, updateUserAvatar] = useState(DEFAULT_PROFILE_IMAGE);
   const venueId = useVenueId();
 
   const { recentWorldUsers } = useRecentWorldUsers();
@@ -49,6 +53,17 @@ export const _UserAvatar: React.FC<UserAvatarProps> = ({
   const avatarSrc: string = user?.anonMode
     ? DEFAULT_PROFILE_IMAGE
     : user?.pictureUrl ?? DEFAULT_PROFILE_IMAGE;
+
+  const { loadedImageUrl: pictureUrl } = useImage({
+    src: avatarSrc,
+    fallbackSrc: DEFAULT_PROFILE_IMAGE,
+  });
+
+  useEffect(() => {
+    if (pictureUrl) {
+      updateUserAvatar(pictureUrl);
+    }
+  }, [pictureUrl]);
 
   const userDisplayName: string = user?.anonMode
     ? DEFAULT_PARTY_NAME
@@ -97,7 +112,7 @@ export const _UserAvatar: React.FC<UserAvatarProps> = ({
       {showNametag && <div className={nametagClasses}>{user?.partyName}</div>}
       <img
         className={imageClasses}
-        src={avatarSrc}
+        src={userAvatar}
         alt={`${userDisplayName}'s avatar`}
         onClick={onClick}
       />
