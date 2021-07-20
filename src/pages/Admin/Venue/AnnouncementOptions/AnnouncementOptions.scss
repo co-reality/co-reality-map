@@ -1,0 +1,19 @@
+@import "scss/constants";
+
+.AnnouncementOptions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: $spacing--lg;
+
+  &__left-side {
+    font-size: $font-size--lg;
+    margin-top: $spacing--xs;
+  }
+
+  &.AnnouncementOptions__edit-button {
+    height: $submit-button-diameter;
+    width: $announce-button-width;
+    background-color: $white;
+    color: $primary--live;
+  }
+}

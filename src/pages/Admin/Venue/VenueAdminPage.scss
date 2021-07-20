@@ -1,4 +1,17 @@
-.admin-page-title {
-  text-align: center;
-  padding-top: 25px;
+@import "scss/constants";
+
+.VenueAdminPage {
+  position: relative;
+  max-width: $announcement-container-width;
+  margin: 0 auto;
+
+  &__title {
+    text-align: center;
+    margin-top: $spacing--xxxl;
+    padding: $spacing--xs;
+    font-size: $font-size--sm;
+    background: $dark;
+    border-radius: $border-radius--xl;
+    opacity: 0.9;
+  }
 }

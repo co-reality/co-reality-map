@@ -858,7 +858,7 @@ exports.adminUpdateBannerMessage = functions.https.onCall(
       .firestore()
       .collection("venues")
       .doc(data.venueId)
-      .update({ bannerMessage: data.bannerMessage || null });
+      .update({ banner: data.banner || null });
   }
 );
 

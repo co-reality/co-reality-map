@@ -5,17 +5,20 @@ import {
   isCurrentVenueNGRequestingSelector,
 } from "utils/selectors";
 
-import { IFRAME_TEMPLATES } from "settings";
-
 import { useSelector } from "hooks/useSelector";
 import { useIsUserVenueOwner } from "hooks/useIsUserVenueOwner";
 import { useUser } from "hooks/useUser";
 import { useVenueId } from "hooks/useVenueId";
 import { useConnectCurrentVenueNG } from "hooks/useConnectCurrentVenueNG";
+import { useShowHide } from "hooks/useShowHide";
 
 import { LoadingPage } from "components/molecules/LoadingPage";
-import { IframeAdmin } from "components/molecules/IframeAdmin";
+import { AnnouncementMessage } from "components/molecules/AnnouncementMessage";
+
 import { BannerAdmin } from "components/organisms/BannerAdmin";
+import { WithNavigationBar } from "components/organisms/WithNavigationBar";
+
+import { AnnouncementOptions } from "./AnnouncementOptions";
 
 import "./VenueAdminPage.scss";
 
@@ -25,6 +28,11 @@ export const VenueAdminPage: React.FC = () => {
   const { currentVenue: venue } = useConnectCurrentVenueNG(venueId);
   const venueRequestStatus = useSelector(isCurrentVenueNGRequestedSelector);
   const venueRequestingStatus = useSelector(isCurrentVenueNGRequestingSelector);
+  const {
+    isShown: isBannerAdminVisibile,
+    show: showBannerAdmin,
+    hide: hideBannerAdmin,
+  } = useShowHide();
 
   const isVenueOwner = useIsUserVenueOwner();
   const isVenueLoading = venueRequestingStatus || !venueRequestStatus;
@@ -48,13 +56,32 @@ export const VenueAdminPage: React.FC = () => {
     );
   }
 
-  const isIframeVenue = IFRAME_TEMPLATES.includes(venue.template);
-
   return (
-    <>
-      <h4 className="admin-page-title">You are editing venue: {venue.name}</h4>
-      <BannerAdmin venueId={venueId} venue={venue} />
-      {isIframeVenue && <IframeAdmin venueId={venueId} venue={venue} />}
-    </>
+    <WithNavigationBar>
+      <div className="VenueAdminPage">
+        <h4 className="VenueAdminPage__title">
+          Current Announcement in {venue?.name}
+        </h4>
+
+        {isBannerAdminVisibile && (
+          <BannerAdmin
+            venueId={venueId}
+            venue={venue}
+            onClose={hideBannerAdmin}
+          />
+        )}
+
+        {!isBannerAdminVisibile && (
+          <>
+            <AnnouncementMessage banner={venue?.banner} />
+
+            <AnnouncementOptions
+              banner={venue.banner}
+              onEdit={showBannerAdmin}
+            />
+          </>
+        )}
+      </div>
+    </WithNavigationBar>
   );
 };

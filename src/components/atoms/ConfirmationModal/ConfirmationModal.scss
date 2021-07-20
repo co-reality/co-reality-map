@@ -1,19 +1,23 @@
 @import "scss/constants.scss";
 
-.confirmation-modal {
-  .confirm-message {
+.ConfirmationModal {
+  &__header {
+    //
+  }
+
+  &__message {
     padding: 10px 0 30px 0;
   }
 
-  .confirmation-buttons {
+  &__buttons {
     display: flex;
     justify-content: space-around;
 
-    .confirm-button {
+    &-confirm {
       width: 50%;
     }
 
-    .cancel-button {
+    &-cancel {
       background-image: none;
       background-color: $black;
       border: solid $white 1px;

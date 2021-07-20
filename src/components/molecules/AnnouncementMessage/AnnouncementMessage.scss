@@ -3,27 +3,57 @@
 $spacing: 15px;
 $close-icon-width: 20px;
 $message-margin: $spacing + $close-icon-width + 5px;
+$action-button-height: 30px;
+$action-button-padding: 6px;
 
-.announcement-container {
+.AnnouncementMessage {
   display: block;
-  z-index: z(announcement);
-  position: absolute;
+  position: relative;
   background: $primary;
-  top: 66px;
-  left: 50%;
-  width: 500px;
-  margin: 0 auto 0 -250px;
+  width: $announcement-container-width;
   transition: left 0.1s linear;
-
-  &.centered {
-    left: 50%;
-  }
-
   padding: $spacing 0;
-  border-radius: 0 0 20px 20px;
+  border-radius: $border-radius--xl;
   text-align: center;
 
-  .close-button {
+  &--user {
+    left: 25%;
+    position: absolute;
+    z-index: z(announcement-banner);
+  }
+
+  &--fullscreen {
+    top: 35%;
+    left: 35%;
+    position: fixed;
+    z-index: z(announcement-banner);
+    width: $announcement-container-width-fullscreen;
+  }
+
+  &__default-text {
+    opacity: 0.6;
+  }
+
+  &__title {
+    font-size: $font-size--xl;
+  }
+
+  &__content {
+    font-size: $font-size--md;
+    margin: 0 $message-margin;
+  }
+
+  &__action-button {
+    display: inline-block;
+    background-color: $primary--darker;
+    min-width: $announce-button-width;
+    min-height: $action-button-height;
+    font-size: $font-size--md;
+    font-weight: $font-weight--500;
+    padding: $action-button-padding $spacing--lg;
+  }
+
+  &__close-button {
     cursor: pointer;
     position: absolute;
     top: $spacing;
@@ -33,8 +63,33 @@ $message-margin: $spacing + $close-icon-width + 5px;
       text-decoration: underline;
     }
   }
-}
 
-.announcement-message {
-  margin: 0 $message-margin;
+  &__container {
+    top: $navbar-height;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: z(announcement);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+
+    &--centered {
+      bottom: 0;
+      position: fixed;
+      display: flex;
+      align-items: center;
+      background-color: opaque-black(0.6);
+    }
+
+    &--admin {
+      position: initial;
+    }
+
+    &--canceled {
+      position: relative;
+      top: 0;
+    }
+  }
 }
