@@ -4,12 +4,12 @@ import { resolve } from "path";
 
 import admin from "firebase-admin";
 import { chunk } from "lodash";
-
+import fs from "fs";
 import { UserVisit } from "../src/types/Firestore";
 import { User } from "../src/types/User";
 
 import { WithId, withId } from "../src/utils/id";
-import { formatSecondsAsDuration } from "../src/utils/time";
+import { formatSecondsAsHHMMSS } from "../src/utils/time";
 
 import { initFirebaseAdminApp, makeScriptUsage } from "./lib/helpers";
 
@@ -99,38 +99,66 @@ interface UsersWithVisitsResult {
   );
 
   // TODO: filter enteredVenueIds and visitsTimeSpent so that they only contain related venues?
-  const result = usersWithVisits.map((userWithVisits) => {
-    const { user, visits } = userWithVisits;
-    const { id, partyName, enteredVenueIds = [] } = user;
-    const { email } = authUsersById[id] ?? {};
+  const result = usersWithVisits
+    .map((userWithVisits) => {
+      const { user, visits } = userWithVisits;
+      const { id, partyName } = user;
+      const { email } = authUsersById[id] ?? {};
 
-    const visitsTimeSpent = visits.map(
-      (visit) => `${visit.id} (${formatSecondsAsDuration(visit.timeSpent)})`
-    );
+      const visitsTimeSpent = visits.map(
+        (visit) => `${visit.id} (${formatSecondsAsHHMMSS(visit.timeSpent)})`
+      );
 
-    return {
-      id,
-      email,
-      partyName,
-      enteredVenueIds: enteredVenueIds.sort().join(", "),
-      visitsTimeSpent: visitsTimeSpent.sort().join(", "),
-    };
-  });
+      const visitIds = visits.map((el) => el.id);
+
+      // write all visit IDs for badge counts
+      visitIds.map((visit) =>
+        fs.writeFileSync("./allVisits.csv", `${visit} \n`, { flag: "a" })
+      );
+
+      return {
+        id,
+        email,
+        partyName,
+        visitsTimeSpent: visitsTimeSpent.sort().join(", "),
+        visits,
+      };
+    })
+    .filter((user) => !!user.visits.length);
+
+  const allResultVisits: string[] = result.reduce((arr: string[], el) => {
+    const result: string[] = el.visits.map((e) => e.id);
+    result.map((e) => arr.push(e));
+
+    return arr;
+  }, []);
+
+  const uniqueVisits = [...new Set(allResultVisits)];
+
+  // write all unique venues
+  uniqueVisits.map((el) =>
+    fs.writeFileSync("./uniqueVenues.csv", `${el} \n`, { flag: "a" })
+  );
 
   // Display CSV headings
   console.log(
-    ["Email", "Party Name", "Entered Venues (Time Spent)"]
+    ["Email", "Party Name", "Rooms Entered", "Entered Venues (Time Spent)"]
       .map((heading) => `"${heading}"`)
       .join(",")
   );
 
-  // Display CSV lines
+  // Write all user data for analytics
   result.forEach((user) => {
-    const csvLine = [user.email, user.partyName, user.visitsTimeSpent]
+    const csvLine = [
+      user.email,
+      user.partyName,
+      user.visits.length,
+      user.visitsTimeSpent,
+    ]
       .map((s) => `"${s}"`)
       .join(",");
 
-    console.log(csvLine);
+    fs.writeFileSync("./allData.csv", `${csvLine} \n`, { flag: "a" });
   });
 })()
   .catch((error) => {

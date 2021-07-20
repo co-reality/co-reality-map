@@ -93,9 +93,9 @@ if (newLogin && username === "" && password === "") {
 const keypress = async () => {
   process.stdin.setRawMode(true);
   return new Promise((resolve) =>
-    process.stdin.once("data", () => {
+    process.stdin.once("data", (data) => {
       process.stdin.setRawMode(false);
-      resolve();
+      resolve(data);
     })
   );
 };

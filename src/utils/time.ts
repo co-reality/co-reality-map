@@ -100,6 +100,21 @@ export const formatSecondsAsDuration = (seconds: number): string =>
   formatDuration(secondsToDuration(seconds));
 
 /**
+ * Format seconds as a string representing the HH:MM:SS duration.
+ *
+ * @example
+ *   formatSecondsAsHHMMSS(6030)
+ *   // 1:40:30
+ *
+ * @param secondsValue total seconds to be formatted as a duration
+ */
+export const formatSecondsAsHHMMSS = (secondsValue: number): string => {
+  const { hours, minutes, seconds } = secondsToDuration(secondsValue);
+
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+/**
  * Format time left from now as a string representing the Duration ignoring seconds.
  *
  * @example
