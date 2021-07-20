@@ -17,7 +17,7 @@ Below are the steps you need to take to make use of these scripts.
 # How to generate an analytics report
 
 1. Open `fetch-reports.ts` and update the date range to 1 day before and 1 day after your target party.
-2. Set `newLogin = false` for your first run of the script; it will save cookies for you that will let you bypass login and captcha next time.
+2. Set `newLogin = true` for your first run of the script; it will save cookies for you that will let you bypass login and captcha next time.
 3. Run the script:
 
 ```
@@ -52,6 +52,10 @@ $ ./makegraphs.py ~/Downloads/My\ Event\ CSVs/*.csv # python 3 compatible, unsur
 
 # Or if that doesn't work for you, you can try:
 #   python3 makegraphs.py ~/Downloads/My\ Event\ CSVs/*.csv
+
+# !!! ATTENTION !!! #
+That script can hang and occasionally throw out warning that says that code block limit is reached.
+If that is the case you need to lower the `END = START + timedelta(hours=X)` X hours value
 ```
 
 14. Open the report:
