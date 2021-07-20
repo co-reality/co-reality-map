@@ -8,14 +8,16 @@ import "./ScheduleRoomEvents.scss";
 
 export interface ScheduleRoomEventsProps {
   events: PersonalizedVenueEvent[];
-  scheduleStartHour: number;
   personalizedRoom?: boolean;
+  scaleFactor: number;
+  scheduleStartHour: number;
 }
 
 export const _ScheduleRoomEvents: React.FC<ScheduleRoomEventsProps> = ({
   events,
-  scheduleStartHour,
   personalizedRoom,
+  scaleFactor,
+  scheduleStartHour,
 }) => {
   return (
     <div className="ScheduleRoomEvents">
@@ -24,6 +26,7 @@ export const _ScheduleRoomEvents: React.FC<ScheduleRoomEventsProps> = ({
           key={`event-${event.id}`}
           personalizedEvent={personalizedRoom}
           event={event}
+          scaleFactor={scaleFactor}
           scheduleStartHour={scheduleStartHour}
         />
       ))}

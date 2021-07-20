@@ -35,6 +35,7 @@ export interface ScheduleProps {
   locatedEvents: LocationEvents[];
   personalEvents: PersonalizedVenueEvent[];
   scheduleDate: Date;
+  scheduleScaleFactor: number;
   isToday: boolean;
   isLoading: boolean;
 }
@@ -43,6 +44,7 @@ export const Schedule: React.FC<ScheduleProps> = ({
   locatedEvents,
   personalEvents,
   scheduleDate,
+  scheduleScaleFactor,
   isToday,
   isLoading,
 }) => {
@@ -124,7 +126,7 @@ export const Schedule: React.FC<ScheduleProps> = ({
     "--room-count": locatedEvents.length + 1, // +1 is needed for the 1st personalized line of the schedule
     "--current-time--position": currentTimePosition,
     "--hours-count": hoursRow.length,
-    "--hour-width": `${SCHEDULE_HOUR_COLUMN_WIDTH_PX}px`,
+    "--hour-width": `${SCHEDULE_HOUR_COLUMN_WIDTH_PX * scheduleScaleFactor}px`,
   });
 
   const containerClasses = classNames("Schedule", containerVars);
@@ -136,10 +138,11 @@ export const Schedule: React.FC<ScheduleProps> = ({
         <ScheduleRoomEvents
           key={`ScheduleRoomEvents-${location.venueId}-${location.roomTitle}`}
           events={events}
+          scaleFactor={scheduleScaleFactor}
           scheduleStartHour={scheduleStartHour}
         />
       )),
-    [locatedEvents, scheduleStartHour]
+    [locatedEvents, scheduleStartHour, scheduleScaleFactor]
   );
 
   if (isLoading) {
@@ -182,6 +185,7 @@ export const Schedule: React.FC<ScheduleProps> = ({
             personalizedRoom
             events={personalEvents}
             scheduleStartHour={scheduleStartHour}
+            scaleFactor={scheduleScaleFactor}
           />
         </div>
 

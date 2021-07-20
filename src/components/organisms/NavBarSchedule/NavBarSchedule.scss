@@ -79,4 +79,9 @@ $weekday--margin-right: 10px;
       opacity: 1;
     }
   }
+
+  &__controls-bar-top {
+    display: flex;
+    justify-content: space-between;
+  }
 }

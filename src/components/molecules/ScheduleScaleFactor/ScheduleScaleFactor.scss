@@ -1,0 +1,22 @@
+.ScheduleScaleFactor {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  &__factorButton {
+    background: transparent;
+    border: none;
+    color: white;
+    margin: 0 20px;
+    min-width: 46px;
+    opacity: 0.7;
+    transition: opacity 100ms;
+
+    &:focus {
+      outline: none;
+    }
+
+    &--active {
+      opacity: 1;
+    }
+  }
+}

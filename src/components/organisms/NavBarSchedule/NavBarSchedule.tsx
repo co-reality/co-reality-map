@@ -34,6 +34,7 @@ import { useVenueEvents } from "hooks/events";
 
 import { Button } from "components/atoms/Button";
 import { Schedule } from "components/molecules/Schedule";
+import { ScheduleScaleFactor } from "components/molecules/ScheduleScaleFactor";
 import { ScheduleVenueDescription } from "components/molecules/ScheduleVenueDescription";
 
 import {
@@ -96,6 +97,7 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
   const isLoadingSchedule = isLoading || isEventsLoading;
 
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const [scheduleScaleFactor, setScheduleScaleFactor] = useState(1);
 
   const weekdays = useMemo(() => {
     const formatDayLabel = (day: Date | number) => {
@@ -228,9 +230,19 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
           </Button>
         </div>
       )}
-      <ul className="NavBarSchedule__weekdays">{weekdays}</ul>
+      <div className="NavBarSchedule__controls-bar-top">
+        <ul className="NavBarSchedule__weekdays">{weekdays}</ul>
+        <ScheduleScaleFactor
+          onChange={setScheduleScaleFactor}
+          value={scheduleScaleFactor}
+        />
+      </div>
 
-      <Schedule isLoading={isLoadingSchedule} {...schedule} />
+      <Schedule
+        isLoading={isLoadingSchedule}
+        {...schedule}
+        scheduleScaleFactor={scheduleScaleFactor}
+      />
     </div>
   );
 };
