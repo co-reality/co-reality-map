@@ -1054,6 +1054,7 @@ const DetailsFormLeft: React.FC<DetailsFormLeftProps> = ({
 
         {templateID &&
           HAS_REACTIONS_TEMPLATES.includes(templateID) &&
+          HAS_GRID_TEMPLATES.includes(templateID) &&
           renderSeatingNumberInput()}
 
         {renderRadioToggle()}
