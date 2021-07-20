@@ -1,5 +1,12 @@
 # Welcome to the Sparkle Summit 21 Hackathon!
 
+### Resources
+
+- Repo & ReadMe (this doc) to get started coding
+- [Hub Post](https://thehub.github.com/news/2021-07-01-summit-hackathon/) about the hackathon
+- [Discussions](https://github.com/github/github/discussions/185794) to find & form teams & post potential ideas
+- [#summit-hackathon](https://github-partners.slack.com/archives/C027DMM2ZPA) - staffed with Sparkle dev in case you have technical questions; if you’re wanting to connect your local dev setup to the hack.sparkle.space sandbox, the minimal set of ENV vars that should get you up and running is pinned in #summit-hackathon
+
 # Sparkle Web App
 
 Codebase for the Sparkle platform, brought to you by [Sparkle](https://sparklespaces.com/), a platform for the most immersive & interactive virtual events.
