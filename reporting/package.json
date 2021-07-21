@@ -11,6 +11,6 @@
   },
   "private": true,
   "devDependencies": {
-    "@types/puppeteer": "^5.4.3"
+    "@types/puppeteer": "^5.4.4"
   }
 }
