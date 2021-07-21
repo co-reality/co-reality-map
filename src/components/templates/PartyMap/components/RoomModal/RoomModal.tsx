@@ -4,11 +4,13 @@ import { Modal } from "react-bootstrap";
 import { DEFAULT_SHOW_SCHEDULE } from "settings";
 
 import { Room, RoomType } from "types/rooms";
-import { AnyVenue, VenueEvent } from "types/venues";
+import { AnyVenue, VenueEvent, VenueTemplate } from "types/venues";
 
 import { retainAttendance } from "store/actions/Attendance";
 
 import { WithId, WithVenueId } from "utils/id";
+import { logEventGoogleAnalytics } from "utils/googleAnalytics";
+import { isExternalUrl } from "utils/url";
 
 import { useDispatch } from "hooks/useDispatch";
 import { useCustomSound } from "hooks/sounds";
@@ -62,6 +64,7 @@ export const RoomModal: React.FC<RoomModalProps> = ({
           room={room}
           venueName={venue.name}
           venueEvents={venueEvents}
+          venueTemplate={venue.template ?? ""}
           showSchedule={venue.showSchedule}
         />
       </div>
@@ -72,6 +75,7 @@ export const RoomModal: React.FC<RoomModalProps> = ({
 export interface RoomModalContentProps {
   room: Room;
   venueName: string;
+  venueTemplate: string;
   venueEvents: WithVenueId<WithId<VenueEvent>>[];
   showSchedule?: boolean;
 }
@@ -79,6 +83,7 @@ export interface RoomModalContentProps {
 export const RoomModalContent: React.FC<RoomModalContentProps> = ({
   room,
   venueName,
+  venueTemplate,
   venueEvents,
   showSchedule = DEFAULT_SHOW_SCHEDULE,
 }) => {
@@ -102,7 +107,16 @@ export const RoomModalContent: React.FC<RoomModalContentProps> = ({
   });
 
   // note: this is here just to change the type on it in an easy way
-  const enterRoomWithSound: () => void = _enterRoomWithSound;
+  const enterRoomWithSound: () => void = useCallback(() => {
+    _enterRoomWithSound();
+    if (venueTemplate === VenueTemplate.partymap && isExternalUrl(room.url)) {
+      logEventGoogleAnalytics({
+        eventCategory: "PARTMAP_WITH_EXTERNAL_LINK",
+        eventAction: "ENTER_PARTMAP_" + venueName.toUpperCase(),
+        eventLabel: room.title,
+      });
+    }
+  }, [_enterRoomWithSound, venueName, room, venueTemplate]);
 
   const renderedRoomEvents = useMemo(() => {
     if (!showSchedule) return [];
