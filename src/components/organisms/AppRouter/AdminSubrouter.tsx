@@ -50,7 +50,7 @@ export const AdminSubrouter: React.FC = () => {
 
       {/* Admin V2/3/NG */}
 
-      <Route path="/admin-ng/venue/:venueId?">
+      <Route path="/admin-ng/venue/:venueId?/:selectedTab?">
         <Provided withWorldUsers>
           <AdminVenueView />
         </Provided>

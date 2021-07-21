@@ -11,12 +11,13 @@ export const venueInsideUrl = (venueId: string) => {
   return `/in/${venueId}`;
 };
 
-export const adminNGVenueUrl = (venueId?: string) =>
-  generatePath("/admin-ng/venue/:venueId?", {
+export const adminNGVenueUrl = (venueId?: string, selectedTab?: string) =>
+  generatePath(`/admin-ng/venue/:venueId?/:selectedTab?`, {
     venueId: venueId,
+    selectedTab: selectedTab,
   });
 
-export const adminNGSettigsUrl = (venueId?: string) =>
+export const adminNGSettingsUrl = (venueId?: string) =>
   generatePath("/admin-ng/advanced-settings/:venueId?", {
     venueId: venueId,
   });
