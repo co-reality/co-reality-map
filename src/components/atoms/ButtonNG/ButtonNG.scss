@@ -1,0 +1,121 @@
+@import "scss/constants.scss";
+
+.ButtonNG {
+  display: inline-block;
+
+  padding: 0.75em;
+  margin: $spacing--xs;
+  width: 100%;
+  max-width: 275px;
+
+  border-radius: $border-radius--xl;
+  border: none;
+  background-image: none;
+
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  line-height: 1.5;
+
+  transform: translateY(0);
+  transition: transform 0.4s $transition-function;
+
+  color: $white;
+  text-shadow: 0 1px 2px opaque-black(0.25);
+  background-color: opaque-white(0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px opaque-black(0.25);
+
+  &:hover {
+    color: currentColor;
+    background-color: opaque-white(0.25);
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px opaque-white(0.25);
+  }
+
+  &:enabled:hover,
+  &--enabled:hover {
+    transform: translateY(-1px);
+  }
+
+  &--disabled,
+  &--disabled:hover,
+  &:disabled,
+  &:disabled:hover {
+    color: opaque-white(0.4);
+    background: opaque-white(0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px opaque-black(0.25);
+    cursor: default;
+  }
+
+  @mixin square-size($size: 1) {
+    height: calc(#{$size} * 1em + 2 * #{$spacing--xs});
+    width: calc(#{$size} * 1em + 2 * #{$spacing--xs});
+  }
+
+  &--icon-only {
+    padding: $spacing--xs;
+  }
+
+  &__icon--icon-text {
+    margin-right: 1em;
+  }
+
+  &--1x {
+    @include square-size(2.5);
+  }
+
+  &--2x {
+    @include square-size(3);
+  }
+
+  &--3x {
+    @include square-size(4);
+  }
+
+  @mixin variant($color, $normal-bg, $hover-bg: $normal-bg) {
+    color: $color;
+    background-color: $normal-bg;
+
+    &:hover {
+      color: $color;
+      background-color: $hover-bg;
+    }
+  }
+
+  &--primary {
+    @include variant($white, $primary--live, $primary--live-hover);
+  }
+
+  &--secondary {
+    @include variant($white, opaque-white(0.2), opaque-white(0.25));
+  }
+
+  &--white {
+    @include variant($primary--live, $white);
+  }
+
+  &--dark {
+    @include variant($white, opaque-black(0.4), opaque-black(0.6));
+  }
+
+  &--gradient:enabled {
+    background-image: $gradient;
+  }
+
+  &--admin-gradient:enabled {
+    background-image: $admin-gradient;
+  }
+
+  &--danger-gradient:enabled {
+    background-image: $danger-gradient;
+  }
+}

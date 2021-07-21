@@ -9,6 +9,8 @@ import { useIsAdminUser } from "hooks/roles";
 
 import { LoadingPage } from "components/molecules/LoadingPage";
 
+import { RunTabView } from "./components/RunTabView/RunTabView";
+
 import "./AdminVenueView.scss";
 
 export enum AdminVenueTab {
@@ -74,7 +76,7 @@ export const AdminVenueView: React.FC = () => {
       </div>
       {selectedTab === AdminVenueTab.spaces && <div>Spaces</div>}
       {selectedTab === AdminVenueTab.timing && <div>Timing</div>}
-      {selectedTab === AdminVenueTab.run && <div>Run</div>}
+      {selectedTab === AdminVenueTab.run && <RunTabView />}
     </>
   );
 };

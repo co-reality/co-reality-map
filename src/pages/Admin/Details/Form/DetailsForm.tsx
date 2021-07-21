@@ -22,13 +22,11 @@ import { createJazzbar } from "utils/venue";
 
 // Typings
 import { VenueTemplate } from "types/venues";
-import { DetailsFormProps } from "./DetailsForm.types";
+import { DetailsFormProps, FormValues } from "./DetailsForm.types";
 import {
   setBannerURL,
   setSquareLogoUrl,
 } from "pages/Admin/Venue/VenueWizard/redux/actions";
-
-import { FormValues } from "./DetailsForm.types";
 
 // Validation schemas
 import { validationSchema_v2 } from "../ValidationSchema";

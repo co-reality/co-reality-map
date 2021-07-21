@@ -1,0 +1,37 @@
+@import "scss/constants.scss";
+
+.AdvancedSettingsButton {
+  background-color: $secondary !important;
+  margin: 0;
+
+  &__container {
+    height: 32px;
+    display: inline-grid;
+    word-break: keep-all;
+    white-space: nowrap;
+    grid-template: 1em 0.75em / 1fr 9fr;
+    gap: $spacing--xs;
+  }
+
+  &__icon {
+    grid-area: 1 / 1 / 2 / 1;
+    align-items: center;
+    justify-items: center;
+    margin: $spacing--xs $spacing--xs $spacing--xs 0;
+  }
+
+  &__title {
+    grid-area: 1 / 2 / 1 / 2;
+    font-size: 1em;
+    text-align: left;
+    padding-left: $spacing--xs;
+  }
+
+  &__subtitle {
+    grid-area: 2 / 2 / 2 / 2;
+    text-align: left;
+    font-size: 0.75em;
+    color: $secondary--lightest;
+    padding-left: $spacing--xs;
+  }
+}

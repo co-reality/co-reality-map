@@ -13,6 +13,7 @@ $secondary--light: #6a6a6a;
 $secondary: #333035;
 $secondary--dark: #19181a;
 $secondary--darkest: #090909;
+$secondary--live: #1a1d24;
 
 $secondary--schedule-event: #3f3d42;
 $secondary--schedule-event-hover: #4c494f;
@@ -239,4 +240,23 @@ $z-layers: (
   @include line-clamp($line-count);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin square-size($size: 1, $min: null, $max: null) {
+  height: $size;
+  width: $size;
+  min-height: $min;
+  min-width: $min;
+  max-height: $max;
+  max-width: $max;
+}
+
+@mixin link-style($color, $hover-color: $color) {
+  color: $color;
+  text-decoration: underline $color;
+
+  &:hover {
+    color: $hover-color;
+    text-decoration: underline $hover-color;
+  }
 }

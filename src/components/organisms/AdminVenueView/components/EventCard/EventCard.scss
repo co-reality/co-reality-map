@@ -1,0 +1,63 @@
+@import "scss/constants.scss";
+
+.EventCard {
+  height: 10em;
+  margin: 1em 0;
+  padding: 1em;
+  gap: $spacing--xs 1em;
+  display: grid;
+  border-radius: $border-radius--lg;
+  background-color: opaque-black(0.1);
+  white-space: nowrap;
+
+  a {
+    @include link-style(opaque-white(0.5));
+  }
+
+  &--no-event {
+    place-content: center center;
+    text-align: center;
+  }
+
+  &--live-event {
+    background-color: rgb($primary--live, 0.5);
+  }
+
+  &--future-event,
+  &--live-event {
+    grid-template: repeat(6, 1fr) / repeat(6, 1fr);
+  }
+
+  &__corner {
+    grid-area: 1 / 1 / span 1 / span 3;
+  }
+
+  &__add {
+    &--future-event {
+      grid-area: 1 / 4 / 1 / span 3;
+      place-self: end;
+    }
+  }
+
+  &__time {
+    &--first {
+      grid-area: 3 / 1 / span 1 / span 1;
+    }
+
+    &--subsequent {
+      grid-area: 4 / 1 / span 1 / span 1;
+      color: opaque-white(0.5);
+    }
+  }
+
+  &__name {
+    &--first {
+      grid-area: 3 / 2 / span 1 / span 3;
+    }
+
+    &--subsequent {
+      grid-area: 4 / 2 / span 1 / span 3;
+      color: opaque-white(0.5);
+    }
+  }
+}

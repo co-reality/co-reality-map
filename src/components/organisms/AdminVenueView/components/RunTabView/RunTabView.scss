@@ -1,0 +1,58 @@
+@import "scss/constants.scss";
+
+.RunTabView {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  @media (max-width: $media-breakpoint--lg) {
+    align-items: center;
+  }
+
+  @media (max-width: $media-breakpoint--md) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__title {
+    margin: $spacing--lg;
+    place-content: center start;
+    height: 2em;
+    line-height: 2em;
+    font-size: 1.4em;
+    font-weight: 600;
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing--xs;
+    min-width: 20%;
+    gap: $spacing--lg;
+
+    & > * {
+      min-width: calc(100% - 2 * #{$spacing--xs});
+    }
+  }
+
+  &__map {
+    border-radius: $border-radius--xl;
+    overflow: hidden;
+
+    > * {
+      margin: -1px; // to avoid border artefacts
+    }
+  }
+
+  &__main {
+    background-color: $secondary--live;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing--lg;
+  }
+
+  &--spacing + &--spacing {
+    margin-top: $spacing--lg;
+  }
+}

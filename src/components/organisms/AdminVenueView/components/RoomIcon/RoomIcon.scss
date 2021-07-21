@@ -1,0 +1,17 @@
+@import "scss/constants.scss";
+
+.RoomIcon {
+  &__wrapper {
+    @include square-size(64px);
+    border-radius: $spacing--xs;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__image {
+    @include square-size(64px);
+    margin: 0;
+    padding: 0;
+  }
+}

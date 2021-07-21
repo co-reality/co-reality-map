@@ -1,0 +1,63 @@
+@import "scss/constants.scss";
+
+.RoomCard {
+  &__card {
+    border-radius: $border-radius--lg;
+    padding: $spacing--md;
+    width: min(calc(100% - 2 * #{$spacing--xs}), 30em);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #323232;
+    background-clip: border-box;
+  }
+
+  &__header {
+    display: grid;
+    grid-template: 32px 32px 2em / 64px 1fr 6em;
+    place-items: center center;
+    column-gap: 1em;
+    row-gap: $spacing--xs;
+    padding: $spacing--xs;
+  }
+
+  &__icon {
+    grid-area: 1 / 1 / span 2 / 1;
+  }
+
+  &__title {
+    grid-area: 1 / 2 / 1 / 2;
+    justify-self: start;
+  }
+
+  &__type {
+    grid-area: 2 / 2 / 2 / 2;
+    justify-self: start;
+  }
+
+  &__counter {
+    grid-area: 1 / 3 / 1 / 3;
+    place-self: start end;
+    background-color: opaque-black(1);
+    border-radius: $border-radius--lg;
+    width: min-content;
+    height: 2em;
+    display: flex;
+    place-items: center;
+    gap: 0.25em;
+    padding: 1em;
+  }
+
+  &__link {
+    grid-area: 3 / 1 / span 1 / span 3;
+    padding: $spacing--xs;
+    width: 100%;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+  }
+}

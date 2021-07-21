@@ -6,6 +6,7 @@ import * as S from "./Button.styles";
 interface LinkProps {
   isLink?: boolean;
   linkTo?: string;
+  newTab?: boolean;
 }
 
 export interface ButtonProps extends LinkProps {
@@ -29,6 +30,7 @@ export const AppButton: React.FC<ButtonProps> = ({
   isLink = false,
   linkTo,
   disabled = false,
+  newTab = false,
 }) => {
   if (loading)
     return (
@@ -44,6 +46,8 @@ export const AppButton: React.FC<ButtonProps> = ({
         className={customClass}
         style={customStyle}
         to={linkTo!}
+        target={newTab ? "_blank" : undefined}
+        rel={newTab ? "noopener noreferer" : undefined}
       >
         {children}
       </S.Button>

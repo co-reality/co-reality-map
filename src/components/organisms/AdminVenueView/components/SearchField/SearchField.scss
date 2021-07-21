@@ -1,0 +1,40 @@
+@import "scss/constants.scss";
+
+.SearchField {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+
+  background: opaque-white(0.12);
+  border: 1px solid opaque-white(0.1);
+  box-sizing: border-box;
+  border-radius: $border-radius--xl;
+
+  width: 100%;
+
+  &:focus-within,
+  &:focus {
+    box-shadow: 0 0 0 2px white;
+  }
+
+  &--empty {
+    padding-right: calc(1em + 16px); // 1x icon size is 16x16
+  }
+
+  &__icon {
+    flex: 1;
+    margin: $spacing--xs 1em;
+    cursor: pointer;
+  }
+
+  &__input,
+  &__input:hover,
+  &__input:focus {
+    background-color: transparent;
+    border: none;
+    border-radius: unset;
+    box-shadow: unset;
+  }
+}
