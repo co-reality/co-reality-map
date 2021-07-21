@@ -28,9 +28,6 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/performance";
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -42,7 +39,6 @@ import {
   BUILD_TAG,
   LOGROCKET_APP_ID,
   MIXPANEL_PROJECT_TOKEN,
-  STRIPE_PUBLISHABLE_KEY,
 } from "secrets";
 import { FIREBASE_CONFIG } from "settings";
 
@@ -54,11 +50,7 @@ import { activatePolyFills } from "./polyfills";
 import { Firestore } from "types/Firestore";
 import { User } from "types/User";
 
-import {
-  PerformanceTrace,
-  tracePromise,
-  traceReactScheduler,
-} from "utils/performance";
+import { traceReactScheduler } from "utils/performance";
 import { authSelector } from "utils/selectors";
 
 import { CustomSoundsProvider } from "hooks/sounds";
@@ -95,11 +87,6 @@ firebase.performance();
 if (process.env.NODE_ENV === "development") {
   firebaseFunctions.useFunctionsEmulator("http://localhost:5001");
 }
-
-// Load Stripe
-const stripePromise = tracePromise(PerformanceTrace.initStripeLoad, () =>
-  loadStripe(STRIPE_PUBLISHABLE_KEY ?? "")
-);
 
 const rrfConfig = {
   userProfile: "users",
@@ -270,22 +257,20 @@ traceReactScheduler("initial render", performance.now(), () => {
   render(
     <BugsnagErrorBoundary>
       <ThemeProvider theme={theme}>
-        <Elements stripe={stripePromise}>
-          <DndProvider backend={HTML5Backend}>
-            <Provider store={store}>
-              <ReactReduxFirebaseProvider {...rrfProps}>
-                <AuthIsLoaded>
-                  <CustomSoundsProvider
-                    loadingComponent={<LoadingPage />}
-                    waitTillConfigLoaded
-                  >
-                    <AppRouter />
-                  </CustomSoundsProvider>
-                </AuthIsLoaded>
-              </ReactReduxFirebaseProvider>
-            </Provider>
-          </DndProvider>
-        </Elements>
+        <DndProvider backend={HTML5Backend}>
+          <Provider store={store}>
+            <ReactReduxFirebaseProvider {...rrfProps}>
+              <AuthIsLoaded>
+                <CustomSoundsProvider
+                  loadingComponent={<LoadingPage />}
+                  waitTillConfigLoaded
+                >
+                  <AppRouter />
+                </CustomSoundsProvider>
+              </AuthIsLoaded>
+            </ReactReduxFirebaseProvider>
+          </Provider>
+        </DndProvider>
       </ThemeProvider>
     </BugsnagErrorBoundary>,
     document.getElementById("root")

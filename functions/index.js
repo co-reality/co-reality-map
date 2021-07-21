@@ -31,14 +31,12 @@ admin.initializeApp({
 
 const access = require("./access");
 const auth = require("./auth");
-const payment = require("./payment");
 const stats = require("./stats");
 const venue = require("./venue");
 const video = require("./video");
 
 exports.access = access;
 exports.auth = auth;
-exports.payment = payment;
 exports.stats = stats;
 exports.venue = venue;
 exports.video = video;

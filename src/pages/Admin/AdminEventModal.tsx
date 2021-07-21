@@ -46,10 +46,6 @@ const validationSchema = Yup.object().shape<EventInput>({
   duration_hours: Yup.number()
     .typeError("Duration must be a number")
     .required("Duration required"),
-  price: Yup.number()
-    .typeError("Price must be a number")
-    .required("Price is required")
-    .default(0),
   host: Yup.string().required(),
   room: Yup.string(),
 });
@@ -101,8 +97,6 @@ const AdminEventModal: React.FunctionComponent<PropsType> = ({
         start_utc_seconds:
           start.unix() || Math.floor(new Date().getTime() / 1000),
         duration_minutes: data.duration_hours * 60,
-        price: 0,
-        collective_price: 0,
         host: data.host,
       };
       if (template && HAS_ROOMS_TEMPLATES.includes(template))

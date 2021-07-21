@@ -3,12 +3,10 @@ import { useState } from "react";
 import { oneHourAfterTimestamp } from "utils/time";
 
 import { useFirestoreConnect } from "./useFirestoreConnect";
-import { useUser } from "./useUser";
 import { useVenueId } from "./useVenueId";
 
 export const useConnectCurrentEvent = () => {
   const venueId = useVenueId();
-  const { user } = useUser();
   const [currentTimestamp] = useState(Date.now() / 1000);
 
   useFirestoreConnect(
@@ -28,22 +26,6 @@ export const useConnectCurrentEvent = () => {
           limit: 1,
           storeAs: "currentEvent",
         }
-      : undefined
-  );
-
-  useFirestoreConnect(
-    venueId
-      ? [
-          {
-            collection: "purchases",
-            where: [
-              ["userId", "==", user?.uid ?? ""],
-              ["venueId", "==", venueId],
-              ["status", "==", "COMPLETE"],
-            ],
-            storeAs: "eventPurchase",
-          },
-        ]
       : undefined
   );
 };

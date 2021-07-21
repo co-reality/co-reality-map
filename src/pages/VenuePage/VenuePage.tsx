@@ -6,15 +6,11 @@ import { LOC_UPDATE_FREQ_MS, PLATFORM_BRAND_NAME } from "settings";
 
 import { VenueTemplate } from "types/venues";
 
-import { hasUserBoughtTicketForEvent } from "utils/hasUserBoughtTicket";
-import { isUserAMember } from "utils/isUserAMember";
 import {
   currentEventSelector,
   currentVenueSelector,
   isCurrentEventRequestedSelector,
   isCurrentVenueRequestedSelector,
-  isUserPurchaseHistoryRequestedSelector,
-  userPurchaseHistorySelector,
 } from "utils/selectors";
 import {
   clearLocationData,
@@ -30,7 +26,6 @@ import { isTruthy } from "utils/types";
 import { hasEventFinished, isEventStartingSoon } from "utils/event";
 
 import { useConnectCurrentEvent } from "hooks/useConnectCurrentEvent";
-import { useConnectUserPurchaseHistory } from "hooks/useConnectUserPurchaseHistory";
 import { useInterval } from "hooks/useInterval";
 import { useMixpanel } from "hooks/useMixpanel";
 import { useSelector } from "hooks/useSelector";
@@ -90,12 +85,6 @@ export const VenuePage: React.FC = () => {
   const currentEvent = useSelector(currentEventSelector);
   const eventRequestStatus = useSelector(isCurrentEventRequestedSelector);
 
-  useConnectUserPurchaseHistory();
-  const userPurchaseHistory = useSelector(userPurchaseHistorySelector);
-  const userPurchaseHistoryRequestStatus = useSelector(
-    isUserPurchaseHistoryRequestedSelector
-  );
-
   // @debt we REALLY shouldn't be loading all of the venues collection data like this, can we remove it?
   useFirestoreConnect("venues");
 
@@ -113,14 +102,10 @@ export const VenuePage: React.FC = () => {
     updateTheme(venue);
   }, [venue]);
 
-  const hasUserBoughtTicket =
-    event && hasUserBoughtTicketForEvent(userPurchaseHistory, event.id);
-
   const isEventFinished = event && hasEventFinished(event);
 
   const isUserVenueOwner = userId && venue?.owners?.includes(userId);
-  const isMember =
-    user && venue && isUserAMember(user.email, venue.config?.memberEmails);
+  const isMember = user && venue;
 
   // NOTE: User location updates
 
@@ -222,17 +207,11 @@ export const VenuePage: React.FC = () => {
       return <>This event does not exist</>;
     }
 
-    if (!event || !venue || !userPurchaseHistoryRequestStatus) {
+    if (!event || !venue) {
       return <LoadingPage />;
     }
 
-    if (
-      (!isMember &&
-        event.price > 0 &&
-        userPurchaseHistoryRequestStatus &&
-        !hasUserBoughtTicket) ||
-      isEventFinished
-    ) {
+    if (!isMember || isEventFinished) {
       return <>Forbidden</>;
     }
 

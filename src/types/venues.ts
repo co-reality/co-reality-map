@@ -320,8 +320,6 @@ export interface VenueEvent {
   description: string;
   descriptions?: string[];
   duration_minutes: number;
-  price: number;
-  collective_price: number;
   host: string;
   room?: string;
   id?: string;

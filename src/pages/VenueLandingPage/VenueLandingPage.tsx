@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
@@ -10,19 +10,10 @@ import {
   IFRAME_ALLOW,
 } from "settings";
 
-import { VenueEvent } from "types/venues";
 import { VenueAccessMode } from "types/VenueAcccess";
-
-import { hasUserBoughtTicketForEvent } from "utils/hasUserBoughtTicket";
-import { WithId } from "utils/id";
-import { isUserAMember } from "utils/isUserAMember";
 import { getTimeBeforeParty } from "utils/time";
 import { venueEntranceUrl, venueInsideUrl } from "utils/url";
-import {
-  currentVenueSelectorData,
-  userPurchaseHistorySelector,
-  venueEventsSelector,
-} from "utils/selectors";
+import { currentVenueSelectorData, venueEventsSelector } from "utils/selectors";
 import { hasEventFinished } from "utils/event";
 
 import useConnectCurrentVenue from "hooks/useConnectCurrentVenue";
@@ -32,16 +23,9 @@ import { useVenueId } from "hooks/useVenueId";
 
 import { updateTheme } from "pages/VenuePage/helpers";
 
-import {
-  AuthenticationModal,
-  AuthOptions,
-} from "components/organisms/AuthenticationModal";
-import PaymentModal from "components/organisms/PaymentModal";
 import { RenderMarkdown } from "components/organisms/RenderMarkdown";
 import WithNavigationBar from "components/organisms/WithNavigationBar";
 
-import { CountDown } from "components/molecules/CountDown";
-import EventPaymentButton from "components/molecules/EventPaymentButton";
 import InformationCard from "components/molecules/InformationCard";
 import { LoadingPage } from "components/molecules/LoadingPage";
 import SecretPasswordForm from "components/molecules/SecretPasswordForm";
@@ -57,8 +41,6 @@ export const VenueLandingPage: React.FC = () => {
     (state) => state.firestore.status.requested.currentVenue
   );
   const venueEvents = useSelector(venueEventsSelector);
-  const purchaseHistory = useSelector(userPurchaseHistorySelector);
-
   const redirectUrl = venue?.config?.redirectUrl ?? "";
   const { hostname } = window.location;
 
@@ -69,22 +51,11 @@ export const VenueLandingPage: React.FC = () => {
   }, [hostname, redirectUrl]);
 
   dayjs.extend(advancedFormat);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<
-    WithId<VenueEvent> | undefined
-  >();
-  const [isAuthenticationModalOpen, setIsAuthenticationModalOpen] = useState(
-    false
-  );
-  const [shouldOpenPaymentModal, setShouldOpenPaymentModal] = useState(false);
-  const [eventPaidSuccessfully, setEventPaidSuccessfully] = useState<
-    string | undefined
-  >();
 
   const { user } = useUser();
 
   const futureOrOngoingVenueEvents = venueEvents?.filter(
-    (event) => !hasEventFinished(event) && event.price > 0
+    (event) => !hasEventFinished(event)
   );
 
   useEffect(() => {
@@ -94,13 +65,6 @@ export const VenueLandingPage: React.FC = () => {
     updateTheme(venue);
   }, [venue]);
 
-  useEffect(() => {
-    if (shouldOpenPaymentModal && !isAuthenticationModalOpen) {
-      setIsPaymentModalOpen(true);
-      setShouldOpenPaymentModal(false);
-    }
-  }, [shouldOpenPaymentModal, isAuthenticationModalOpen]);
-
   if (venueRequestStatus && !venue) {
     return <>This venue does not exist</>;
   }
@@ -109,21 +73,7 @@ export const VenueLandingPage: React.FC = () => {
     return <LoadingPage />;
   }
 
-  const isUserVenueOwner = user && venue.owners?.includes(user.uid);
-
   const nextVenueEventId = futureOrOngoingVenueEvents?.[0]?.id;
-
-  const closePaymentModal = () => {
-    setIsPaymentModalOpen(false);
-  };
-
-  const openAuthenticationModal = () => {
-    setIsAuthenticationModalOpen(true);
-  };
-
-  const closeAuthenticationModal = () => {
-    setIsAuthenticationModalOpen(false);
-  };
 
   const onJoinClick = () => {
     if (!venueId) return;
@@ -276,15 +226,6 @@ export const VenueLandingPage: React.FC = () => {
                     );
 
                     const isNextVenueEvent = venueEvent.id === nextVenueEventId;
-
-                    const hasUserBoughtTicket =
-                      user &&
-                      (hasUserBoughtTicketForEvent(
-                        purchaseHistory,
-                        venueEvent.id
-                      ) ||
-                        isUserAMember(user.email, venue.config?.memberEmails));
-
                     return (
                       <InformationCard
                         title={venueEvent.name}
@@ -298,10 +239,8 @@ export const VenueLandingPage: React.FC = () => {
                             "dddd MMMM Do"
                           )}`}
                         </div>
-
                         <div className="event-description">
                           <RenderMarkdown text={venueEvent.description} />
-
                           {venueEvent.descriptions?.map(
                             (description, index) => (
                               <RenderMarkdown
@@ -309,58 +248,6 @@ export const VenueLandingPage: React.FC = () => {
                                 key={`${description}#${index}`}
                               />
                             )
-                          )}
-                        </div>
-
-                        <div className="button-container">
-                          {hasUserBoughtTicket ? (
-                            <div>
-                              <div>You have a ticket for this event</div>
-                              <CountDown
-                                startUtcSeconds={venueEvent.start_utc_seconds}
-                              />
-                            </div>
-                          ) : (
-                            <div className="price-container">
-                              Individual tickets £{venueEvent.price / 100}
-                              <br />
-                              Group tickets £{venueEvent.collective_price / 100}
-                              {!user && (
-                                <div className="login-invitation">
-                                  {"Already have a ticket? "}
-                                  <span
-                                    className="link"
-                                    onClick={openAuthenticationModal}
-                                  >
-                                    Log in
-                                  </span>
-                                  .
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {user ? (
-                            <EventPaymentButton
-                              event={venueEvent}
-                              venueId={venueId}
-                              isUserVenueOwner={!!isUserVenueOwner}
-                              selectEvent={() => setSelectedEvent(venueEvent)}
-                              setIsPaymentModalOpen={setIsPaymentModalOpen}
-                              paymentConfirmationPending={
-                                eventPaidSuccessfully === venueEvent.id
-                              }
-                            />
-                          ) : (
-                            <button
-                              className="btn btn-primary buy-tickets-button"
-                              onClick={() => {
-                                setSelectedEvent(venueEvent);
-                                openAuthenticationModal();
-                              }}
-                            >
-                              Buy tickets
-                            </button>
                           )}
                         </div>
                       </InformationCard>
@@ -371,23 +258,6 @@ export const VenueLandingPage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {user && selectedEvent && (
-        <PaymentModal
-          selectedEvent={selectedEvent}
-          show={isPaymentModalOpen}
-          onHide={closePaymentModal}
-          setEventPaidSuccessfully={setEventPaidSuccessfully}
-          eventPaidSuccessfully={eventPaidSuccessfully}
-        />
-      )}
-
-      <AuthenticationModal
-        show={isAuthenticationModalOpen}
-        onHide={closeAuthenticationModal}
-        afterUserIsLoggedIn={() => setShouldOpenPaymentModal(true)}
-        showAuth={AuthOptions.register}
-      />
     </WithNavigationBar>
   );
 };

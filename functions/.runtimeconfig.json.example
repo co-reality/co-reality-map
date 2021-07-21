@@ -2,10 +2,6 @@
   "project": {
     "id": ""
   },
-  "stripe": {
-    "secret_key": "",
-    "endpoint_secret": ""
-  },
   "twilio": {
     "account_sid": "",
     "api_key": "",

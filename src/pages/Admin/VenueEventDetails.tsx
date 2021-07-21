@@ -49,39 +49,6 @@ const VenueEventDetails = ({
           <RenderMarkdown text={description} key={`${description}#${index}`} />
         ))}
       </div>
-      <div className="button-container">
-        <div className="price-container">
-          {venueEvent.price > 0 && (
-            <>Individual tickets £{venueEvent.price / 100}</>
-          )}
-        </div>
-        {!className && (
-          <div className="event-payment-button-container">
-            <div>
-              <button
-                role="link"
-                className="btn btn-primary buy-tickets-button"
-                onClick={() => {
-                  setEditedEvent && setEditedEvent(venueEvent);
-                  setShowCreateEventModal(true);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                role="link"
-                className="btn btn-primary buy-tickets-button"
-                onClick={() => {
-                  setEditedEvent && setEditedEvent(venueEvent);
-                  setShowDeleteEventModal(true);
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

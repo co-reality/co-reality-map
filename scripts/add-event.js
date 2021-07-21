@@ -7,11 +7,11 @@ function usage() {
   console.log(`
 ${process.argv[1]}: Add an event to a venue
 
-Specify the name, time, duration in minutes, description, collective price, and price.
+Specify the name, time, duration in minutes, description.
 
-Usage: node ${process.argv[1]} API_KEY PROJECT_ID VENUE UTC_TIME DURATION_MINUTES PRICE COLLECTIVE_PRICE NAME DESCRIPTION
+Usage: node ${process.argv[1]} API_KEY PROJECT_ID VENUE UTC_TIME DURATION_MINUTES NAME DESCRIPTION
 
-Example: node ${process.argv[1]} aaazzz111222333 co-reality-map examplevenue 2020-08-01T19:00:00Z 180 500 2500 "The Virtual Jazz Bar" "Join us in Virtual jazz bar on Saturday for three sets of fabulous jazz from the House band."
+Example: node ${process.argv[1]} aaazzz111222333 co-reality-map examplevenue 2020-08-01T19:00:00Z 180 "The Virtual Jazz Bar" "Join us in Virtual jazz bar on Saturday for three sets of fabulous jazz from the House band."
 `);
   process.exit(1);
 }
@@ -25,8 +25,6 @@ const projectId = argv[1];
 const venueId = argv[2];
 const start_utc_seconds = Date.parse(argv[3]) / 1000;
 const duration_minutes = argv[4];
-const price = argv[5];
-const collective_price = argv[6];
 const name = argv[7];
 const description = argv[8];
 
@@ -54,8 +52,6 @@ read({ prompt: "Username:" }, function (err, username) {
           descriptions: [description],
           start_utc_seconds,
           duration_minutes,
-          price,
-          collective_price,
         };
         firebase
           .firestore()
