@@ -23,22 +23,29 @@ const DEST_DOMAIN = "staging.sparkle.space";
 
 const VENUES_TO_CLONE = ["wayspace"];
 
+const VENUE_RENAME_MAP: Partial<Record<string, string>> = {
+  foo: "bar",
+};
+
 // ---------------------------------------------------------
 // HERE THERE BE DRAGONS (edit below here at your own risk)
 // ---------------------------------------------------------
 
 const CONFIRM_VALUE = "i-have-edited-the-script-and-am-sure";
+const DRY_RUN = "--dry-run";
 
 const usage = makeScriptUsage({
   description: "Clone venue(s) between different firebase projects.",
-  usageParams: CONFIRM_VALUE,
-  exampleParams: CONFIRM_VALUE,
+  usageParams: `${CONFIRM_VALUE} [${DRY_RUN}]`,
+  exampleParams: `${CONFIRM_VALUE} [${DRY_RUN}]`,
 });
 
-const [confirmationCheck] = process.argv.slice(2);
+const [confirmationCheck, dryRun] = process.argv.slice(2);
 if (confirmationCheck !== CONFIRM_VALUE) {
   usage();
 }
+
+const isDryRun = dryRun === DRY_RUN;
 
 const sourceApp = initFirebaseAdminApp(SOURCE_PROJECT_ID, {
   appName: "sourceApp",
@@ -53,6 +60,7 @@ const destApp = initFirebaseAdminApp(DEST_PROJECT_ID, {
 // TODO: do we need to copy roles across?
 // TODO: venues (owners will need to be changed)
 // TODO: check if venue already exists (be safe, don't overwrite!)
+// TODO: use VENUE_RENAME_MAP when rewriting room/etc urls (in case we renamed the venue)
 
 const replaceSourceDomainReferences = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,10 +80,16 @@ const replaceSourceDomainReferences = (
     );
 
     console.log(
-      `Found a reference to ${SOURCE_DOMAIN} in ${objectType} ${objectIdentifier}, key ${key}.`,
-      `Value: ${obj[key]}`,
-      `Replacing with: ${replacementValue}`
+      "  Rewriting reference to",
+      SOURCE_DOMAIN,
+      "in",
+      `'${objectType}'`,
+      `'${objectIdentifier}'`,
+      "with key",
+      `'${key}'`
     );
+    console.log("    Before :", obj[key]);
+    console.log("    After  :", replacementValue);
 
     obj[key] = replacementValue;
   }
@@ -98,6 +112,26 @@ const replaceSourceDomainReferences = (
 
   console.log("total venues:", allSourceVenues.length);
   console.log("wanted venues:", wantedSourceVenues.length, VENUES_TO_CLONE);
+  console.log("venue renames:", VENUE_RENAME_MAP);
+  console.log();
+
+  console.log(
+    "Will copy",
+    wantedSourceVenues.length,
+    "venues from",
+    sourceApp.options.projectId,
+    "to",
+    destApp.options.projectId
+  );
+  console.log(
+    "  source venues      :",
+    wantedSourceVenues.map((venue) => venue.id)
+  );
+  console.log(
+    "  destination venues :",
+    wantedSourceVenues.map((venue) => VENUE_RENAME_MAP[venue.id] ?? venue.id)
+  );
+  console.log();
 
   // TODO: we should save backups before we potentially overwrite things..
   // const saveToBackupFile = makeSaveToBackupFile(
@@ -108,11 +142,20 @@ const replaceSourceDomainReferences = (
 
   wantedSourceVenues.forEach((venue) => {
     const { id, ...venueData } = venue;
-    const destVenueRef = destApp.firestore().collection("venues").doc(id);
 
+    // Rename the destinationVenueId if required
+    const destinationVenueId = VENUE_RENAME_MAP[id] ?? id;
+
+    const destVenueRef = destApp
+      .firestore()
+      .collection("venues")
+      .doc(destinationVenueId);
+
+    // @debt will there ever even be any URLs that need rewriting in these 'root venue keys'?
     Object.keys(venue).forEach((key) => {
       replaceSourceDomainReferences(venue, key, "venue", venue.id);
     });
+
     if (venue.rooms) {
       venue.rooms.forEach((room) => {
         Object.keys(room).forEach((key) => {
@@ -123,9 +166,23 @@ const replaceSourceDomainReferences = (
 
     destAppBatch.set(destVenueRef, venueData);
 
-    console.log("added venue to batch:", venue.name);
+    console.log("added venue to batch:", destinationVenueId, `(${venue.name})`);
   });
 
-  const writeResult = await destAppBatch.commit();
-  console.log(writeResult);
-})();
+  if (!isDryRun) {
+    const writeResult = await destAppBatch.commit();
+    console.log(writeResult);
+  } else {
+    console.log(
+      "[DRY-RUN] Not committing transaction. Nothing has been changed."
+    );
+  }
+})()
+  .then(() => {
+    console.log("Finished!");
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log("Failed: ", error);
+    process.exit(1);
+  });
