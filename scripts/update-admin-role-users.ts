@@ -1,4 +1,4 @@
-#!/usr/bin/env node -r esm -r ts-node/register
+#!/usr/bin/env node -r esm -r ts-node/register -r tsconfig-paths/register -r ignore-styles
 
 import {
   checkFileExists,

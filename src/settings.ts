@@ -14,8 +14,11 @@ import { RoomType } from "types/rooms";
 
 import { FIVE_MINUTES_MS } from "utils/time";
 
+// @ts-ignore -- ignore TypeScript errors from the following *.png import to avoid type errors when using scripts/
 import sparkleNavLogo from "assets/icons/sparkle-nav-logo.png";
+// @ts-ignore -- ignore TypeScript errors from the following *.png import to avoid type errors when using scripts/
 import defaultMapIcon from "assets/icons/default-map-icon.png";
+// @ts-ignore -- ignore TypeScript errors from the following *.png import to avoid type errors when using scripts/
 import sparkleverseLogo from "assets/images/sparkleverse-logo.png";
 
 export const SPARKLE_HOMEPAGE_URL = "https://sparklespaces.com/";

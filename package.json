@@ -161,9 +161,11 @@
     "firebase-admin": "^9.1.1",
     "firebase-tools": "^8.6.0",
     "gifwrap": "^0.9.2",
+    "ignore-styles": "^5.0.1",
     "phin": "^3.5.0",
     "source-map-explorer": "^2.5.2",
     "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.10.1",
     "typescript": "^4.2.4",
     "uuidv4": "^6.2.3"
   }
