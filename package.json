@@ -18,7 +18,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/mixpanel-browser": "^2.35.4",
     "@types/mousetrap": "^1.6.4",
-    "@types/qs": "^6.9.3",
+    "@types/qs": "^6.9.7",
     "@types/react-resize-detector": "^4.2.0",
     "@types/styled-components": "^5.1.4",
     "@types/ws": "^7.2.6",
