@@ -350,6 +350,12 @@ const VenueInfoComponent: React.FC<VenueInfoComponentProps> = ({
             >
               Edit space
             </Link>
+            <Link
+              to={`/admin/venue/usersreport/${venue.id}`}
+              className="btn btn-block"
+            >
+              Users report
+            </Link>
             {canHaveSubvenues(venue) && (
               <Link
                 to={`/admin/venue/rooms/${venue.id}`}

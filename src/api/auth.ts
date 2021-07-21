@@ -44,3 +44,8 @@ export const fetchCustomAuthConfig = async (
 
       throw err;
     });
+
+export const getUsersEmails = async (usersIds: string[]) =>
+  await firebase.functions().httpsCallable("auth-getUsersEmailsById")({
+    usersIds,
+  });

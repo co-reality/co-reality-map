@@ -1,0 +1,1 @@
+export { AdminUsersTableChart } from "./AdminUsersTableChart";

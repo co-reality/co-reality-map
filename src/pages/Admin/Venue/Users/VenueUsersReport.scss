@@ -1,0 +1,44 @@
+@import "scss/constants";
+
+.VenueUserReport {
+  padding: $spacing--xl;
+
+  &__filter-box {
+    border: 1px solid white;
+    margin: $spacing--xl auto;
+    padding: $spacing--xl;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    &__download-btn {
+      width: 25%;
+      margin: auto;
+    }
+
+    &__custom-field {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: $spacing--xl 0;
+
+      &__input {
+        width: 70%;
+      }
+    }
+
+    &__headers {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+
+      &__item {
+        width: 25%;
+        height: 35px;
+      }
+    }
+  }
+}

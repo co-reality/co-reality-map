@@ -6,9 +6,14 @@ const { HttpsError } = require("firebase-functions/lib/providers/https");
 const { fetchAuthConfig } = require("./src/api/auth");
 const { addAdmin } = require("./src/api/roles");
 
-const { assertValidUrl, assertValidVenueId } = require("./src/utils/assert");
+const {
+  assertValidUrl,
+  assertValidVenueId,
+  checkAuth,
+} = require("./src/utils/assert");
 const { createOAuth2Client } = require("./src/utils/auth");
 const { getJson, postJson } = require("./src/utils/fetch");
+const { chunk } = require("lodash");
 
 // @debt refactor lowercaseFirstChar into utils/* (or maybe remove it entirely..?)
 // Case-insensitive first character for iDevices
@@ -225,6 +230,24 @@ exports.connectI4AOAuthHandler = functions.https.onRequest(async (req, res) => {
   );
 
   res.redirect(customTokenReturnUrl.toString());
+});
+
+exports.getUsersEmailsById = functions.https.onCall(async (data, context) => {
+  checkAuth(context);
+  const { usersIds } = data;
+  const authUsersEmails = await Promise.all(
+    chunk(usersIds, 100).map(async (chunkUsers) => {
+      const chunkUserIds = chunkUsers.map((userId) => {
+        return { uid: userId };
+      });
+      const authUsersResult = await admin.auth().getUsers(chunkUserIds);
+      return authUsersResult.users.map((user) => ({
+        email: user.email || "",
+        uid: user.uid,
+      }));
+    })
+  );
+  return [].concat(...authUsersEmails);
 });
 
 /** Automatically make user admin upon register.
