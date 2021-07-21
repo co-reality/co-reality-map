@@ -1,0 +1,121 @@
+// NOTE: do not include any other files here, keep these styles separate from the rest
+
+.ErrorPrompt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+  padding: max(4em, 5%) max(4em, 20%);
+
+  &__modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+
+    position: relative;
+    min-width: 50%;
+
+    background: #232225;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+  }
+
+  &__row {
+    margin-top: 2em;
+    width: 100%;
+    display: flex;
+
+    & > * + * {
+      margin: 0 1em;
+    }
+
+    &--vertical {
+      flex-wrap: wrap;
+
+      & > * + * {
+        margin: 1em 0;
+      }
+    }
+  }
+
+  &__title {
+    font-family: "Rubik", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 22px;
+
+    text-align: center;
+
+    color: #ffffff;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 10px 0;
+  }
+
+  &__message {
+    width: 100%;
+  }
+
+  &__mailto,
+  &__mailto:hover {
+    color: #f6e652;
+    text-decoration: none;
+  }
+
+  &__name {
+    font-weight: bold;
+  }
+
+  &__value--preformatted,
+  &__value--preformatted:focus,
+  &__value--preformatted:hover {
+    min-height: 15em;
+    max-height: 30em;
+    min-width: 10em;
+    max-width: 100%;
+    overflow: auto;
+    text-align: start;
+    font-family: monospace;
+    cursor: text;
+    border: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  &__buttons {
+    width: 50%;
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  &__button {
+    height: 2.5em;
+    min-width: 10em;
+    padding: 4px 1em;
+    border-radius: 24px;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__button--primary {
+    color: #ffffff;
+    background: #7c46fb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &__button--normal {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+}
