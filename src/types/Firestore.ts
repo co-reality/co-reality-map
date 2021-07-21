@@ -65,6 +65,7 @@ export interface FirestoreData {
   eventPurchase?: Record<string, Purchase>;
   events?: Record<string, VenueEvent>;
   experience?: Experience;
+  ownedVenues?: Record<string, AnyVenue>;
   playaVenues?: Record<string, AnyVenue>; // for the admin playa preview
   reactions?: Record<string, Reaction>;
   screeningRoomVideos: Record<string, ScreeningRoomVideo>;

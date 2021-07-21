@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { shallowEqual } from "react-redux";
 import {
   Link,
   Redirect,
@@ -36,7 +35,6 @@ import { isVenueWithRooms, AnyVenue, VenueEvent } from "types/venues";
 
 import { isTruthyFilter } from "utils/filter";
 import { WithId } from "utils/id";
-import { makeVenueSelector, orderedVenuesSelector } from "utils/selectors";
 import { venueInsideUrl } from "utils/url";
 import {
   canBeDeleted,
@@ -45,10 +43,10 @@ import {
   canHaveSubvenues,
 } from "utils/venue";
 
+import { useOwnedVenues } from "hooks/useConnectOwnedVenues";
 import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 import { useIsAdminUser } from "hooks/roles";
 import { useQuery } from "hooks/useQuery";
-import { useSelector } from "hooks/useSelector";
 import { useShowHide } from "hooks/useShowHide";
 import { useUser } from "hooks/useUser";
 import { useVenueId } from "hooks/useVenueId";
@@ -56,6 +54,7 @@ import { useVenueId } from "hooks/useVenueId";
 import { PlayaContainer } from "pages/Account/Venue/VenueMapEdition";
 
 import WithNavigationBar from "components/organisms/WithNavigationBar";
+import { Loading } from "components/molecules/Loading";
 
 import AdminDeleteEvent from "./AdminDeleteEvent";
 import AdminEventModal from "./AdminEventModal";
@@ -77,10 +76,11 @@ const VenueList: React.FC<VenueListProps> = ({
   selectedVenueId,
   roomIndex,
 }) => {
-  // @debt This selector relies on all venues in firebase being loaded into memory.. not very efficient
-  const venues = useSelector(orderedVenuesSelector);
+  const { isLoading, ownedVenues } = useOwnedVenues({
+    currentVenueId: selectedVenueId,
+  });
 
-  if (!venues) return <>Loading...</>;
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -91,9 +91,9 @@ const VenueList: React.FC<VenueListProps> = ({
         </Link>
       </div>
       <ul className="page-container-adminsidebar-venueslist">
-        {venues.map((venue, index) => (
+        {ownedVenues.map((venue) => (
           <li
-            key={index}
+            key={venue.id}
             className={`${selectedVenueId === venue.id ? "selected" : ""} ${
               canHaveSubvenues(venue) ? "camp" : ""
             }`}
@@ -129,11 +129,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venueId, roomIndex }) => {
   const { url: matchUrl } = useRouteMatch();
   const { pathname: urlPath } = useLocation();
 
-  const venueSelector = useCallback(
-    (state) => makeVenueSelector(venueId)(state),
-    [venueId]
-  );
-  const venue = useSelector(venueSelector, shallowEqual);
+  const { currentVenue } = useOwnedVenues({ currentVenueId: venueId });
 
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
   const [showDeleteEventModal, setShowDeleteEventModal] = useState(false);
@@ -150,19 +146,22 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venueId, roomIndex }) => {
   }, []);
 
   const tabs = useMemo(() => {
-    if (!venue) return [];
+    if (!currentVenue) return [];
 
     return [
       { url: matchUrl, label: "Venue Info" },
-      canHaveEvents(venue) && { url: `${matchUrl}/events`, label: "Events" },
-      canHavePlacement(venue) && {
+      canHaveEvents(currentVenue) && {
+        url: `${matchUrl}/events`,
+        label: "Events",
+      },
+      canHavePlacement(currentVenue) && {
         url: `${matchUrl}/placement`,
         label: "Placement & Editing",
       },
     ].filter(isTruthyFilter);
-  }, [matchUrl, venue]);
+  }, [matchUrl, currentVenue]);
 
-  if (!venue) {
+  if (!currentVenue) {
     return <>{"Oops, seems we can't find your venue!"}</>;
   }
 
@@ -184,7 +183,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venueId, roomIndex }) => {
         <Switch>
           <Route path={`${matchUrl}/events`}>
             <EventsComponent
-              venue={venue}
+              venue={currentVenue}
               showCreateEventModal={showCreateEventModal}
               setShowCreateEventModal={setShowCreateEventModal}
               editedEvent={editedEvent}
@@ -196,7 +195,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venueId, roomIndex }) => {
           </Route>
           <Route path={matchUrl}>
             <VenueInfoComponent
-              venue={venue}
+              venue={currentVenue}
               roomIndex={roomIndex}
               showCreateEventModal={showCreateEventModal}
               setShowCreateEventModal={setShowCreateEventModal}
@@ -210,7 +209,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ venueId, roomIndex }) => {
         onHide={adminEventModalOnHide}
         venueId={venueId}
         event={editedEvent}
-        template={venue.template}
+        template={currentVenue.template}
         setEditedEvent={setEditedEvent}
         setShowDeleteEventModal={setShowDeleteEventModal}
       />

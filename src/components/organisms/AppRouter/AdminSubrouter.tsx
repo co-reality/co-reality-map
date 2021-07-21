@@ -19,31 +19,31 @@ export const AdminSubrouter: React.FC = () => {
       {/* Admin V1 */}
 
       <Route path="/admin/venue/rooms/:venueId">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <RoomsForm />
         </Provided>
       </Route>
 
       <Route path="/admin/venue/creation">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <VenueWizard />
         </Provided>
       </Route>
 
       <Route path="/admin/venue/edit/:venueId">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <VenueWizard />
         </Provided>
       </Route>
 
       <Route path="/admin/:venueId">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <Admin />
         </Provided>
       </Route>
 
       <Route path="/admin">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <Admin />
         </Provided>
       </Route>
@@ -57,25 +57,25 @@ export const AdminSubrouter: React.FC = () => {
       </Route>
 
       <Route path="/admin-ng/advanced-settings/:venueId?">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <AdminAdvancedSettings />
         </Provided>
       </Route>
 
       <Route path="/admin-ng/create/venue">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <VenueWizardV2 />
         </Provided>
       </Route>
 
       <Route path="/admin-ng/edit/:venueId">
-        <Provided withWorldUsers withRelatedVenues>
+        <Provided withWorldUsers withOwnedVenues>
           <VenueWizardV2 />
         </Provided>
       </Route>
 
       <Route path="/admin-ng">
-        <Provided withWorldUsers>
+        <Provided withWorldUsers withOwnedVenues>
           <AdminV2 />
         </Provided>
       </Route>

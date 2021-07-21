@@ -87,51 +87,6 @@ export const worldUsersByIdWithoutLocationSelector: SparkleSelector<
   );
 };
 
-/**
- * Selector to retrieve venues from the Redux Firestore.
- *
- * @param state the Redux store
- *
- * @deprecated This selector requires all of the venues data in firebase to be loaded into memory. Find a different way.
- * @debt Refactor all places that rely on this, then remove it from the codebase
- */
-export const venuesSelector: SparkleSelector<Record<string, AnyVenue>> = (
-  state
-) => state.firestore.data.venues || {};
-
-/**
- * @deprecated This selector requires all of the venues data in firebase to be loaded into memory. Find a different way.
- * @debt Refactor all places that rely on this, then remove it from the codebase
- */
-export const orderedVenuesSelector: SparkleSelector<
-  WithId<AnyVenue>[] | undefined
-> = (state) => state.firestore.ordered.venues;
-
-/**
- * Makes a venueSelector selector for a given venueId, which when called
- * will retrieve the specified venue from the Redux Firestore.
- *
- * @param venueId the venueId to be retrieved
- * @return (state: RootState) => WithId<AnyVenue> | undefined
- *
- * @example
- *   const venueId = 'abc123'
- *   const venueSelector = useCallback(makeVenueSelector(venueId), [venueId])
- *   const venue = useSelector(venueSelector, shallowEqual)
- *
- * @deprecated This function relies on a selector that requires all of the venues data in firebase to be loaded into memory. Find a different way.
- * @debt Refactor all places that rely on this, then remove it from the codebase
- */
-export const makeVenueSelector = (venueId: string) => (
-  state: RootState
-): WithId<AnyVenue> | undefined => {
-  const venues = venuesSelector(state);
-
-  if (!venues.hasOwnProperty(venueId)) return undefined;
-
-  return { ...venues[venueId], id: venueId };
-};
-
 export const currentEventSelector: SparkleSelector<
   WithId<VenueEvent>[] | undefined
 > = makeOrderedSelector("currentEvent");

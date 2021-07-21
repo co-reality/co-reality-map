@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy, useEffect, useMemo } from "react";
 import { Redirect } from "react-router-dom";
 import { useTitle } from "react-use";
 
@@ -26,18 +26,18 @@ import { venueEntranceUrl } from "utils/url";
 
 import { tracePromise } from "utils/performance";
 import { isCompleteProfile, updateProfileEnteredVenueIds } from "utils/profile";
-import { isTruthy } from "utils/types";
+import { isTruthy, isDefined } from "utils/types";
 import { hasEventFinished, isEventStartingSoon } from "utils/event";
 
 import { useConnectCurrentEvent } from "hooks/useConnectCurrentEvent";
 import { useConnectUserPurchaseHistory } from "hooks/useConnectUserPurchaseHistory";
 import { useInterval } from "hooks/useInterval";
 import { useMixpanel } from "hooks/useMixpanel";
+import { usePreloadAssets } from "hooks/usePreloadAssets";
 import { useSelector } from "hooks/useSelector";
 import { useWorldUserLocation } from "hooks/users";
 import { useUser } from "hooks/useUser";
 import { useVenueId } from "hooks/useVenueId";
-import { useFirestoreConnect } from "hooks/useFirestoreConnect";
 // import { useVenueAccess } from "hooks/useVenueAccess";
 import useConnectCurrentVenue from "hooks/useConnectCurrentVenue";
 
@@ -86,6 +86,19 @@ export const VenuePage: React.FC = () => {
   const venue = useSelector(currentVenueSelector);
   const venueRequestStatus = useSelector(isCurrentVenueRequestedSelector);
 
+  const assetsToPreload = useMemo(
+    () =>
+      [
+        venue?.mapBackgroundImageUrl,
+        ...(venue?.rooms ?? []).map((room) => room?.image_url),
+      ]
+        .filter(isDefined)
+        .map((url) => ({ url })),
+    [venue]
+  );
+
+  usePreloadAssets(assetsToPreload);
+
   useConnectCurrentEvent();
   const currentEvent = useSelector(currentEventSelector);
   const eventRequestStatus = useSelector(isCurrentEventRequestedSelector);
@@ -95,9 +108,6 @@ export const VenuePage: React.FC = () => {
   const userPurchaseHistoryRequestStatus = useSelector(
     isUserPurchaseHistoryRequestedSelector
   );
-
-  // @debt we REALLY shouldn't be loading all of the venues collection data like this, can we remove it?
-  useFirestoreConnect("venues");
 
   const userId = user?.uid;
 
@@ -188,6 +198,7 @@ export const VenuePage: React.FC = () => {
   }
 
   if (!venue || !venueId) {
+    // @debt if !venueId is true loading page might display indefinitely, another message or action may be appropriate
     return <LoadingPage />;
   }
 
@@ -222,7 +233,7 @@ export const VenuePage: React.FC = () => {
       return <>This event does not exist</>;
     }
 
-    if (!event || !venue || !userPurchaseHistoryRequestStatus) {
+    if (!event || !userPurchaseHistoryRequestStatus) {
       return <LoadingPage />;
     }
 
