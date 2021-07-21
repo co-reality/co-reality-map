@@ -22,7 +22,7 @@ import { WithId } from "utils/id";
 import { useSelector } from "../useSelector";
 import { isLoaded } from "../useFirestoreConnect";
 import { useRecentVenueUsers } from "../users";
-import { useUser } from "../useUser";
+import { useUser, useUserInvalidateCache } from "../useUser";
 import { useGetUserByPosition } from "../useGetUserByPosition";
 
 import { useConnectAllAuditoriumSections } from "./useAllAuditoriumSections";
@@ -82,6 +82,8 @@ export const useAuditoriumSection = ({
     positionedUsers: seatedUsers,
   });
 
+  const { invalidateUserCache } = useUserInvalidateCache(userId);
+
   const takeSeat: (
     gridPosition: GridPosition
   ) => Promise<void> | undefined = useCallback(
@@ -92,9 +94,9 @@ export const useAuditoriumSection = ({
         venueId,
         userId,
         gridData: { sectionId, row, column },
-      });
+      }).then(() => invalidateUserCache());
     },
-    [sectionId, venueId, userId]
+    [sectionId, venueId, userId, invalidateUserCache]
   );
 
   const leaveSeat: () => Promise<void> | undefined = useCallback(() => {

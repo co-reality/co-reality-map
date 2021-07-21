@@ -21,6 +21,7 @@ import { setLocationData } from "utils/userLocation";
 
 import { useKeyboardControls } from "hooks/useKeyboardControls";
 import { useRecentVenueUsers } from "hooks/users";
+import { useUserInvalidateCache } from "hooks/useUser";
 
 // @debt refactor these hooks into somewhere more sensible
 import { useMapGrid } from "./hooks/useMapGrid";
@@ -85,6 +86,8 @@ export const Map: React.FC<MapProps> = ({
     };
   }, [venue.columns, venue.mapBackgroundImageUrl]);
 
+  const { invalidateUserCache } = useUserInvalidateCache(userUid);
+
   const takeSeat = useCallback(
     (gridPosition: GridPosition) => {
       if (!userUid) return;
@@ -95,9 +98,9 @@ export const Map: React.FC<MapProps> = ({
         venueId,
         userId: userUid,
         gridData: gridPosition,
-      });
+      }).then(() => invalidateUserCache());
     },
-    [userUid, venueId, venueName]
+    [userUid, venueId, venueName, invalidateUserCache]
   );
 
   const currentPosition = profileData?.[venue.id];

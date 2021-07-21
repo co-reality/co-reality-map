@@ -28,7 +28,7 @@ import { isDefined } from "utils/types";
 
 import { useDispatch } from "hooks/useDispatch";
 import { useRecentVenueUsers } from "hooks/users";
-import { useUser } from "hooks/useUser";
+import { useUser, useUserInvalidateCache } from "hooks/useUser";
 import { useShowHide } from "hooks/useShowHide";
 
 import { usePartygoersbySeat } from "components/templates/PartyMap/components/Map/hooks/usePartygoersBySeat";
@@ -262,6 +262,8 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
     [carvedOutWidthInSeats, carvedOutHeightInSeats]
   );
 
+  const { invalidateUserCache } = useUserInvalidateCache(userId);
+
   const takeSeat = useCallback(
     (row: number | null, column: number | null) => {
       if (!venueId || !userId) return;
@@ -269,9 +271,9 @@ export const Audience: React.FC<AudienceProps> = ({ venue }) => {
       makeUpdateUserGridLocation({
         venueId,
         userId,
-      })(row, column);
+      })(row, column).then(() => invalidateUserCache());
     },
-    [venueId, userId]
+    [venueId, userId, invalidateUserCache]
   );
 
   const leaveSeat = useCallback(() => {

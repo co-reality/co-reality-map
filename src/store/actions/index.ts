@@ -1,4 +1,5 @@
 import { AttendanceActions } from "./Attendance";
+import { CacheActions } from "./Cache";
 import { ChatActions } from "./Chat";
 import { LocationActions } from "./Location";
 import { RoomActions } from "./Room";
@@ -11,4 +12,5 @@ export type RootActions =
   | LocationActions
   | RoomActions
   | SovereignVenueActions
-  | UserProfileActions;
+  | UserProfileActions
+  | CacheActions;

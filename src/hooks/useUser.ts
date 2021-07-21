@@ -1,13 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { FirebaseReducer } from "react-redux-firebase";
 import { isEqual } from "lodash";
+import firebase from "firebase/app";
 
-import { User } from "types/User";
+import { updateUserCache } from "store/actions/Cache";
+
+import { User, UserWithLocation } from "types/User";
 
 import { withId, WithId } from "utils/id";
 import { authSelector, profileSelector } from "utils/selectors";
 
 import { useSelector } from "hooks/useSelector";
+import { useDispatch } from "./useDispatch";
 
 export interface UseUserResult {
   user?: FirebaseReducer.AuthState;
@@ -29,4 +33,29 @@ export const useUser = (): UseUserResult => {
     }),
     [auth, profile]
   );
+};
+
+// @debt Remove, once the proper user fix is merged in
+export const useUserInvalidateCache = (id: string | undefined) => {
+  const dispatch = useDispatch();
+
+  const invalidateUserCache = useCallback(() => {
+    if (!id) return;
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(id)
+      .get()
+      .then((doc: firebase.firestore.DocumentSnapshot) => {
+        const user: UserWithLocation = doc.data() as UserWithLocation;
+
+        const updateAction = updateUserCache(id, withId(user, doc.id));
+        dispatch(updateAction);
+      });
+  }, [id, dispatch]);
+
+  return {
+    invalidateUserCache,
+  };
 };

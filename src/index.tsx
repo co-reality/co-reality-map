@@ -2,6 +2,7 @@ import "./wdyr";
 
 import React, { useEffect } from "react";
 import { render } from "react-dom";
+import minutesToMilliseconds from "date-fns/minutesToMilliseconds";
 
 import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
@@ -47,6 +48,9 @@ import {
 import { FIREBASE_CONFIG } from "settings";
 
 import { VenueTemplateReducers, MiscReducers } from "store/reducers";
+import { reloadUserCache } from "store/actions/Cache";
+
+import { fetchUsersRecord } from "api/users";
 
 import * as serviceWorker from "./serviceWorker";
 import { activatePolyFills } from "./polyfills";
@@ -228,6 +232,20 @@ if (BUGSNAG_API_KEY) {
     },
   });
 }
+
+// @debt Remove, once the proper user fix is merged in
+// Load users every minute
+setInterval(async () => {
+  const users = await fetchUsersRecord();
+  store.dispatch(reloadUserCache(users));
+}, minutesToMilliseconds(1));
+
+// @debt Remove, once the proper user fix is merged in
+// Initial loading of users
+setTimeout(async () => {
+  const users = await fetchUsersRecord();
+  store.dispatch(reloadUserCache(users));
+}, 0);
 
 // When BUGSNAG_API_KEY not set, stub out BugsnagErrorBoundary with a noop
 const BugsnagErrorBoundary = BUGSNAG_API_KEY

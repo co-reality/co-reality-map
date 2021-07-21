@@ -62,7 +62,8 @@ export const currentVenueSelectorData: SparkleSelector<AnyVenue | undefined> = (
  */
 export const worldUsersSelector: SparkleSelector<
   WithId<UserWithLocation>[] | undefined
-> = (state) => state.firestore.ordered.worldUsers;
+  // @debt Change, once the proper user fix is merged in
+> = (state) => state.cache.usersArray;
 
 export const worldUsersWithoutLocationSelector: SparkleSelector<
   WithId<User>[] | undefined
@@ -75,7 +76,8 @@ export const worldUsersWithoutLocationSelector: SparkleSelector<
  */
 export const worldUsersByIdSelector: SparkleSelector<
   Record<string, UserWithLocation> | undefined
-> = (state) => state.firestore.data.worldUsers;
+  // @debt Change, once the proper user fix is merged in
+> = (state) => state.cache.usersRecord;
 
 export const worldUsersByIdWithoutLocationSelector: SparkleSelector<
   Record<string, WithId<User>> | undefined

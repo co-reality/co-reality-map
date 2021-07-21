@@ -7,7 +7,7 @@ import { WithId } from "utils/id";
 import { worldUsersWithoutLocationSelector } from "utils/selectors";
 import { isDefined } from "utils/types";
 
-import { isLoaded, useFirestoreConnect } from "hooks/useFirestoreConnect";
+import { isLoaded } from "hooks/useFirestoreConnect";
 import { useSelector } from "hooks/useSelector";
 import { useSovereignVenue } from "hooks/useSovereignVenue";
 
@@ -47,23 +47,23 @@ export const WorldUsersProvider: React.FC<WorldUsersProviderProps> = ({
     isDefined(venueId);
 
   // TODO: refactor this to not use useFirestoreConnect
-  useFirestoreConnect(() => {
-    if (!shouldConnect) return [];
+  // useFirestoreConnect(() => {
+  //   if (!shouldConnect) return [];
 
-    const relatedLocationIds = [venueId];
+  //   const relatedLocationIds = [venueId];
 
-    if (sovereignVenueId) {
-      relatedLocationIds.push(sovereignVenueId);
-    }
+  //   if (sovereignVenueId) {
+  //     relatedLocationIds.push(sovereignVenueId);
+  //   }
 
-    return [
-      {
-        collection: "users",
-        where: ["enteredVenueIds", "array-contains-any", relatedLocationIds],
-        storeAs: "worldUsers",
-      },
-    ];
-  });
+  //   return [
+  //     {
+  //       collection: "users",
+  //       where: ["enteredVenueIds", "array-contains-any", relatedLocationIds],
+  //       storeAs: "worldUsers",
+  //     },
+  //   ];
+  // });
 
   const worldUsersState: WorldUsersContextState = useMemo(
     () => ({
