@@ -4,6 +4,7 @@ import {
   differenceInMinutes,
   fromUnixTime,
   isAfter,
+  isValid,
   isFuture,
   isWithinInterval,
 } from "date-fns";
@@ -48,8 +49,16 @@ export const hasEventFinished = (event: VenueEvent) =>
 export const eventStartTime = (event: VenueEvent) =>
   fromUnixTime(event.start_utc_seconds);
 
-export const eventEndTime = (event: VenueEvent) =>
-  addMinutes(eventStartTime(event), event.duration_minutes);
+export const eventEndTime = (event: VenueEvent) => {
+  const MAX_END_TIME_VALUE = new Date(8640000000000000);
+  const endTime = addMinutes(eventStartTime(event), event.duration_minutes);
+
+  if (isValid(endTime)) {
+    return endTime;
+  }
+
+  return MAX_END_TIME_VALUE;
+};
 
 export const isEventStartingSoon = (event: VenueEvent) =>
   differenceInMinutes(eventStartTime(event), Date.now()) <= 60;
