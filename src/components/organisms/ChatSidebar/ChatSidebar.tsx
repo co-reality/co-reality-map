@@ -51,7 +51,11 @@ export const _ChatSidebar: React.FC<ChatSidebarProps> = ({ venue }) => {
   return (
     <div className={containerStyles}>
       <div className="chat-sidebar__header">
-        <div className="chat-sidebar__controller" onClick={toggleSidebar}>
+        <button
+          className="chat-sidebar__controller"
+          onClick={toggleSidebar}
+          type="button"
+        >
           {isExpanded ? (
             <FontAwesomeIcon icon={faChevronRight} size="sm" />
           ) : (
@@ -64,25 +68,32 @@ export const _ChatSidebar: React.FC<ChatSidebarProps> = ({ venue }) => {
               />
             </>
           )}
-        </div>
+        </button>
 
-        <div className="chat-sidebar__tabs">
-          <div className={venueChatTabStyles} onClick={selectVenueChat}>
-            {venueChatTabTitle}
+        {isExpanded && (
+          <div className="chat-sidebar__tabs">
+            <div className={venueChatTabStyles} onClick={selectVenueChat}>
+              {venueChatTabTitle}
+            </div>
+            <div className={privateChatTabStyles} onClick={selectPrivateChat}>
+              {privateChatTabTitle}
+            </div>
           </div>
-          <div className={privateChatTabStyles} onClick={selectPrivateChat}>
-            {privateChatTabTitle}
-          </div>
+        )}
+      </div>
+      {isExpanded && (
+        <div className="chat-sidebar__tab-content">
+          {chatSettings.openedChatType === ChatTypes.VENUE_CHAT && (
+            <VenueChat venue={venue} />
+          )}
+          {chatSettings.openedChatType === ChatTypes.PRIVATE_CHAT && (
+            <PrivateChats
+              recipientId={chatSettings.recipientId}
+              venue={venue}
+            />
+          )}
         </div>
-      </div>
-      <div className="chat-sidebar__tab-content">
-        {chatSettings.openedChatType === ChatTypes.VENUE_CHAT && (
-          <VenueChat venue={venue} />
-        )}
-        {chatSettings.openedChatType === ChatTypes.PRIVATE_CHAT && (
-          <PrivateChats recipientId={chatSettings.recipientId} venue={venue} />
-        )}
-      </div>
+      )}
     </div>
   );
 };

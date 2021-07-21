@@ -29,6 +29,10 @@
   }
 
   &__alternative-logins {
+    border: none;
+    border-width: 0;
+    background: none;
+    color: $white;
     margin-top: $spacing--md;
     display: flex;
     justify-content: center;

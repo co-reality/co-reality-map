@@ -60,6 +60,7 @@ $header-height: 45px;
   }
 
   &__controller {
+    border-width: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,7 +72,6 @@ $header-height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     position: absolute;
     top: 0;
     transform: translateX(-100%);

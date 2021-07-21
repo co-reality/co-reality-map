@@ -96,7 +96,7 @@ export const Login: React.FC<LoginProps> = ({
           <div className="Login__login-box">
             <span>Quick log in with Okta</span>
 
-            <div className="Login__alternative-logins">
+            <button className="Login__alternative-logins">
               {hasCustomAuthConnect && (
                 <img
                   className="Login__quick-login-icon"
@@ -115,7 +115,7 @@ export const Login: React.FC<LoginProps> = ({
                   title="SAML SSO login"
                 />
               )}
-            </div>
+            </button>
           </div>
         )}
         {/* @debt Changed for Okta SSO */}
