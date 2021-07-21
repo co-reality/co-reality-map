@@ -344,7 +344,7 @@ const createBaseUpdateVenueData = (data, updated) => {
     updated.bannerMessage = data.bannerMessage;
   }
 
-  if (data.parentId) {
+  if (typeof data.parentId === "string") {
     updated.parentId = data.parentId;
   }
 
