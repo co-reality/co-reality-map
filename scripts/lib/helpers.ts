@@ -4,6 +4,8 @@ import { relative, resolve } from "path";
 import admin from "firebase-admin";
 import formatDate from "date-fns/format/index.js";
 
+import { asArray } from "../../src/utils/types";
+
 export interface CredentialFile {
   type?: string;
   project_id?: string;
@@ -124,11 +126,23 @@ export const ensureProjectIdMatchesCredentialProjectId = (
  * @param usageParams shows the positioning of each script parameter and what it's general name is
  * @param exampleParams shows an example of supplying values for each script parameter
  *
- * @example
+ * @example One line for usage/example
  *   const usage = makeScriptUsage({
  *     description:   "Describe my script in a really useful way.",
  *     usageParams:   "PROJECT_ID VENUE_IDS [CREDENTIAL_PATH]", // Note: CREDENTIAL_PATH is optional here
  *     exampleParams: "my-project-id venueId,venueId2,venueIdN [theMatchingAccountServiceKey.json]",
+ *   });
+ *
+ * @example Multiple lines for usage/example
+ *   const usage = makeScriptUsage({
+ *     description: "Describe my script in a really useful way.",
+ *     usageParams: [
+ *       "PROJECT_ID VENUE_IDS [CREDENTIAL_PATH]"
+ *       "PROJECT_ID VENUE_IDS SOMETHINGELSE [CREDENTIAL_PATH]"
+ *     ], // Note: CREDENTIAL_PATH is optional here
+ *     exampleParams: [
+ *       "my-project-id venueId,venueId2,venueIdN [theMatchingAccountServiceKey.json]",
+ *     ]
  *   });
  */
 export const makeScriptUsage = ({
@@ -137,17 +151,32 @@ export const makeScriptUsage = ({
   exampleParams,
 }: {
   description: string;
-  usageParams: string;
-  exampleParams: string;
+  usageParams: string | string[];
+  exampleParams: string | string[];
 }) => () => {
   const scriptName = relative(process.cwd(), process.argv[1]);
+
+  const usageLines = asArray(usageParams).map((params) =>
+    params ? `${scriptName} ${params}` : ""
+  );
+
+  const exampleLines = asArray(exampleParams).map((params) =>
+    params ? `${scriptName} ${params}` : ""
+  );
+
+  const renderLines = (lines: string[]) => {
+    const prefix = lines.length > 1 ? "\n  " : "";
+
+    return `${prefix}${lines.join(prefix)}`;
+  };
+
   const helpText = `
 ---------------------------------------------------------
 ${description}
 
-Usage: ${scriptName} ${usageParams}
+Usage: ${renderLines(usageLines)}
 
-Example: ${scriptName} ${exampleParams}
+Example: ${renderLines(exampleLines)}
 ---------------------------------------------------------
 `;
 
