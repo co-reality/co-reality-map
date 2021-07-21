@@ -35,6 +35,7 @@ export const SectionPreview: React.FC<SectionPreviewProps> = ({
   const sectionId = section.id;
   const venueId = venue.id;
 
+  // @debt refactor this into a hook that more efficiently encapsultes the required selector logic + uses selector to memoise
   const seatedUsers = useMemo(
     () =>
       getAuditoriumSeatedUsers({

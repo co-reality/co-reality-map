@@ -23,10 +23,10 @@ import { useKeyboardControls } from "hooks/useKeyboardControls";
 import { useRecentVenueUsers } from "hooks/users";
 
 // @debt refactor these hooks into somewhere more sensible
-import { useMapGrid } from "./hooks/useMapGrid";
 import { usePartygoersOverlay } from "./hooks/usePartygoersOverlay";
 import { useGetUserByPosition } from "hooks/useGetUserByPosition";
 
+import { MapGrid } from "./MapGrid";
 import { MapRoom } from "./MapRoom";
 
 import "./Map.scss";
@@ -184,15 +184,6 @@ export const Map: React.FC<MapProps> = ({
     takeSeat,
   });
 
-  const mapGrid = useMapGrid({
-    showGrid,
-    userUid,
-    columnsArray,
-    rowsArray,
-    getUserBySeat,
-    onSeatClick,
-  });
-
   // TODO: this probably doesn't even need to be a hook.. it's more of a component if anything. We can clean this up later
   const partygoersOverlay = usePartygoersOverlay({
     showGrid,
@@ -242,7 +233,17 @@ export const Map: React.FC<MapProps> = ({
         />
 
         <div className="party-map-grid-container" style={gridContainerStyles}>
-          {mapGrid}
+          {showGrid && (
+            <MapGrid
+              {...{
+                userUid,
+                columnsArray,
+                rowsArray,
+                getUserBySeat,
+                onSeatClick,
+              }}
+            />
+          )}
           {partygoersOverlay}
           {roomOverlay}
         </div>

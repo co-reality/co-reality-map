@@ -17,7 +17,8 @@ $reply-icon-radius: 20px;
   flex-direction: column;
   margin-bottom: $spacing--lg;
 
-  content-visibility: auto;
+  // @debt This content-visibility: auto line seems to do something that causes constant re-calculations and pins the GPU at high usage
+  //content-visibility: auto;
 
   &:hover {
     .ChatMessage__reply-icon {

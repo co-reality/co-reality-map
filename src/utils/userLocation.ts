@@ -30,6 +30,8 @@ export interface SetLocationDataProps {
   locationName: string;
 }
 
+// TODO: refactor how user location updates works here?
+//   Called from VenuePage useEffect when venue changes, etc
 export const setLocationData = ({
   userId,
   locationName,
@@ -49,6 +51,8 @@ export interface UpdateCurrentLocationDataProps {
 
 // NOTE: The intended effect is to update the current location, without rewriting it.
 // profileLocationData can only have 1 key at any point of time
+// TODO: refactor how user location updates works here?
+//   Called from VenuePage interval
 export const updateCurrentLocationData = ({
   userId,
   profileLocationData,
@@ -61,6 +65,8 @@ export const updateCurrentLocationData = ({
   });
 };
 
+// TODO: refactor how user location updates works here?
+//   Called from VenuePage useEffect + onBeforeUnloadHandler
 export const clearLocationData = (userId: string) => {
   updateLocationData({ userId, newLocationData: {} });
 };

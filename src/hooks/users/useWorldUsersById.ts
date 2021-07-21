@@ -1,16 +1,10 @@
-import { isEqual } from "lodash";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+
+import { useWorldUsersQueryState } from "store/api/worldUsers";
 
 import { User } from "types/User";
 
-import { WithId } from "utils/id";
-import { worldUsersByIdWithoutLocationSelector } from "utils/selectors";
-
-import { isLoaded } from "hooks/useFirestoreConnect";
-import { useSelector } from "hooks/useSelector";
-
 import { useWorldUsersContext } from "./useWorldUsers";
-
-const noUsersById: Record<string, WithId<User>> = {};
 
 /**
  * @debt typing, Record implies that a User will exist for literally any given string, which is untrue
@@ -18,16 +12,21 @@ const noUsersById: Record<string, WithId<User>> = {};
  */
 export const useWorldUsersById = () => {
   // We mostly use this here to ensure that the WorldUsersProvider has definitely been connected
-  useWorldUsersContext();
+  const { worldUsersApiArgs } = useWorldUsersContext();
 
-  const worldUsersById: Record<string, WithId<User>> | undefined = useSelector(
-    worldUsersByIdWithoutLocationSelector,
-    isEqual
-  );
+  const {
+    isSuccess: isWorldUsersByIdLoaded,
+    worldUsersById,
+  } = useWorldUsersQueryState(worldUsersApiArgs ?? skipToken, {
+    selectFromResult: (result) => ({
+      isSuccess: result.isSuccess,
+      worldUsersById: result.data?.worldUsersById ?? {},
+    }),
+  });
 
   return {
-    worldUsersById: worldUsersById ?? noUsersById,
-    isWorldUsersLoaded: isLoaded(worldUsersById),
+    isWorldUsersLoaded: isWorldUsersByIdLoaded,
+    worldUsersById,
   };
 };
 

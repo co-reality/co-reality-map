@@ -70,7 +70,6 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.8",
     "redux-firestore": "sparkletown/redux-firestore#fix/introduce-batch-store-updates-on-addition",
-    "redux-thunk": "^2.3.0",
     "rehype-sanitize": "^4.0.0",
     "remark-emoji": "^2.2.0",
     "remark-external-links": "^8.0.0",

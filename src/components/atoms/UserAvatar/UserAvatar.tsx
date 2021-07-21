@@ -60,6 +60,9 @@ export const _UserAvatar: React.FC<UserAvatarProps> = ({
     "UserAvatar--medium": medium,
   });
 
+  // @debt this seems to cause performance issues. It should be possible to use worldUserLocationsById
+  //   from useWorldUserLocation / similar, plus some 'is recent user?' logic to directly look up the individual
+  //   user in an efficient manner.
   const isOnline = useMemo(
     () => recentWorldUsers.find((worldUser) => worldUser.id === user?.id),
     [user, recentWorldUsers]

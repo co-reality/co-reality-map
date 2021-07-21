@@ -140,6 +140,8 @@ $border-radius: 28px;
     opacity: 0.2;
   }
 
+  // @debt The only place this seems to be referenced is within src/components/molecules/MapPartygoerOverlay/MapPartygoerOverlay.scss
+  //  so it should probably be moved to that file
   @keyframes avatarpulse {
     0% {
       background-color: $primary;

@@ -1,24 +1,24 @@
 import React, { createContext, useContext, useMemo } from "react";
-import { isEqual } from "lodash";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
 import { User } from "types/User";
 
+import {
+  useWorldUsersQuery,
+  useWorldUsersQueryState,
+  WorldUsersApiArgs,
+} from "store/api/worldUsers";
+
 import { WithId } from "utils/id";
-import { worldUsersWithoutLocationSelector } from "utils/selectors";
-import { isDefined } from "utils/types";
 
-import { isLoaded, useFirestoreConnect } from "hooks/useFirestoreConnect";
-import { useSelector } from "hooks/useSelector";
 import { useSovereignVenue } from "hooks/useSovereignVenue";
-
-const noUsers: WithId<User>[] = [];
 
 export interface WorldUsersContextState {
   isSovereignVenueIdLoading: boolean;
   sovereignVenueId?: string;
   sovereignVenueIdError?: string;
 
-  shouldConnect: boolean;
+  worldUsersApiArgs?: WorldUsersApiArgs;
 }
 
 const WorldUsersContext = createContext<WorldUsersContextState | undefined>(
@@ -41,29 +41,23 @@ export const WorldUsersProvider: React.FC<WorldUsersProviderProps> = ({
     venueId,
   });
 
-  const shouldConnect =
-    !isSovereignVenueLoading &&
-    isDefined(sovereignVenueId) &&
-    isDefined(venueId);
+  const relatedLocationIds: string[] | undefined = useMemo(() => {
+    if (isSovereignVenueLoading || !venueId || !sovereignVenueId) return;
 
-  // TODO: refactor this to not use useFirestoreConnect
-  useFirestoreConnect(() => {
-    if (!shouldConnect) return [];
+    return [sovereignVenueId, venueId];
+  }, [isSovereignVenueLoading, sovereignVenueId, venueId]);
 
-    const relatedLocationIds = [venueId];
-
-    if (sovereignVenueId) {
-      relatedLocationIds.push(sovereignVenueId);
+  // TODO: should we refactor this to use useWorldUsersQuerySubscription rather than connecting it to receive data updates?
+  //   It seems that useWorldUsersQuerySubscription doesn't return originalArgs, so we can't use it in the same way
+  //   as we are currently doing things.. but we could potentially just pass the same args object into the hook as what we pass
+  //   down for the descendant code to use.. which would work around that 'limitation'
+  // TODO: https://redux-toolkit.js.org/rtk-query/usage/queries#selecting-data-from-a-query-result
+  const { originalArgs: worldUsersApiArgs } = useWorldUsersQuery(
+    relatedLocationIds ? { relatedLocationIds } : skipToken,
+    {
+      selectFromResult: ({ originalArgs }) => ({ originalArgs }),
     }
-
-    return [
-      {
-        collection: "users",
-        where: ["enteredVenueIds", "array-contains-any", relatedLocationIds],
-        storeAs: "worldUsers",
-      },
-    ];
-  });
+  );
 
   const worldUsersState: WorldUsersContextState = useMemo(
     () => ({
@@ -71,14 +65,14 @@ export const WorldUsersProvider: React.FC<WorldUsersProviderProps> = ({
       isSovereignVenueIdLoading: isSovereignVenueLoading,
       sovereignVenueId,
       sovereignVenueIdError,
-      shouldConnect,
+      worldUsersApiArgs,
     }),
     [
       venueId,
       isSovereignVenueLoading,
       sovereignVenueId,
       sovereignVenueIdError,
-      shouldConnect,
+      worldUsersApiArgs,
     ]
   );
 
@@ -102,22 +96,30 @@ export const useWorldUsersContext = (): WorldUsersContextState => {
 };
 
 export interface WorldUsersData {
-  worldUsers: readonly WithId<User>[];
   isWorldUsersLoaded: boolean;
+  worldUsers: readonly WithId<User>[];
 }
 
+// TODO:
+//   https://redux-toolkit.js.org/rtk-query/api/created-api/overview#react-hooks
+//   https://redux-toolkit.js.org/rtk-query/api/created-api/hooks
+//   https://redux-toolkit.js.org/rtk-query/api/created-api/hooks#usequerystate
 export const useWorldUsers = (): WorldUsersData => {
   // We mostly use this here to ensure that the WorldUsersProvider has definitely been connected
-  useWorldUsersContext();
+  const { worldUsersApiArgs } = useWorldUsersContext();
 
-  // @debt we use lodash's isEqual here to do a deep compare to prevent re-renders, but ideally we wouldn't need to
-  const selectedWorldUsers = useSelector(
-    worldUsersWithoutLocationSelector,
-    isEqual
+  const { isSuccess: isWorldUsersLoaded, worldUsers } = useWorldUsersQueryState(
+    worldUsersApiArgs ?? skipToken,
+    {
+      selectFromResult: (result) => ({
+        isSuccess: result.isSuccess,
+        worldUsers: result.data?.worldUsers ?? [],
+      }),
+    }
   );
 
   return {
-    worldUsers: selectedWorldUsers ?? noUsers,
-    isWorldUsersLoaded: isLoaded(selectedWorldUsers),
+    isWorldUsersLoaded,
+    worldUsers,
   };
 };

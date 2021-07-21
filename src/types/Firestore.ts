@@ -6,7 +6,6 @@ import { Reaction } from "types/reactions";
 import { Role } from "types/Role";
 import { ScreeningRoomVideo } from "types/screeningRoom";
 import { Table } from "types/Table";
-import { UserWithLocation } from "types/User";
 import { AnyVenue, PosterPageVenue, VenueEvent } from "types/venues";
 
 import { WithId } from "utils/id";
@@ -74,7 +73,6 @@ export interface FirestoreData {
   userRoles?: Record<string, Role>;
   venueChatMessages?: Record<string, VenueChatMessage>;
   venueEvents?: Record<string, VenueEvent>;
-  worldUsers?: Record<string, UserWithLocation>;
 
   /**
    * @deprecated This state requires all of the venues data in firebase to be loaded into memory. Find a different way.
@@ -112,7 +110,6 @@ export interface FirestoreOrdered {
   posterVenues?: WithId<PosterPageVenue>[];
   venueChatMessages?: WithId<VenueChatMessage>[];
   venueEvents?: WithId<VenueEvent>[];
-  worldUsers?: WithId<UserWithLocation>[];
 
   /**
    * @deprecated This state requires all of the venues data in firebase to be loaded into memory. Find a different way.

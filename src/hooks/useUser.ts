@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { FirebaseReducer } from "react-redux-firebase";
 import { isEqual } from "lodash";
 
+import { RootState } from "store";
+
 import { User } from "types/User";
 
 import { withId, WithId } from "utils/id";
@@ -17,16 +19,33 @@ export interface UseUserResult {
 }
 
 export const useUser = (): UseUserResult => {
-  const auth = useSelector(authSelector, isEqual);
-  const profile = useSelector(profileSelector, isEqual);
+  const auth = useSelector((state: RootState) => {
+    const auth = authSelector(state);
+
+    return !auth.isEmpty ? auth : undefined;
+  }, isEqual);
+
+  const profile = useSelector((state: RootState) => {
+    const profile = profileSelector(state);
+
+    return !profile.isEmpty ? profile : undefined;
+  }, isEqual);
+
+  const userId = auth?.uid;
+
+  const userWithId = useMemo(() => {
+    if (!userId || !profile) return;
+
+    return withId(profile, userId);
+  }, [profile, userId]);
 
   return useMemo(
     () => ({
-      user: !auth.isEmpty ? auth : undefined,
-      profile: !profile.isEmpty ? profile : undefined,
-      userWithId: auth && profile ? withId(profile, auth.uid) : undefined,
-      userId: auth && profile ? auth.uid : undefined,
+      user: auth,
+      profile,
+      userWithId,
+      userId,
     }),
-    [auth, profile]
+    [auth, profile, userId, userWithId]
   );
 };

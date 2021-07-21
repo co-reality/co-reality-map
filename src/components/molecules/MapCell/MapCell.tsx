@@ -11,9 +11,6 @@ interface MapCellProps {
   //  We don't really handle user avatars in this layer anymore, so it seems out of place here..
   seatedPartygoer?: WithId<User>;
 
-  /** @default false **/
-  showGrid?: boolean;
-
   // @debt we seem to only use this to apply the 'avatar' class, but I don't think we
   //  need those styles anymore as UserProfilePicture wraps it all up anyway
   /** @default false **/
@@ -37,7 +34,6 @@ export const _MapCell: React.FC<MapCellProps> = ({
   column,
   seatedPartygoer,
 
-  showGrid = false,
   hasSeatedPartygoer = false,
   seatedPartygoerIsMe = false,
   onSeatClick,
@@ -46,8 +42,6 @@ export const _MapCell: React.FC<MapCellProps> = ({
     () => onSeatClick && onSeatClick(row, column, seatedPartygoer),
     [column, onSeatClick, row, seatedPartygoer]
   );
-
-  if (!showGrid) return <div className="seat-row" />;
 
   return (
     <div className="seat-row">
