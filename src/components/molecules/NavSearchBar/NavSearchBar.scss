@@ -56,10 +56,4 @@
   &__search-results-number {
     font-weight: 500;
   }
-
-  &__search-results {
-    @include scrollbar;
-    overflow-y: auto;
-    max-height: $search-results-height--max;
-  }
 }

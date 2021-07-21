@@ -1,0 +1,10 @@
+@import "scss/constants.scss";
+@import "./navSearchBarConstants.scss";
+
+.NavSearchList {
+  &__list {
+    @include scrollbar;
+    overflow-y: auto;
+    max-height: $search-results-height--max;
+  }
+}

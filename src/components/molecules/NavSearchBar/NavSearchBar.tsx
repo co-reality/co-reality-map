@@ -27,11 +27,13 @@ import { useRelatedVenues } from "hooks/useRelatedVenues";
 import { RoomModal } from "components/templates/PartyMap/components";
 import { EventModal } from "components/organisms/EventModal";
 import { Loading } from "components/molecules/Loading";
+import {
+  NavSearchList,
+  NavSearchListItem,
+} from "components/molecules/NavSearchBar/NavSearchList";
 import { InputField } from "components/atoms/InputField";
 
 import navDropdownCloseIcon from "assets/icons/nav-dropdown-close.png";
-
-import { NavSearchResult } from "./NavSearchResult";
 
 import "./NavSearchBar.scss";
 
@@ -97,58 +99,54 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
     venueIds: relatedVenueIds,
   });
 
-  const foundRooms = useMemo<JSX.Element[]>(() => {
+  const foundRooms = useMemo<NavSearchListItem[]>(() => {
     if (!searchQuery) return [];
 
     /* @debt we really shouldn't be using the index as part of the key here, it's unstable.. but rooms don't have a unique identifier */
     return (
       enabledRelatedRooms
         .filter((room) => room.title.toLowerCase().includes(searchQuery))
-        .map((room, index) => (
-          <NavSearchResult
-            key={`room-${room.title}-${index}`}
-            title={room.title}
-            description="Room"
-            image={room.image_url}
-            onClick={() => {
-              setSelectedRoom(room);
-              // @debt we need to find room venue (selectedRoomVenue) because of RoomModal -> useRoom -> externalRoomSlug (which accepts venueName as a parameter)
-              //  probably would be better to extend Room type with the venueId it's related to, and use it in the `externalRoomSlug` instead of venueName
-              setSelectedRoomVenue(
-                relatedVenues.find((venue) =>
-                  venue.rooms?.filter((venueRoom) => isEqual(venueRoom, room))
-                )
-              );
+        .map((room, index) => ({
+          key: `room-${room.title}-${index}`,
+          title: room.title,
+          description: "Room",
+          image: room.image_url,
+          onClick: () => {
+            setSelectedRoom(room);
+            // @debt we need to find room venue (selectedRoomVenue) because of RoomModal -> useRoom -> externalRoomSlug (which accepts venueName as a parameter)
+            //  probably would be better to extend Room type with the venueId it's related to, and use it in the `externalRoomSlug` instead of venueName
+            setSelectedRoomVenue(
+              relatedVenues.find((venue) =>
+                venue.rooms?.filter((venueRoom) => isEqual(venueRoom, room))
+              )
+            );
 
-              clearSearch();
-            }}
-          />
-        )) ?? []
+            clearSearch();
+          },
+        })) ?? []
     );
   }, [searchQuery, enabledRelatedRooms, clearSearch, relatedVenues]);
 
   const { worldUsers } = useWorldUsers();
   const { openUserProfileModal } = useProfileModalControls();
 
-  const foundUsers = useMemo<JSX.Element[]>(() => {
+  const foundUsers = useMemo<NavSearchListItem[]>(() => {
     if (!searchQuery) return [];
 
     return worldUsers
       .filter((user) => user.partyName?.toLowerCase().includes(searchQuery))
-      .map((user) => (
-        <NavSearchResult
-          key={`user-${user.id}`}
-          title={user.partyName ?? DEFAULT_PARTY_NAME}
-          user={user}
-          onClick={() => {
-            openUserProfileModal(user);
-            clearSearch();
-          }}
-        />
-      ));
+      .map((user) => ({
+        key: `user-${user.id}`,
+        title: user.partyName ?? DEFAULT_PARTY_NAME,
+        user: user,
+        onClick: () => {
+          openUserProfileModal(user);
+          clearSearch();
+        },
+      }));
   }, [searchQuery, worldUsers, clearSearch, openUserProfileModal]);
 
-  const foundEvents = useMemo<JSX.Element[]>(() => {
+  const foundEvents = useMemo<NavSearchListItem[]>(() => {
     if (!searchQuery) return [];
 
     return relatedEvents
@@ -170,20 +168,18 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
             ?.icon ??
           DEFAULT_VENUE_LOGO;
 
-        return (
-          <NavSearchResult
-            key={`event-${event.id ?? event.name}`}
-            title={event.name}
-            description={`Event - ${uppercaseFirstChar(
-              formatUtcSecondsRelativeToNow(event.start_utc_seconds)
-            )}`}
-            image={imageUrl ?? DEFAULT_VENUE_LOGO}
-            onClick={() => {
-              setSelectedEvent(event);
-              clearSearch();
-            }}
-          />
-        );
+        return {
+          key: `event-${event.id ?? event.name}`,
+          title: event.name,
+          description: `Event - ${uppercaseFirstChar(
+            formatUtcSecondsRelativeToNow(event.start_utc_seconds)
+          )}`,
+          image: imageUrl ?? DEFAULT_VENUE_LOGO,
+          onClick: () => {
+            setSelectedEvent(event);
+            clearSearch();
+          },
+        };
       });
   }, [
     searchQuery,
@@ -194,8 +190,10 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
     clearSearch,
   ]);
 
-  const numberOfSearchResults =
-    foundRooms.length + foundEvents.length + foundUsers.length;
+  const foundItems = useMemo<NavSearchListItem[]>(
+    () => [...foundRooms, ...foundEvents, ...foundUsers],
+    [foundRooms, foundEvents, foundUsers]
+  );
 
   const clearSearchIcon = (
     <img
@@ -219,19 +217,15 @@ export const NavSearchBar: React.FC<NavSearchBarProps> = ({ venueId }) => {
       <div className={navDropdownClassnames}>
         <div className="NavSearchBar__nav-dropdown__title font-size--small">
           <strong className="NavSearchBar__search-results-number">
-            {numberOfSearchResults}
-          </strong>{" "}
+            {foundItems.length}
+          </strong>
           search results
         </div>
 
         {isLoading || isEventsLoading ? (
           <Loading />
         ) : (
-          <div className="NavSearchBar__search-results">
-            {foundRooms}
-            {foundEvents}
-            {foundUsers}
-          </div>
+          <NavSearchList items={foundItems} />
         )}
       </div>
 
