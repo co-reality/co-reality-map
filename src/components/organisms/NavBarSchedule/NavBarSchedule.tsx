@@ -1,16 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
   addDays,
+  differenceInCalendarDays,
   format,
   fromUnixTime,
-  isToday,
+  isBefore,
   startOfDay,
   startOfToday,
 } from "date-fns";
 import classNames from "classnames";
 import { groupBy } from "lodash";
 
-import { PLATFORM_BRAND_NAME, SCHEDULE_SHOW_DAYS_AHEAD } from "settings";
+import { PLATFORM_BRAND_NAME, SCHEDULE_MAX_DAYS_AHEAD } from "settings";
 
 import {
   LocationEvents,
@@ -27,6 +28,7 @@ import {
 import { WithVenueId } from "utils/id";
 import { range } from "utils/range";
 import { formatDateRelativeToNow } from "utils/time";
+import { isDefined } from "utils/types";
 
 import { useRelatedVenues } from "hooks/useRelatedVenues";
 import { useUser } from "hooks/useUser";
@@ -77,15 +79,29 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
   });
 
   const scheduledStartDate = sovereignVenue?.start_utc_seconds;
+  const scheduledEndDate = sovereignVenue?.end_utc_seconds;
 
-  const firstDayOfSchedule = useMemo(() => {
-    return scheduledStartDate
+  const { firstDayOfSchedule, isScheduleTimeshifted } = useMemo(() => {
+    const today = startOfToday();
+    const firstDayOfEvent = scheduledStartDate
       ? startOfDay(fromUnixTime(scheduledStartDate))
-      : startOfToday();
+      : today;
+
+    const isScheduleTimeshifted = isBefore(today, firstDayOfEvent);
+
+    const firstDayOfSchedule = isScheduleTimeshifted ? firstDayOfEvent : today;
+
+    return {
+      firstDayOfSchedule,
+      isScheduleTimeshifted,
+    };
   }, [scheduledStartDate]);
 
-  const isScheduleTimeshifted = !isToday(firstDayOfSchedule);
-
+  const lastDayOfSchedule = useMemo(() => {
+    return scheduledEndDate
+      ? startOfDay(fromUnixTime(scheduledEndDate))
+      : undefined;
+  }, [scheduledEndDate]);
   const {
     isEventsLoading,
     events: relatedVenueEvents = emptyRelatedEvents,
@@ -97,7 +113,9 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
 
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
-  const weekdays = useMemo(() => {
+  // TODO: extract a new useMemo'd  const startOfSelectedDay = addDays(firstDayOfSchedule, selectedDayIndex);
+  //  Then reuse that in all the places that are currently duplicating this logic
+  const renderedScheduleDayTabs = useMemo(() => {
     const formatDayLabel = (day: Date | number) => {
       if (isScheduleTimeshifted) {
         return format(day, "E, LLL d");
@@ -108,7 +126,22 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
       }
     };
 
-    return range(SCHEDULE_SHOW_DAYS_AHEAD).map((dayIndex) => {
+    // we add 1 day so that we will still show the last day on the schedule
+    const daysTillScheduleEnded = lastDayOfSchedule
+      ? Math.max(
+          0,
+          differenceInCalendarDays(
+            addDays(lastDayOfSchedule, 1),
+            startOfToday()
+          )
+        )
+      : undefined;
+
+    const scheduleDaysToShowCount = isDefined(daysTillScheduleEnded)
+      ? Math.min(daysTillScheduleEnded, SCHEDULE_MAX_DAYS_AHEAD)
+      : SCHEDULE_MAX_DAYS_AHEAD;
+
+    return range(scheduleDaysToShowCount).map((dayIndex) => {
       const day = addDays(firstDayOfSchedule, dayIndex);
       const classes = classNames("NavBarSchedule__weekday", {
         "NavBarSchedule__weekday--active": dayIndex === selectedDayIndex,
@@ -133,7 +166,12 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
         </li>
       );
     });
-  }, [selectedDayIndex, firstDayOfSchedule, isScheduleTimeshifted]);
+  }, [
+    isScheduleTimeshifted,
+    firstDayOfSchedule,
+    lastDayOfSchedule,
+    selectedDayIndex,
+  ]);
 
   const getEventLocation = useCallback(
     (locString: string): VenueLocation => {
@@ -150,7 +188,8 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
     const daysEvents = relatedVenueEvents
       .filter(
         isScheduleTimeshifted
-          ? isEventWithinDate(startOfSelectedDay)
+          ? // @debt do we need this ternary here? Can we just always use one of isEventWithinDate / isEventWithinDateAndNotFinished ?
+            isEventWithinDate(startOfSelectedDay)
           : isEventWithinDateAndNotFinished(startOfSelectedDay)
       )
       .map(
@@ -185,11 +224,12 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
   const hasSavedEvents = schedule.personalEvents.length > 0;
 
   const downloadPersonalEventsCalendar = useCallback(() => {
-    const dayStart = addDays(startOfToday(), selectedDayIndex);
+    const startOfSelectedDay = addDays(firstDayOfSchedule, selectedDayIndex);
+    // @debt this seems to only download events for the currently selected day, yet the UI implies as though it will download all of my events
     const allPersonalEvents: PersonalizedVenueEvent[] = relatedVenueEvents
       .map(
         prepareForSchedule({
-          day: dayStart,
+          day: startOfSelectedDay,
           usersEvents: userEventIds,
           isForCalendarFile: true,
         })
@@ -200,7 +240,7 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
       calendar: createCalendar({ events: allPersonalEvents }),
       calendarName: `${PLATFORM_BRAND_NAME}_Personal`,
     });
-  }, [relatedVenueEvents, userEventIds, selectedDayIndex]);
+  }, [firstDayOfSchedule, selectedDayIndex, relatedVenueEvents, userEventIds]);
 
   const downloadAllEventsCalendar = useCallback(() => {
     downloadCalendar({
@@ -221,6 +261,8 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
           {hasSavedEvents && (
             <Button
               onClick={downloadPersonalEventsCalendar}
+              // @debt downloadPersonalEventsCalendar seems to only download events for the currently selected day,
+              //  yet the UI here implies as though it will download all of my events
               customClass="NavBarSchedule__download-schedule-btn"
             >
               Download your schedule
@@ -235,9 +277,20 @@ export const NavBarSchedule: React.FC<NavBarScheduleProps> = ({
           </Button>
         </div>
       )}
-      <ul className="NavBarSchedule__weekdays">{weekdays}</ul>
 
-      <Schedule isLoading={isLoadingSchedule} {...schedule} />
+      {/* TODO: refactor this to be cleaner + follow our standards better */}
+      {renderedScheduleDayTabs.length > 0 ? (
+        <>
+          <ul className="NavBarSchedule__weekdays">
+            {renderedScheduleDayTabs}
+          </ul>
+
+          <Schedule isLoading={isLoadingSchedule} {...schedule} />
+        </>
+      ) : (
+        // TODO: Improve how this displays
+        <div>Scheduled events have ended</div>
+      )}
     </div>
   );
 };

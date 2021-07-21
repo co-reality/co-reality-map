@@ -163,6 +163,7 @@ export interface BaseVenue {
   };
   showLearnMoreLink?: boolean;
   start_utc_seconds?: number;
+  end_utc_seconds?: number; // Note: this is intended to only be set/used on the sovereign venue, to define the end timestamp of the entire party/event
   attendeesTitle?: string;
   requiresDateOfBirth?: boolean;
   ticketUrl?: string;
