@@ -1,1 +1,1 @@
-export { default } from "./FileButton";
+export { FileButton } from "./FileButton";

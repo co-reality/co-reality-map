@@ -17,6 +17,11 @@ export type Dimensions = {
   height: number;
 };
 
+export type Position = {
+  left: number;
+  top: number;
+};
+
 export type Bounds = Point & Dimensions;
 
 export type Matrix<T> = T[][];

@@ -1,4 +1,5 @@
 import { SoundConfigReference } from "./sounds";
+import { VenueTemplate } from "./venues";
 
 export enum RoomType {
   unclickable = "UNCLICKABLE",
@@ -42,3 +43,9 @@ export interface RoomData_v2 {
   template?: string;
   roomIndex?: number;
 }
+
+export enum RoomTemplate {
+  external = "external",
+}
+
+export type VenueRoomTemplate = VenueTemplate | RoomTemplate;

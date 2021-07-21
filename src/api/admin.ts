@@ -460,11 +460,40 @@ export const upsertRoom = async (
     user
   );
 
-  return await firebase.functions().httpsCallable("venue-upsertRoom")({
-    venueId,
-    roomIndex,
-    room: firestoreVenueInput,
-  });
+  return await firebase
+    .functions()
+    .httpsCallable("venue-upsertRoom")({
+      venueId,
+      roomIndex,
+      room: firestoreVenueInput,
+    })
+    .catch((e) => {
+      Bugsnag.notify(e, (event) => {
+        event.addMetadata("api/admin::upsertRoom", {
+          venueId,
+          roomIndex,
+        });
+      });
+      throw e;
+    });
+};
+
+export const deleteRoom = async (venueId: string, room: RoomData_v2) => {
+  return await firebase
+    .functions()
+    .httpsCallable("venue-deleteRoom")({
+      venueId,
+      room,
+    })
+    .catch((e) => {
+      Bugsnag.notify(e, (event) => {
+        event.addMetadata("api/admin::deleteRoom", {
+          venueId,
+          room,
+        });
+      });
+      throw e;
+    });
 };
 
 export const updateRoom = async (

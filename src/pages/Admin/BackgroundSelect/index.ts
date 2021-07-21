@@ -1,1 +1,1 @@
-export { default } from "./BackgroundSelect";
+export { BackgroundSelect } from "./BackgroundSelect";

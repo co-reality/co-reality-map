@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Form, Modal, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import ImageInput from "components/atoms/ImageInput";
-import { RoomData_v2 } from "types/rooms";
 
 import { CustomInputsType, RoomTemplate, ROOM_TEMPLATES } from "settings";
+
+import { RoomData_v2 } from "types/rooms";
+
 import { roomEditSchema } from "pages/Admin/Details/ValidationSchema";
+import ImageInput from "components/atoms/ImageInput";
 
 import "./RoomEditModal.scss";
 

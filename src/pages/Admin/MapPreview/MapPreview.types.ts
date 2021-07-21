@@ -7,4 +7,5 @@ export interface MapPreviewProps {
   venueId: string;
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
+  onRoomChange?: (rooms: RoomData_v2[]) => void;
 }

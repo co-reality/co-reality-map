@@ -15,6 +15,7 @@ import {
 import { FormValues } from "pages/Admin/Venue/DetailsForm";
 
 import { WithId } from "./id";
+import { VenueInput_v2 } from "api/admin";
 
 export const canHaveEvents = (venue: AnyVenue): boolean =>
   PLACEABLE_VENUE_TEMPLATES.includes(venue.template);
@@ -32,6 +33,28 @@ export const checkIfValidVenueId = (venueId?: string): boolean => {
   if (typeof venueId !== "string") return false;
 
   return /[a-z0-9_]{1,250}/.test(venueId);
+};
+
+export const buildEmptyVenue = (
+  venueName: string,
+  template: VenueTemplate
+): VenueInput_v2 => {
+  const list = new DataTransfer();
+
+  const fileList = list.files;
+
+  return {
+    name: venueName,
+    subtitle: "",
+    description: "",
+    template: template,
+    bannerImageFile: fileList,
+    bannerImageUrl: "",
+    logoImageUrl: "",
+    mapBackgroundImageUrl: "",
+    logoImageFile: fileList,
+    rooms: [],
+  };
 };
 
 /**

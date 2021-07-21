@@ -1,75 +1,82 @@
 import React from "react";
+import { useAsyncFn } from "react-use";
 
-// API
 import { updateVenue_v2 } from "api/admin";
 
-// Components
-import FileButton from "components/atoms/FileButton";
-
-// Hooks
 import { useUser } from "hooks/useUser";
+import { useFetchAssets } from "hooks/useFetchAssetImages";
 
-// Typings
-import { BackgroundSelectProps } from "./BackgroundSelect.types";
+import { FileButton } from "components/atoms/FileButton";
 
-// Styles
-import * as S from "./BackgroundSelect.styles";
-import { useFetchAssetImages } from "hooks/useFetchAssetImages";
+import "./BackgroundSelect.scss";
 
-const BackgroundSelect: React.FC<BackgroundSelectProps> = ({
+export interface BackgroundSelectProps {
+  venueName: string;
+  mapBackground?: string;
+}
+
+export const BackgroundSelect: React.FC<BackgroundSelectProps> = ({
   venueName,
   mapBackground,
 }) => {
   const { user } = useUser();
-  const mapBackgrounds = useFetchAssetImages("mapBackgrounds");
+  const {
+    assets: mapBackgrounds,
+    isLoading: isLoadingBackgrounds,
+  } = useFetchAssets("mapBackgrounds");
 
-  const handleUpload = (url: string, file?: FileList) => {
-    if (!user) return;
+  const [{ loading: isUploading }, uploadMapBackground] = useAsyncFn(
+    async (url: string, file?: FileList) => {
+      if (!user) return;
 
-    if (file && file.length) {
-      return updateVenue_v2(
+      const hasCustomBackground = !!(file && file.length);
+
+      return await updateVenue_v2(
         {
           name: venueName,
-          mapBackgroundImageFile: file,
+          ...(hasCustomBackground && { mapBackgroundImageFile: file }),
           mapBackgroundImageUrl: url,
         },
         user
       );
-    }
+    },
+    [user, venueName]
+  );
 
-    return updateVenue_v2(
-      {
-        name: venueName,
-        mapBackgroundImageUrl: url,
-      },
-      user
-    );
-  };
+  const hasBackgrounds = !!mapBackgrounds.length && !isLoadingBackgrounds;
 
   return (
-    <S.Wrapper hasImage={!!mapBackground}>
+    <div className="BackgroundSelect">
       {!mapBackground && (
         <>
-          <FileButton onChange={handleUpload} />
+          <FileButton
+            disabled={isUploading}
+            title="Import a map background"
+            description="Recommended size: 2000px / 1200px"
+            onChange={uploadMapBackground}
+          />
 
           <h3>Or choose a map</h3>
-          <S.MapBrowserGrid>
-            {mapBackgrounds.length > 0 &&
-              mapBackgrounds.map((item, index) => (
-                <S.MapItem
-                  backgroundImage={item}
+          {isLoadingBackgrounds && <div>Loading maps...</div>}
+
+          <div className="BackgroundSelect__map-grid">
+            {hasBackgrounds &&
+              mapBackgrounds.map((mapBackground, index) => (
+                <button
+                  className="BackgroundSelect__map"
+                  disabled={isUploading}
+                  style={{ backgroundImage: `url(${mapBackground})` }}
                   key={index}
-                  aspectRatio="1.6/1"
-                  onClick={() => handleUpload(item)}
+                  onClick={() => uploadMapBackground(mapBackground)}
                 />
               ))}
-          </S.MapBrowserGrid>
+          </div>
         </>
       )}
 
-      {mapBackground && <S.Image src={mapBackground} />}
-    </S.Wrapper>
+      {mapBackground && (
+        <img width="100%" src={mapBackground} alt="Venue map background" />
+      )}
+    </div>
   );
 };
-
-export default BackgroundSelect;

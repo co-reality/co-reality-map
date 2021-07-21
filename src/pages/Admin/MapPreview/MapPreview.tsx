@@ -7,15 +7,17 @@ import { RoomInput_v2, updateRoom, updateVenue_v2 } from "api/admin";
 
 import { useUser } from "hooks/useUser";
 
+import { RoomData_v2 } from "types/rooms";
+
 import {
   Container,
   SubVenueIconMap,
 } from "pages/Account/Venue/VenueMapEdition/Container";
 import Legend from "components/atoms/Legend";
-import * as S from "./MapPreview.styles";
-import BackgroundSelect from "../BackgroundSelect";
+import { BackgroundSelect } from "../BackgroundSelect";
+
 import { MapPreviewProps } from "./MapPreview.types";
-import { RoomData_v2 } from "types/rooms";
+import * as S from "./MapPreview.styles";
 
 const MapPreview: React.FC<MapPreviewProps> = ({
   venueName,
@@ -24,6 +26,7 @@ const MapPreview: React.FC<MapPreviewProps> = ({
   venueId,
   isEditing,
   setIsEditing,
+  onRoomChange,
 }) => {
   const { user } = useUser();
   const [mapRooms, setMapRooms] = useState<RoomData_v2[]>([]);
@@ -66,6 +69,7 @@ const MapPreview: React.FC<MapPreviewProps> = ({
         height_percent: room.height,
       }));
       setMapRooms(normalizeRooms);
+      onRoomChange && onRoomChange(normalizeRooms);
     }
   };
 

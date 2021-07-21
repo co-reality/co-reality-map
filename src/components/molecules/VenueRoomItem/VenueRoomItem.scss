@@ -1,0 +1,22 @@
+@import "scss/constants.scss";
+
+.VenueRoomItem {
+  padding: $spacing--md;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:hover {
+    background-color: $saturated-black;
+  }
+
+  &__room-icon {
+    height: 34px;
+    width: 34px;
+    margin-right: 10px;
+    background-size: contain;
+    background-position: center;
+    border-radius: 4px;
+    box-shadow: 0 0 0 3px $primary;
+  }
+}
