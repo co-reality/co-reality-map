@@ -1,9 +1,15 @@
 @import "scss/constants";
 
 .UserAvatar {
+  $sizes-map: (
+    small: 25px,
+    medium: 40px,
+    large: 54px,
+  );
+  $default-size: 25px;
+
+  @include square-size($default-size);
   position: relative;
-  width: 25px;
-  height: 25px;
 
   &:hover {
     .UserAvatar__nametag--hover {
@@ -19,8 +25,7 @@
   }
 
   &__image {
-    height: 100%;
-    width: 100%;
+    @include square-size($default-size);
     border-radius: 50%;
     vertical-align: unset;
   }
@@ -30,14 +35,12 @@
     bottom: -1px;
     right: -1px;
     border-radius: 50%;
-    height: 8px;
-    width: 8px;
     z-index: z(user-avatar-status-indicator);
     display: block;
+    @include square-size(8px);
 
     &--large {
-      height: 12px;
-      width: 12px;
+      @include square-size(12px);
     }
   }
 
@@ -49,19 +52,11 @@
     }
   }
 
-  &--small {
-    width: 25px;
-    height: 25px;
-  }
-
-  &--medium {
-    height: 40px;
-    width: 40px;
-  }
-
-  &--large {
-    height: 54px;
-    width: 54px;
+  @each $modifier, $size in $sizes-map {
+    &--#{$modifier},
+    &--#{$modifier} img {
+      @include square-size($size);
+    }
   }
 
   &__nametag {
@@ -74,12 +69,11 @@
 
     text-align: center;
 
-    margin: 0 auto;
+    margin: 0 -50% 0 auto;
     padding: 0 $spacing--xs;
 
     bottom: 10%;
     left: 50%;
-    margin-right: -50%;
 
     border-radius: $border-radius--md;
 
